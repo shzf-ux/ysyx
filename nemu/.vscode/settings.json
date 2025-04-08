@@ -1,0 +1,13 @@
+{
+    "editor.fontSize": 18,
+    "window.zoomLevel": 1.8,
+    "files.associations": {
+        "isa.h": "c",
+        "reg.h": "c",
+        "isa-def.h": "c",
+        "common.h": "c",
+        "typeinfo": "c",
+        "random": "c"
+    },
+    "editor.mouseWheelScrollSensitivity": 5
+}
