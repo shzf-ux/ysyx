@@ -38,7 +38,7 @@ static long load_img()
 {
     if (img_file == NULL)
     {
-        printf("%sNo image is given. Use the default build-in image.%s\n", ANSI_BG_BLUE, ANSI_NONE);
+        printf("%sNo image is given. Use the default build-in image.%s\n", ANSI_FG_BLUE, ANSI_NONE);
         return 4096; // built-in image size
     }
 
@@ -85,7 +85,7 @@ static int parse_args(int argc, char *argv[])
 void welcome()
 {
 
-    printf("%sWelcome RISC-V NPC %s\n", ANSI_BG_BLUE, ANSI_NONE);
+    printf("Welcome %sRISC-V%s NPC \n", ANSI_BG_RED, ANSI_NONE);
 }
 void init_monitor(int argc, char *argv[])
 {
