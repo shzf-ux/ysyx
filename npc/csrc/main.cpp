@@ -27,27 +27,36 @@ int main(int argc, char **argv)
     top->trace(vcd, 5);
     vcd->open("waveform.vcd");
 
-    top->rst = 1;
+    int sim_time = 0;
+    // 1. 初始化信号
     top->clk = 0;
-    top->eval(); // 此时复位逻辑未触发（无时钟上升沿）
+    top->rst = 0;
+    top->eval();
 
-    // 2. 生成时钟上升沿以触发复位
+    sim_time++;
+
+    // 1.5 开始复位流程
     top->clk = 1;
-    top->eval(); // 此时复位逻辑生效，pc_out = 0x80000000
+    top->rst = 1;
+    top->eval();
+    top->instruction = pmem_read(top->pc_out);
+    vcd->dump(sim_time); // 写入复位信号置位状态
+    sim_time++;
 
 
     // 3. 释放复位信号
     top->rst = 0;
     top->clk = 0;
+    top->instruction = pmem_read(top->pc_out);
     top->eval();
-    int sim_time = 0;
-    const int MAX_SIM_TIME = 50;
+    vcd->dump(sim_time); // 写入复位释放状态
+    sim_time++;
+    const int MAX_SIM_TIME = 100;
     while ((sim_time < MAX_SIM_TIME) && flag_stop == 0)
     {
-        
-        top->instruction = pmem_read(top->pc_out);
-        printf("instruction:%08x\n", top->instruction);
         top->clk = !top->clk;
+        top->instruction = pmem_read(top->pc_out);
+
         top->eval();
         vcd->dump(sim_time);
         sim_time++;
