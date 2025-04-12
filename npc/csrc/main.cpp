@@ -13,6 +13,7 @@ extern "C" void ebreak_instruction(uint32_t inst)
     printf("%sTrigger the Ebreak inst%s\n",ANSI_BG_GREEN,ANSI_NONE);
     flag_stop = 1;
 }
+
 uint32_t pmem_read(uint32_t pc);
 int main(int argc, char **argv)
 {
@@ -65,6 +66,17 @@ int main(int argc, char **argv)
         if (top->clk) {
           // std::cout << "Sim Time: " << sim_time << std::endl;
         }
+    }
+    if (flag_stop == 1)
+    {
+
+        printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
+        printf("at pc = %08x\n", top->pc_out);
+    }
+    else
+    {
+        printf("%sHIT BAD TRAP  %s", ANSI_FG_RED, ANSI_NONE);
+        printf("at pc = %08x\n", top->pc_out);
     }
 
     // 清理
