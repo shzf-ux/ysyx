@@ -29,5 +29,6 @@
 #define RESET_VECTOR 0x80000000
 #define CONFIG_MBASE 0x80000000
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
+extern unsigned char isa_logo[];
 
 #endif
