@@ -16,6 +16,9 @@ module ysyx_25030085_alu(
             4'b0000: begin
                 Alu_Result=rs1_data+B;//
             end
+            4'b1001:begin
+                Alu_Result=pc+B;
+            end
 
             default: begin
             end

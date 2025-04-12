@@ -25,8 +25,8 @@ module ysyx_25030085_regfile (
     integer i; 
 
     always @(posedge clk) begin
-        //   $display("Reg Status: x1=0x%08x, x2=0x%08x", 
-        //    register[1], register[2]);
+         // $display("Reg Status: x1(ra)=0x%08x, x2(sp)=0x%08x", 
+         // register[1], register[2]);
         if(rst)begin//复位信号
             for(i=0;i<32;i=i+1)begin
             register[i]=0;

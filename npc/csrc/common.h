@@ -1,5 +1,5 @@
-#ifndef _MONITOR_H_
-#define _MONITOR_H_
+#ifndef _COMMON_H_
+#define _COMMON_H_
 
 #include <getopt.h> //
 #include <string.h>
@@ -7,6 +7,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <assert.h>
+#include <verilated.h>
+#include <verilated_vcd_c.h>
+#include "../obj_dir/Vysyx_25030085_top.h"
 #define ANSI_FG_BLACK "\33[1;30m"
 #define ANSI_FG_RED "\33[1;31m"
 #define ANSI_FG_GREEN "\33[1;32m"
@@ -29,6 +32,11 @@
 #define RESET_VECTOR 0x80000000
 #define CONFIG_MBASE 0x80000000
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
+#define MAX_SIM_TIME 100
 extern unsigned char isa_logo[];
+
+
+
+
 
 #endif
