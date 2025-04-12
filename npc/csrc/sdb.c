@@ -13,7 +13,6 @@ static char *rl_gets()
     printf("(npc) "); // 手动打印提示符
     fflush(stdout);   // 确保立即显示
 
-    // 读取输入（阻塞式）
     if (fgets(buffer, INPUT_MAX_LEN, stdin) == NULL)
     {
         return NULL; // 处理 EOF (Ctrl+D)
@@ -35,8 +34,19 @@ static int cmd_info(char *args)
     return 0;
 }
 static int cmd_s(char *args)
-{                                  // 单步执行,参数为执行的步数
-
+{                     // 单步执行,参数为执行的步数
+    char *num = strtok(NULL, " "); // 获取第二个参数
+    if (num == NULL)
+    {
+        npc_exec(1);
+        return 0;
+    }
+    int cnt = 0;
+    sscanf(num, "%d", &cnt);
+    for (int i = 0; i < cnt; i++)
+    {
+       npc_exec(1);
+    }
     return 0;
 }
 
