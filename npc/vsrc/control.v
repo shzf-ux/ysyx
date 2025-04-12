@@ -3,9 +3,10 @@ import "DPI-C" function void invalid_inst   (input int pc,input int inst);
 module ysyx_25030085_control (
     input  [31:0] inst,
     input  [31:0] pc,
-//8个控制信号
+//9个控制信号
     output reg    MemWrite, //储存器控制信号，决定写
     output reg    MemRead,//储存器控制信号  读
+    output reg [2:0]MemOp,//数据存储器操作方式，0字节，1半字，2一个字
 
     output reg [1:0]MemtoReg,//选择写回数据来源（ALU结果/存储器数据/PC+4等）
    //00为alu计算结果，01为储存器数据，10为pc+4，jal,11为立即数直接写回lui
@@ -45,6 +46,7 @@ always @(inst) begin
             AluOp   =4'b000;
             imm  =32'h0000_0000;
             invalid =1'b0;
+            MemOp =3'b000;
 
     if(pc>=32'h8000_0000)begin
      case (opcode)
@@ -104,17 +106,20 @@ always @(inst) begin
             MemtoReg =2'b00;
             RegWrite=1'b0;
             ALUSrc  =1'b1;//与立即数相加
-            AluOp   =4'b000;
+            AluOp   =4'b0000;//rs1+立即数
             imm     =immS;
             invalid =1'b0;
             case(func3)
             3'b000:begin//sb
+            MemOp=3'b000;
                 
             end
             3'b001:begin//sh
+            MemOp=3'b001;
                 
             end
             3'b010:begin//sw
+            MemOp=3'b010;
                 
             end
             default:begin
@@ -164,7 +169,7 @@ always @(inst) begin
             imm     =immU;
             invalid =1'b0;                    
             end
-            7'b0010111:begin//U型指令auipc
+            7'b0010111:begin//U型指令auipc 立即数左移12+PC存入rd
             MemWrite=1'b0;
             MemRead =1'b0;
             Branch  =1'b0;

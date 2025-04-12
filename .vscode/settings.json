@@ -31,6 +31,9 @@
     "type_traits": "c",
     "isa.h": "c",
     "monitor.h": "c",
-    "difftest.h": "c"
+    "difftest.h": "c",
+    "cpu.h": "c",
+    "readline.h": "c",
+    "history.h": "c"
   }
 }
