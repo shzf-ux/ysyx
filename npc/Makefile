@@ -20,6 +20,7 @@ VERILATOR_FLAGS :=-cc --exe --build --trace \
                    --top-module $(TOP_MODULE)
 #main的执行参数
 ARGS :=
+IMG :=
 $(shell mkdir -p $(BUILD_DIR))
 $(shell mkdir -p $(OBJ_DIR))
 
