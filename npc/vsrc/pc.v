@@ -21,7 +21,7 @@ always @(posedge clk or posedge rst) begin
     pc_out<=pc_out+4; 
 end
 always@(pc_out)begin
-    $display("pc:0x%08x",pc_out);
+   // $display("pc:0x%08x",pc_out);
 end
 
 endmodule

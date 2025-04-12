@@ -3,7 +3,7 @@ import "DPI-C" function void invalid_inst   (input int pc,input int inst);
 module ysyx_25030085_control (
     input  [31:0] inst,
     input  [31:0] pc,
-
+//8个控制信号
     output reg    MemWrite, //储存器控制信号，决定写
     output reg    MemRead,//储存器控制信号  读
 
@@ -15,6 +15,7 @@ module ysyx_25030085_control (
     output reg   [1:0] Jump,//01为jal，10为jalr
     output reg    ALUSrc,//（0=寄存器，1=立即数）
     output reg  [3:0] AluOp,
+
     output reg  [31:0]imm
    
 );
@@ -25,11 +26,27 @@ module ysyx_25030085_control (
     reg [31:0] immI;
     reg [31:0] immJ;//最低位补0
     reg [31:0] immU;
+    reg [31:0] immS;
     assign immJ= {{12{inst[31]}}, inst[19:12],inst[20],inst[30:21],1'b0};
     assign immI={{20{inst[31]}}, inst[31:20]};
     assign immU={inst[31:12],12'b0};
+    assign immS={{20{inst[31]}}, inst[31:25], inst[11:7]};
 
-always @(*) begin
+
+always @(inst) begin
+    //初始值
+            MemWrite=1'b0;
+            MemRead =1'b0;
+            Branch  =1'b0;
+            Jump    =2'b00;
+            MemtoReg =2'b00;
+            RegWrite=1'b0;
+            ALUSrc  =1'b0;
+            AluOp   =4'b000;
+            imm  =32'h0000_0000;
+            invalid =1'b0;
+
+    if(pc>=32'h8000_0000)begin
      case (opcode)
             7'b0010011: begin  // I-type指令 rs1与立即数操作
             MemWrite=1'b0;
@@ -78,12 +95,39 @@ always @(*) begin
             AluOp=4'b1000 ;         
             end              
             endcase
-
-
-
-
-
             end
+            7'b0100011:begin//s类型指令（rs2 → Mem[rs1 + offset]）
+            MemWrite=1'b1;//内存写入使能
+            MemRead =1'b0;
+            Branch  =1'b0;
+            Jump    =2'b00;
+            MemtoReg =2'b00;
+            RegWrite=1'b0;
+            ALUSrc  =1'b1;//与立即数相加
+            AluOp   =4'b000;
+            imm     =immS;
+            invalid =1'b0;
+            case(func3)
+            3'b000:begin//sb
+                
+            end
+            3'b001:begin//sh
+                
+            end
+            3'b010:begin//sw
+                
+            end
+            default:begin
+                
+            end
+
+
+
+
+            endcase
+                
+            end
+
             7'b1101111:begin //jal rd, offset  rd = PC + 4
             MemWrite=1'b0;
             MemRead =1'b0;
@@ -134,6 +178,14 @@ always @(*) begin
                 
             end
             //错误情况
+            7'b1110011:begin//系统调用指令
+            case(func3)
+            3'b000:begin               
+            end
+            default:begin               
+            end
+            endcase    
+            end
             default: begin
             MemWrite=1'b0;
             MemRead =1'b0;
@@ -147,12 +199,13 @@ always @(*) begin
             invalid =1'b1;
             end
         endcase
+    end
 end
 //系统类别的指令ebreak call
    wire is_ebreak;
    assign is_ebreak= (opcode == 7'b1110011) && (func3 == 0) && (inst[31:20] == 1);
 
-    always@(*)begin
+    always@(is_ebreak,invalid)begin
         if(is_ebreak)begin
       ebreak_instruction(inst);   
         end
