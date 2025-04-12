@@ -79,8 +79,8 @@ static int parse_args(int argc, char *argv[])
     {
         switch (o)
         {
-        case 'b':sdb_set_batch_mode();break; // 设置批处理模式
-        case 1: img_file = optarg;return 0;
+        case 'b':printf("hello batch\n");sdb_set_batch_mode();break; // 设置批处理模式
+        case 1: printf("hello\n");img_file = optarg;return 0;
         default:
             printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
             printf("\t-b,--batch              run with batch mode\n");

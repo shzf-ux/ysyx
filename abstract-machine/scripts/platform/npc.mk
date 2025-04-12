@@ -12,6 +12,7 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
+NPCFLAGS  += -b $(IMAGE).bin
 
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
@@ -27,6 +28,6 @@ image: image-dep
 
 run: insert-arg
 	echo "TODO: add command here to run simulation"   
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS=$(IMAGE).bin
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS=$(NPCFLAGS)
 
 .PHONY: insert-arg

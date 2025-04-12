@@ -34,7 +34,7 @@ compile:
 
 # 运行仿真
 run: compile
-	@$(OBJ_DIR)/$(TARGET) $(ARGS)
+	$(OBJ_DIR)/$(TARGET) $(ARGS)
 
 # 清理
 clean:
