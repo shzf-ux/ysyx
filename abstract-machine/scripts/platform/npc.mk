@@ -28,6 +28,6 @@ image: image-dep
 
 run: insert-arg
 	echo "TODO: add command here to run simulation"   
-	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS=$(NPCFLAGS)
+	$(MAKE) -C $(NPC_HOME) ISA=$(ISA) run ARGS=$(NPCFLAGS) IMG=$(IMAGE).bin
 
 .PHONY: insert-arg
