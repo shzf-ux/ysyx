@@ -2,25 +2,27 @@
 #include <readline/history.h>
 #include "common.h"
 static int is_batch_mode = false;
-void npc_exec(uint64_t n);
+int npc_exec(uint64_t n);
+#define INPUT_MAX_LEN 256 // 输入最大长度
+
 static char *rl_gets()
 {
-    static char *line_read = NULL;
+    static char buffer[INPUT_MAX_LEN + 1]; // 静态缓冲区
+    memset(buffer, 0, sizeof(buffer));     // 清空缓冲区
 
-    if (line_read)
+    printf("(npc) "); // 手动打印提示符
+    fflush(stdout);   // 确保立即显示
+
+    // 读取输入（阻塞式）
+    if (fgets(buffer, INPUT_MAX_LEN, stdin) == NULL)
     {
-        free(line_read);
-        line_read = NULL;
+        return NULL; // 处理 EOF (Ctrl+D)
     }
 
-    line_read = readline("(npc) ");
+    // 去除末尾换行符
+    buffer[strcspn(buffer, "\n")] = '\0';
 
-    if (line_read && *line_read)
-    {
-        add_history(line_read);
-    }
-
-    return line_read;
+    return buffer; // 返回静态缓冲区地址
 }
 static int cmd_x(char *args)
 { // 扫描内存，第一个参数为数量，第二个参数为起始位置
@@ -40,8 +42,8 @@ static int cmd_s(char *args)
 
 static int cmd_c(char *args)
 { // cpu执行，无参数
-    npc_exec(-1);
-    return 0;
+    int ret=npc_exec(-1);
+    return ret;
 }
 
 static int cmd_q(char *args) // 退出
@@ -69,6 +71,7 @@ static struct
 };
 
 #define NR_CMD ARRLEN(cmd_table)
+#define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
 
 static int cmd_help(char *args)
 {
