@@ -15,11 +15,9 @@ extern "C" void ebreak_instruction(uint32_t inst)
 }
 extern "C" void invalid_inst(uint32_t thispc, uint32_t inst)
 {
-    uint8_t *p = (uint8_t *)inst;
-    printf("invalid opcode(PC = %08x):\n"
-           "\t%02x %02x %02x %02x ...\n"
+    printf("invalid opcode(PC = %08x):\n"        
            "\t%08x...\n",
-           thispc, p[0], p[1], p[2], p[3], inst);
+           thispc, inst);
 
     printf("There are two cases which will trigger this unexpected exception:\n"
            "1. The instruction at PC = %08x is not implemented.\n"
@@ -32,7 +30,7 @@ extern "C" void invalid_inst(uint32_t thispc, uint32_t inst)
                     "* Every line of untested code is always wrong!\n\n",
                     ANSI_FG_RED),
            isa_logo);
-
+    flag_stop = 2;
 }
 
 uint32_t pmem_read(uint32_t pc);
@@ -78,6 +76,7 @@ int main(int argc, char **argv)
     {
         top->clk = !top->clk;
         top->instruction = pmem_read(top->pc_out);
+       // printf("pc:%08x\n", top->pc_out);
 
         top->eval();
         vcd->dump(sim_time);
@@ -88,21 +87,23 @@ int main(int argc, char **argv)
           // std::cout << "Sim Time: " << sim_time << std::endl;
         }
     }
-    if (flag_stop == 1)
+    if (flag_stop == 1)//遇到ebreak退出
     {
 
         printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
         printf("at pc = %08x\n", top->pc_out);
+        return 0;
     }
-    else
+    else //不合理的指令
     {
         printf("%sHIT BAD TRAP  %s", ANSI_FG_RED, ANSI_NONE);
         printf("at pc = %08x\n", top->pc_out);
+        return 1;
     }
 
     // 清理
     vcd->close();
     delete top;
     delete vcd;
-    return 0;
+   
 }

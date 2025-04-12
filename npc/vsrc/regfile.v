@@ -44,7 +44,7 @@ module ysyx_25030085_regfile (
             
         end
         2'b10:begin//2为pc+4，jal
-        $display("Write: x%d = 0x%08x", rd, register[rd]);
+       // $display("Write: x%d = 0x%08x", rd, register[rd]);
         register[rd]<=pc_out+4;
         end
         2'b11:begin//立即数LUI

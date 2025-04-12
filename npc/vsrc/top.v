@@ -21,7 +21,7 @@ module ysyx_25030085_top (
     wire [3:0]  AluOp;
 
     always @(instruction) begin
-          $display("inst:0x%08x",instruction);
+        //  $display("inst:0x%08x",instruction);
     end
 
   
