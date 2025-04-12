@@ -30,6 +30,7 @@
     "memory_resource": "c",
     "type_traits": "c",
     "isa.h": "c",
-    "monitor.h": "c"
+    "monitor.h": "c",
+    "difftest.h": "c"
   }
 }

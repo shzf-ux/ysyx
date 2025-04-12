@@ -36,6 +36,7 @@ ysyx_25030085_pc pc_init(
 );
 
 ysyx_25030085_control control_init(
+    .pc(pc_out),
     .inst(instruction),
     .MemRead(MemRead),
     .MemtoReg(MemtoReg),

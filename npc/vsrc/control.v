@@ -1,7 +1,8 @@
 import "DPI-C" function void ebreak_instruction (input int inst) ;
-        
+import "DPI-C" function void invalid_inst   (input int pc,input int inst);       
 module ysyx_25030085_control (
     input  [31:0] inst,
+    input  [31:0] pc,
 
     output reg    MemWrite, //储存器控制信号，决定写
     output reg    MemRead,//储存器控制信号  读
@@ -15,7 +16,9 @@ module ysyx_25030085_control (
     output reg    ALUSrc,//（0=寄存器，1=立即数）
     output reg  [3:0] AluOp,
     output reg  [31:0]imm
+   
 );
+    reg invalid;//不合理的指令
     reg [6:0] opcode=inst[6:0];
     reg [2:0] func3=inst[14:12];
     reg [6:0] func7=inst[31:25];
@@ -36,6 +39,7 @@ always @(*) begin
             MemtoReg =2'b00;//alu计算结果
             RegWrite=1'b1;//有效
             ALUSrc  =1'b1;//立即数
+            invalid =1'b0;
             imm  =immI;
 
             case(func3)
@@ -89,7 +93,8 @@ always @(*) begin
             RegWrite=1'b1;//写入rd为pc+4,使能信号
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b0000;
-            imm     =immJ;    
+            imm     =immJ;   
+            invalid =1'b0; 
             end  
             7'b1100111:begin//jalr指令 跳转地址为(rs1+IMMI)&0
             MemWrite=1'b0;
@@ -100,7 +105,8 @@ always @(*) begin
             RegWrite=1'b1;//写入rd为pc+4,使能信号
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b0000;//控制rs1+b
-            imm     =immI;                   
+            imm     =immI;
+            invalid =1'b0;                   
             end
             7'b0110111:begin//U型指令lui
             MemWrite=1'b0;
@@ -111,7 +117,8 @@ always @(*) begin
             RegWrite=1'b1;//写入rd,使能信号
             ALUSrc  =1'b1;//来源立即数
             AluOp   =4'b0000;
-            imm     =immU;                    
+            imm     =immU;
+            invalid =1'b0;                    
             end
             7'b0010111:begin//U型指令auipc
             MemWrite=1'b0;
@@ -122,10 +129,11 @@ always @(*) begin
             RegWrite=1'b1;//写入rd,使能信号
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b1001;//特殊。pc+立即数
-            imm     =immU;    
+            imm     =immU;
+            invalid =1'b0;    
                 
             end
-            // 默认情况
+            //错误情况
             default: begin
             MemWrite=1'b0;
             MemRead =1'b0;
@@ -136,6 +144,7 @@ always @(*) begin
             ALUSrc  =1'b0;
             AluOp   =4'b000;
             imm  =32'h0000_0000;
+            invalid =1'b1;
             end
         endcase
 end
@@ -147,6 +156,8 @@ end
         if(is_ebreak)begin
       ebreak_instruction(inst);   
         end
+        else if(invalid)
+      invalid_inst(pc,inst);
       
     end
 
