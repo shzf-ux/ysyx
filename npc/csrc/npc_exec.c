@@ -1,6 +1,6 @@
 #include "common.h"
-#include "/home/zzy/ysyx-workbench/nemu/src/utils/disasm.c"
-#include "/home/zzy/ysyx-workbench/nemu/tools/capstone/repo/include/capstone/capstone.h"
+#include <dlfcn.h>
+#include <capstone/capstone.h>
 extern Vysyx_25030085_top *top;
 extern VerilatedVcdC *vcd;
 extern int sim_time;
