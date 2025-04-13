@@ -1,6 +1,6 @@
 #include "common.h"
 #include <dlfcn.h>
-#include <capstone/capstone.h>
+#include "capstone.h"
 extern Vysyx_25030085_top *top;
 extern VerilatedVcdC *vcd;
 extern int sim_time;
