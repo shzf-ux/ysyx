@@ -3,6 +3,7 @@ void sdb_set_batch_mode();
 extern Vysyx_25030085_top *top;
 extern VerilatedVcdC *vcd;
 extern int sim_time;
+void init_disasm();
 uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #define Log(format, ...)                                    \
     _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \
@@ -139,5 +140,6 @@ void init_monitor(int argc, char *argv[])
     init_mem();
     init_isa();
     load_img();
+    init_disasm();
     init_rtl(argc, argv);
 }
