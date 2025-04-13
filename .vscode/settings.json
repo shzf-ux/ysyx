@@ -35,6 +35,7 @@
     "cpu.h": "c",
     "readline.h": "c",
     "history.h": "c",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "capstone.h": "c"
   }
 }

@@ -2,7 +2,7 @@
 #include <readline/history.h>
 #include "common.h"
 static int is_batch_mode = false;
-extern flag_stop;
+extern int flag_stop;
 int npc_exec(uint64_t n);
 #define INPUT_MAX_LEN 256 // 输入最大长度
 
@@ -59,7 +59,7 @@ static int cmd_c(char *args)
     }
     else if(flag_stop==1)
     {
-         
+        printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
     }
     
 
