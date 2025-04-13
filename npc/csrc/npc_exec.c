@@ -16,14 +16,16 @@ LogBuf *s;
 
 void npc_exec(uint64_t n)
 {
-  
+
+    int batch_mode = (int)n == -1;
+
     while ((sim_time < MAX_SIM_TIME) && flag_stop == 0 && (n--) > 0)
     {
         top->clk = !top->clk;
         int is_rising_edge = (top->clk == 1);//记录上升沿
         top->instruction = pmem_read(top->pc_out);
 
-        if (is_rising_edge)
+        if (is_rising_edge&&!batch_mode)
         {
             s = (LogBuf *)malloc(sizeof(LogBuf));
         char *p = s->logbuf;
@@ -46,8 +48,6 @@ void npc_exec(uint64_t n)
         memset(p, ' ', space_len);
         
         p += space_len;
-       
-       
         void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
         
         disassemble(p, s->logbuf + sizeof(s->logbuf) - p, // 向buf加入反汇编后的内容

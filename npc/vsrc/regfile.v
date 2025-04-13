@@ -1,3 +1,5 @@
+import "DPI-C"  function void info_register  (input int value); 
+import "DPI-C" context function void set_scope();
 module ysyx_25030085_regfile ( 
     input clk,
     input rst,
@@ -11,10 +13,9 @@ module ysyx_25030085_regfile (
     input [31:0]Alu_Result,//alu计算结果
     output [31:0]Read_rs1,
     output [31:0]Read_rs2
-   
-    
-
 );
+
+
     reg [4:0]rs1;
     reg [4:0]rs2;
     reg [4:0]rd;
@@ -22,12 +23,30 @@ module ysyx_25030085_regfile (
     assign rs2=instruction[24:20];
     assign rd =instruction[11:7];
     reg [31:0] register [0:31];
+    reg is_info_register;
     integer i; 
+    initial begin
+        set_scope();
+        is_info_register=0;
+    end
 
-    always @(posedge clk) begin
-         // $display("Reg Status: x1(ra)=0x%08x, x2(sp)=0x%08x", 
-         // register[1], register[2]);
-        if(rst)begin//复位信号
+    
+    export "DPI-C" function info_register_en;
+    function void info_register_en(input bit enable);
+      //$display("%d",is_info_register);
+       is_info_register=enable;
+      // $display("%d",is_info_register);
+    endfunction
+  
+    always @(posedge is_info_register) begin
+        for(i=0;i<32;i++)begin
+        info_register(register[i]);
+        end
+    end
+
+    always @(posedge clk) begin    
+
+    if(rst)begin//复位信号
             for(i=0;i<32;i=i+1)begin
             register[i]=0;
             end

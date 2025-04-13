@@ -1,9 +1,29 @@
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <svdpi.h> // 包含DPI-C作用域API
 #include "common.h"
 static int is_batch_mode = false;
 extern int flag_stop;
+extern Vysyx_25030085_top *top;
+extern VerilatedVcdC *vcd;
 int npc_exec(uint64_t n);
+extern "C"
+{
+    void info_register_en(bool enable);
+    void set_scope();
+}
+void set_scope()
+{
+
+    svScope scope = svGetScopeFromName("TOP.ysyx_25030085_top.regfile_init");
+    if (!scope)
+    {
+        fprintf(stderr, "Error: Regfile scope not found!\n");
+        exit(1);
+    }
+    svSetScope(scope);
+}
+
 #define INPUT_MAX_LEN 256 // 输入最大长度
 
 static char *rl_gets()
@@ -24,29 +44,55 @@ static char *rl_gets()
 
     return buffer; // 返回静态缓冲区地址
 }
+uint32_t pmem_read(uint32_t pc);
 static int cmd_x(char *args)
 { // 扫描内存，第一个参数为数量，第二个参数为起始位置
+    char *n = strtok(args, " ");
+    char *paddr = strtok(NULL, " ");
+    int len = 0;
+    uint32_t addr = 0;
+    sscanf(n, "%d", &len);
+    sscanf(paddr, "%x", &addr);
+    for (int i = 0; i < len; i++)
+    {
+       
+        printf("0x%08x:  ", addr);
+        printf("Hex:0x%08x", pmem_read(addr)); 
+        printf("\tDec:%d\n", pmem_read(addr)); 
+        addr = addr + 4;
+    }
 
     return 0;
 }
 static int cmd_info(char *args)
 { // 参数为r时，打印寄存器状态，参数为w打印监视点状态
+    set_scope();
+    
+    info_register_en(1);
+    top->eval();//一定要更新,verilog里面的always的信号是否n更新n看这个
+    info_register_en(0);
+    top->eval();
 
     return 0;
 }
 static int cmd_s(char *args)
 {                     // 单步执行,参数为执行的步数
+    if (flag_stop == 1)
+    {
+        printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
+        return 0;
+    }
     char *num = strtok(NULL, " "); // 获取第二个参数
     if (num == NULL)
     {
-        npc_exec(1);
+        npc_exec(2);
         return 0;
     }
     int cnt = 0;
     sscanf(num, "%d", &cnt);
     for (int i = 0; i < cnt; i++)
     {
-       npc_exec(1);
+       npc_exec(2);
     }
     return 0;
 }
@@ -59,7 +105,7 @@ static int cmd_c(char *args)
     }
     else if(flag_stop==1)
     {
-        printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
+        printf("Program execution has ended. To restart the program, exit NPC and run again.\n");
     }
     
 

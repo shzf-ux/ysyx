@@ -15,18 +15,18 @@ int main(int argc, char **argv)
 {
     init_monitor(argc, argv);
     sdb_mainloop();
-    if (flag_stop == 1) // 遇到ebreak退出
-    {
-
-        printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
-        printf("at pc = %08x\n", top->pc_out);
-        NPC_State = 0;
-    }
-    else // 不合理的指令
+    if (flag_stop == 2) // 不合理
     {
         printf("%sHIT BAD TRAP  %s", ANSI_FG_RED, ANSI_NONE);
         printf("at pc = %08x\n", top->pc_out);
         NPC_State = 1;
+
+    }
+    else // 不合理的指令
+    {
+        printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
+        printf("at pc = %08x\n", top->pc_out);
+        NPC_State = 0;
     }
 
     // 清理
