@@ -2,6 +2,7 @@
 #include <readline/history.h>
 #include "common.h"
 static int is_batch_mode = false;
+extern flag_stop;
 int npc_exec(uint64_t n);
 #define INPUT_MAX_LEN 256 // 输入最大长度
 
@@ -52,8 +53,17 @@ static int cmd_s(char *args)
 
 static int cmd_c(char *args)
 { // cpu执行，无参数
-    int ret=npc_exec(-1);
-    return ret;
+    if(flag_stop==0)
+    {
+    npc_exec(-1);
+    }
+    else if(flag_stop==1)
+    {
+         
+    }
+    
+
+    return 0;
 }
 
 static int cmd_q(char *args) // 退出

@@ -14,8 +14,6 @@ void npc_exec(uint64_t n)
     {
         top->clk = !top->clk;
         top->instruction = pmem_read(top->pc_out);
-        printf("pc:%08x\n", top->pc_out);
-
         top->eval();
         vcd->dump(sim_time);
         sim_time++;
