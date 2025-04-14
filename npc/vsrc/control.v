@@ -1,5 +1,5 @@
 import "DPI-C" function void ebreak_instruction (input int inst) ;
-import "DPI-C" function void invalid_inst   (input int pc,input int inst);       
+import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
 module ysyx_25030085_control (
     input  [31:0] inst,
     input  [31:0] pc,
@@ -32,6 +32,11 @@ module ysyx_25030085_control (
     assign immI={{20{inst[31]}}, inst[31:20]};
     assign immU={inst[31:12],12'b0};
     assign immS={{20{inst[31]}}, inst[31:25], inst[11:7]};
+
+
+
+
+
 
 
 always @(inst) begin
@@ -145,7 +150,7 @@ always @(inst) begin
             imm     =immJ;   
             invalid =1'b0; 
             end  
-            7'b1100111:begin//jalr指令 跳转地址为(rs1+IMMI)&0
+            7'b1100111:begin//jalr指令 跳转地址为(rs1+IMMI)&0，a先前jal写的值已经被存到寄存器ra里面了，这时候跳转地址rs1就是ra寄存器的值
             MemWrite=1'b0;
             MemRead =1'b0;
             Branch  =1'b0;

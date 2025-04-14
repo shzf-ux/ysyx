@@ -8,7 +8,7 @@ module ysyx_25030085_regfile (
     input [31:0] instruction,
     input RegWrite,
     input [1:0] MemtoReg, //选择写回数据来源（ALU结果/存储器数据/PC+4等）
-   //0为alu计算结果，1为储存器数据，2为pc+4，jal
+   //0为alu计算结果，1为储存器数据，2为pc+4，jal jalr等
 
     input [31:0]Alu_Result,//alu计算结果
     output [31:0]Read_rs1,
@@ -42,6 +42,10 @@ module ysyx_25030085_regfile (
         for(i=0;i<32;i++)begin
         info_register(register[i]);
         end
+    end
+    //保持零寄存器为0
+    always@(*)begin
+        register[0]=0;
     end
 
     always @(posedge clk) begin    
