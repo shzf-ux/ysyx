@@ -1,5 +1,5 @@
 import "DPI-C"  function void info_register  (input int value); 
-import "DPI-C" context function void set_scope();
+//import "DPI-C" context function void set_scope();
 module ysyx_25030085_regfile ( 
     input clk,
     input rst,
@@ -26,7 +26,7 @@ module ysyx_25030085_regfile (
     reg is_info_register;
     integer i; 
     initial begin
-        set_scope();
+     
         is_info_register=0;
     end
 

@@ -24,7 +24,7 @@ void npc_exec(uint64_t n)
         top->clk = !top->clk;
         int is_rising_edge = (top->clk == 1);//记录上升沿
         top->instruction = pmem_read(top->pc_out);
-
+        #ifdef CONFIG_ITRACE_COND
         if (is_rising_edge&&!batch_mode)
         {
             s = (LogBuf *)malloc(sizeof(LogBuf));
@@ -56,6 +56,7 @@ void npc_exec(uint64_t n)
         printf("%s\n", s->logbuf);
         free(s);
         }
+       #endif
         top->eval();
         vcd->dump(sim_time);
         sim_time++;

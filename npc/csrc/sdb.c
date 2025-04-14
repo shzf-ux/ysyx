@@ -55,7 +55,7 @@ static int cmd_x(char *args)
     sscanf(paddr, "%x", &addr);
     for (int i = 0; i < len; i++)
     {
-       
+
         printf("0x%08x:  ", addr);
         printf("Hex:0x%08x", pmem_read(addr)); 
         printf("\tDec:%d\n", pmem_read(addr)); 
