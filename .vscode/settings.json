@@ -40,6 +40,7 @@
     "dlfcn.h": "c",
     "platform.h": "c",
     "stdbool.h": "c",
-    "xcore.h": "c"
+    "xcore.h": "c",
+    "getopt.h": "c"
   }
 }

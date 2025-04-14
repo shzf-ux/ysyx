@@ -1,6 +1,6 @@
 #ifndef _COMMON_H_
 #define _COMMON_H_
-
+#include "/home/zzy/ysyx-workbench/npc/include/generated/autoconf.h"
 #include <getopt.h> //
 #include <string.h>
 #include <stdlib.h>
