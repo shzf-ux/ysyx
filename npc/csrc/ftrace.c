@@ -61,7 +61,7 @@ void parse_elf(char* elf_file)//传入一个elf文件
         }
         if(shdr.sh_type==SHT_STRTAB)//找到字符串表
         {
-            str_tab = malloc(shdr.sh_size);
+            str_tab =(char*) malloc(shdr.sh_size);
             //分配内存
 
             fseek(fp, shdr.sh_offset, SEEK_SET);
@@ -90,7 +90,7 @@ void parse_elf(char* elf_file)//传入一个elf文件
             fseek(fp, shdr.sh_offset, SEEK_SET);//跳转符号表
             int sym_count = shdr.sh_size / shdr.sh_entsize;
             //符号个数
-            symbol = malloc(sizeof(Symbol)*sym_count);
+            symbol = (Symbol*) malloc(sizeof(Symbol) * sym_count);
             // 为结构体e分配内存
             for (size_t j = 0; j < sym_count; j++)
             {
@@ -139,7 +139,7 @@ void printf_symbol_tab()
         
     }
 }
-void display_call_func(uint32_t pc, uint32_t target)
+extern "C" void display_call_func(uint32_t pc, uint32_t target)
 //起始地址和目标地址
 {
     printf_symbol_tab();
@@ -160,7 +160,7 @@ void display_call_func(uint32_t pc, uint32_t target)
     printf("call  %s target:0x%08x\n", symbol[i].name, target);//打印调用函数和目标地址
 }
 
-void display_ret_func(uint32_t pc,uint32_t target)//当前地址，返回地址
+extern "C" void display_ret_func(uint32_t pc, uint32_t target) // 当前地址，返回地址
 {
     flag = 1;
     int i = 0;

@@ -98,6 +98,7 @@ static int parse_args(int argc, char *argv[])
 void welcome()
 {
     printf("Welcome %sRISC-V%s NPC \n", ANSI_BG_RED, ANSI_NONE);
+    printf("For help, type \"help\"\n");
 }
 void init_rtl(int argc, char *argv[])
 {

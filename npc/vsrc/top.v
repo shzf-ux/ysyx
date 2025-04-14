@@ -33,7 +33,8 @@ ysyx_25030085_pc pc_init(
     .rst(rst),
     .Jump(Jump),
     .imm(imm),
-    .pc_out(pc_out),
+    .pc(pc_out),
+    .inst(instruction),
     .Alu_Result(Alu_Result)
 );
 
