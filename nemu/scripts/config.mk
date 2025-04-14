@@ -42,16 +42,13 @@ $(FIXDEP):
 	$(Q)$(MAKE) $(silent) -C $(FIXDEP_PATH)
 
 menuconfig: $(MCONF) $(CONF) $(FIXDEP)
-	echo nihao
 	$(Q)$(MCONF) $(Kconfig)
 	$(Q)$(CONF) $(silent) --syncconfig $(Kconfig)
 
 savedefconfig: $(CONF)
-	echo nihao
 	$(Q)$< $(silent) --$@=configs/defconfig $(Kconfig)
 
 %defconfig: $(CONF) $(FIXDEP)
-	echo nihao
 	$(Q)$< $(silent) --defconfig=configs/$@ $(Kconfig)
 	$(Q)$< $(silent) --syncconfig $(Kconfig)
 

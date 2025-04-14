@@ -44,10 +44,10 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 CONF   := $(NPC_HOME)/$(CSRC_DIR)/tools/Kconfig/conf
-
+MCONF  := $(NPC_HOME)/$(CSRC_DIR)/tools/Kconfig/mconf
 menuconfig:Kconfig $(CONF)
+	@$(MCONF) Kconfig
 	@$(CONF) -s --syncconfig Kconfig
-	@kconfig-mconf Kconfig  
 
 .PHONY: all compile run clean
 -include ../Makefile
