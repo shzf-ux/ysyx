@@ -46,6 +46,7 @@
     "sstream": "c",
     "regex": "c",
     "paddr.h": "c",
-    "dut.h": "c"
+    "dut.h": "c",
+    "difftest-def.h": "c"
   }
 }
