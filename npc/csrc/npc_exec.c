@@ -17,7 +17,6 @@ LogBuf *s;
 void npc_exec(uint64_t n)
 {
     int batch_mode = (int)n == -1;
-
     while ((sim_time < MAX_SIM_TIME) && flag_stop == 0 && (n--) > 0)
     {
         top->clk = !top->clk;
@@ -57,13 +56,15 @@ void npc_exec(uint64_t n)
         free(s);
         }
        #endif
-       if (is_rising_edge)
+       
+      if (is_rising_edge)
        {
         printf("pc:%08x\n",top->pc_out);
         difftest_step(top->pc_out);
+        top->pc_out += 4;
        }
         top->eval();
         vcd->dump(sim_time);
         sim_time++;
-    }
+   }
 }
