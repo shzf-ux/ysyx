@@ -80,17 +80,9 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
         "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
         "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
     printf("测试\n");
-    for (int i = 0; i < 32; i++)
-    {
-        if (CPU_state.gpr[i]!=0)
-        {
-            printf("%-5s: 0x%08x\n", regs[i], CPU_state.gpr[i]);
-        }
 
-          
-    }
-
-    display_register(0);//不打印
+    display_register(1);//不打印
+ 
     bool sign = true;
     int i = 0;
     for (i = 0; i < 32; i++)
@@ -98,11 +90,12 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
       //  printf("%d,%08x\n", i, CPU_state.gpr[i]);
         if (CPU_state.gpr[i] != ref_r->gpr[i])
         {
-            
+
             sign = false;
             return false;
         }
     }
+    printf("%08x,%08x\n", CPU_state.pc, ref_r->pc);
     if (sign && CPU_state.pc == ref_r->pc)
     {
         return true;
