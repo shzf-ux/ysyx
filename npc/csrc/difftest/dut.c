@@ -74,16 +74,20 @@ static int checkregs(CPU *ref, uint32_t pc)
 }
 bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
 {
-    char *regs[] = {
-        "x0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+     char*regs[] = {
+        "x0", "rinta", "sp", "gp", "tp", "t0", "t1", "t2",
         "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
         "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
         "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
     printf("测试\n");
     for (int i = 0; i < 32; i++)
     {
+        if (CPU_state.gpr[i]!=0)
+        {
+            printf("%-5s: 0x%08x\n", regs[i], CPU_state.gpr[i]);
+        }
 
-        printf("%-5s: 0x%08x\n", regs[i], CPU_state.gpr[i]);
+          
     }
 
     display_register(0);//不打印
