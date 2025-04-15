@@ -19,25 +19,11 @@
 #include <memory/paddr.h>
 //addr为向nemu虚拟地址0x80000000，buf为npc数组的物理地址，
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  //addr转化到nemu的数组n起点
-  if (direction == DIFFTEST_TO_REF)//
-  {
-    for (int i = 0; i < 10; i++)
-    {
-      printf("0x%08x:  ", addr);
-      printf("Hex:0x%08x", paddr_read(addr, 4)); // addr len
-      printf("\tDec:%d\n", paddr_read(addr, 4)); // addr len
-      addr = addr + 4;
-    }
-    memcpy(guest_to_host(addr), buf, n); // 把实际地址赋值到nemu的数组地址里面
-    for (int i = 0; i < 10; i++)
-    {
-      printf("0x%08x:  ", addr);
-      printf("Hex:0x%08x", paddr_read(addr, 4)); // addr len
-      printf("\tDec:%d\n", paddr_read(addr, 4)); // addr len
-      addr = addr + 4;
-    }
-  }
+  printf("1111111\n");
+  // addr转化到nemu的数组n起点
+
+  memcpy(guest_to_host(addr), buf, n); // 把实际地址赋值到nemu的数组地址里面
+  
  
 }
 // 传入寄存器结构体，向这个寄存器结构体赋值nemu的寄存器状态;
