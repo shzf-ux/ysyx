@@ -82,7 +82,7 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
         if (CPU_state.gpr[i] != ref_r->gpr[i])
         {
             sign = false;
-            break;
+            return false;
         }
     }
     if (sign && CPU_state.pc == ref_r->pc)
