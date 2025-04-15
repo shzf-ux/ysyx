@@ -70,6 +70,11 @@ static long load_img()
 }
 static int parse_args(int argc, char *argv[])
 {
+    for (int i = 0; i < argc; i++)
+    {
+        printf("argv[%d]: %s\n", i, argv[i]);
+    }
+
     const struct option table[] = {
      {"batch"    , no_argument      , NULL, 'b'},
     {"elf"      , required_argument, NULL, 'e'},
@@ -82,10 +87,13 @@ static int parse_args(int argc, char *argv[])
     int o;
     while ((o = getopt_long(argc, argv, "-bhl:d:p:e:", table, NULL)) != -1)
     {
+        printf("%c\n", o);
         switch (o)
         {
         case 'b':sdb_set_batch_mode();break; // 设置批处理模式
-        case 'd': diff_so_file = optarg;break;
+        case 'd': diff_so_file = optarg;
+            printf("%s\n", diff_so_file);
+            break;
         case 1:img_file = optarg;return 0;
         default:
             printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
@@ -150,4 +158,5 @@ void init_monitor(int argc, char *argv[])
     init_disasm();
     init_rtl(argc, argv);
     init_difftest(diff_so_file, img_size, difftest_port);
+    
 }

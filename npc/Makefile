@@ -8,16 +8,12 @@ TOP_MODULE := ysyx_25030085_top
 
 
 SOURCES    := $(abspath $(wildcard $(VSRC_DIR)/*.v))
-TESTBENCH += $(abspath $(wildcard $(CSRC_DIR)/*/*.cpp $(CSRC_DIR)/*/*.c))
-#递归包含
-#动态库
-NEMU_LIB_PATH := $(abspath $(NEMU_HOME)/build)
-NEMU_LIB_NAME := riscv32-nemu-interpreter-so
+TESTBENCH := $(abspath $(wildcard $(CSRC_DIR)/*.cpp $(CSRC_DIR)/*.c $(CSRC_DIR)/*.))
+TESTBENCH += $(abspath $(wildcard $(CSRC_DIR)/*/*.cpp $(CSRC_DIR)/*/*.c ))
 
-VERILATOR_FLAGS += \
-    -LDFLAGS "-L$(NEMU_LIB_PATH) -Wl,-rpath=$(NEMU_LIB_PATH)" \
-    -LDFLAGS "-l:$(NEMU_LIB_NAME)" \
-    -CFLAGS "-I$(NEMU_HOME)/include"
+#动态库
+
+NEMU_LIB_NAME := $(abspath$(wildcard $(NEMU_HOME)/build/riscv32-nemu-interpreter-so))
 
 
 VERILATOR      := verilator

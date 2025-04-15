@@ -17,12 +17,12 @@
 #include <cpu/cpu.h>
 #include <difftest-def.h>
 #include <memory/paddr.h>
-//addr为向nemu起始地址，buf为npc的地址，
+//addr为向nemu虚拟地址0x80000000，buf为npc数组的物理地址，
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   //addr转化到nemu的数组n起点
   if (direction == DIFFTEST_TO_REF)//
   {
-    memmove(guest_to_host(addr), buf, n); 
+    memcpy(guest_to_host(addr), buf, n); // 把实际地址赋值到nemu的数组地址里面
   }
   else
   {
