@@ -23,7 +23,7 @@ void init_difftest(char *ref_so_file, long img_size, int port)
         fprintf(stderr, "dlopen error: %s\n", dlerror());  // 打印错误
         exit(1);
     }
-    printf("111\n");
+    
     ref_difftest_memcpy = (void (*)(uint32_t, void *, size_t, bool))dlsym(handle, "difftest_memcpy");
     assert(ref_difftest_memcpy);
 
