@@ -57,7 +57,7 @@ void difftest_step(uint32_t pc)
      CPU ref_r;
 
     ref_difftest_exec(1);
-    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
+    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
 
     checkregs(&ref_r, pc);
 }
