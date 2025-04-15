@@ -26,7 +26,7 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction)
   }
   else
   {
-    //printf("111\n");
+    printf("111\n");
     assert(0);
   }
 }
