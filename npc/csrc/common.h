@@ -34,9 +34,17 @@
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 #define MAX_SIM_TIME 100
 extern unsigned char isa_logo[];
+typedef struct
+{
+    int gpr[32];
+    uint32_t pc;
+} CPU;
+extern CPU CPU_state;
 
+class Vysyx_25030085_top; 
+class VerilatedVcdC;
 
-
-
-
+// 声明全局可访问的指针
+extern Vysyx_25030085_top *top; 
+extern VerilatedVcdC *vcd;     
 #endif

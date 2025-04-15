@@ -1,4 +1,3 @@
-# 关键配置
 BUILD_DIR  := ./build
 OBJ_DIR    := $(BUILD_DIR)/obj_dir
 VSRC_DIR   := vsrc
@@ -7,8 +6,18 @@ TARGET     := Vysyx_25030085_top
 TOP_MODULE := ysyx_25030085_top
 
 
+
 SOURCES    := $(abspath $(wildcard $(VSRC_DIR)/*.v))
-TESTBENCH := $(abspath $(wildcard $(CSRC_DIR)/*.cpp $(CSRC_DIR)/*.c $(CSRC_DIR)/*.))
+TESTBENCH += $(abspath $(wildcard $(CSRC_DIR)/*/*.cpp $(CSRC_DIR)/*/*.c))
+#递归包含
+#动态库
+NEMU_LIB_PATH := $(abspath $(NEMU_HOME)/build)
+NEMU_LIB_NAME := riscv32-nemu-interpreter-so
+
+VERILATOR_FLAGS += \
+    -LDFLAGS "-L$(NEMU_LIB_PATH) -Wl,-rpath=$(NEMU_LIB_PATH)" \
+    -LDFLAGS "-l:$(NEMU_LIB_NAME)" \
+    -CFLAGS "-I$(NEMU_HOME)/include"
 
 
 VERILATOR      := verilator
@@ -18,9 +27,7 @@ VERILATOR_FLAGS +=-cc --exe --build --trace \
                    --x-assign fast --x-initial fast \
                    --assert -Mdir $(OBJ_DIR) \
                    --top-module $(TOP_MODULE)			   
-#CONFIG_OPTS := $(shell grep '^CONFIG_' .config | sed 's/=y/=1/; s/^/-D/')
-#VERILATOR_FLAGS += "$(CONFIG_OPTS)"
-#main的执行参数
+
 ARGS :=
 IMG :=
 $(shell mkdir -p $(BUILD_DIR))
