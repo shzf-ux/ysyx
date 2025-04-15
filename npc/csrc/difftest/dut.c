@@ -79,7 +79,7 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
     int i = 0;
     for (i = 0; i < 32; i++)
     {
-        printf("%d,%08x\n", i, CPU_state.gpr[i]);
+      //  printf("%d,%08x\n", i, CPU_state.gpr[i]);
         if (CPU_state.gpr[i] != ref_r->gpr[i])
         {
             
