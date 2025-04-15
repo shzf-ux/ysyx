@@ -13,8 +13,9 @@ CPU CPU_state;
 uint32_t pmem_read(uint32_t pc);
 int main(int argc, char **argv)
 {
- 
+   
     init_monitor(argc, argv);
+    
     sdb_mainloop();
     if (flag_stop == 2) // 不合理
     {
