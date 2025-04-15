@@ -58,8 +58,7 @@ module ysyx_25030085_regfile (
             end
         end
 
-        else if (RegWrite) begin//写回rd使能信号，选择写回来源
-
+        else if (RegWrite&&rd!=0) begin//写回rd使能信号，选择写回来源
         case(MemtoReg) //0为alu计算结果
         2'b00:begin
         register[rd] <= Alu_Result;//写回rd寄存器

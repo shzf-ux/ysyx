@@ -79,9 +79,9 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
         "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
         "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
         "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
-    printf("测试\n");
+   // printf("测试\n");
 
-    display_register(1);//不打印
+    display_register(0);//不打印
  
     bool sign = true;
     int i = 0;

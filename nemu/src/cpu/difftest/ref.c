@@ -41,16 +41,16 @@ __EXPORT void difftest_regcpy(void *dut, bool direction)
 
   if (direction == DIFFTEST_TO_REF) //
   {
-    printf("标准\n");
-    for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
-    {
-      if(cpu.gpr[i]!=0)
-      {
-        printf("%-5s: 0x%08x\n", regs[i], cpu.gpr[i]);
-      }
+   // printf("标准\n");
+    //for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
+   // {
+   //   if(cpu.gpr[i]!=0)
+    //  {
+     //   printf("%-5s: 0x%08x\n", regs[i], cpu.gpr[i]);
+    //  }
 
      
-    }
+  //  }
     for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
     {
       dut_state->gpr[i] = cpu.gpr[i];
