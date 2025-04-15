@@ -36,12 +36,18 @@ __EXPORT void difftest_regcpy(void *dut, bool direction)
       "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
   typedef struct
   {
-    int gpr[32];        
+    int gpr[32];
+    uint32_t pc;
   } CPU;
   CPU *dut_state = (CPU *)dut;//把dut转化
 
   if (direction == DIFFTEST_TO_REF) //
   {
+    for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
+    {
+
+      printf("%-5s: 0x%08x\n", regs[i], cpu.gpr[i]);
+    }
 
     for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
     {
