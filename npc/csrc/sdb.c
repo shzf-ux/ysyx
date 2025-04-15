@@ -4,12 +4,11 @@
 #include "common.h"
 static int is_batch_mode = false;
 extern int flag_stop;
-extern Vysyx_25030085_top *top;
-extern VerilatedVcdC *vcd;
+
 int npc_exec(uint64_t n);
 extern "C"
 {
-    void info_register_en(bool enable);
+    void info_register_en(bool enable,int en);
     void set_scope();
 }
 void set_scope()
@@ -64,14 +63,19 @@ static int cmd_x(char *args)
 
     return 0;
 }
+void display_register(int en)//打印寄存器
+{
+    set_scope();
+    info_register_en(1,en);
+    top->eval(); // 一定要更新,verilog里面的always的信号是否n更新n看这个
+    info_register_en(0,en);
+    top->eval();
+}
 static int cmd_info(char *args)
 { // 参数为r时，打印寄存器状态，参数为w打印监视点状态
-    set_scope();
+
+    display_register(1);//开启打印状态
     
-    info_register_en(1);
-    top->eval();//一定要更新,verilog里面的always的信号是否n更新n看这个
-    info_register_en(0);
-    top->eval();
 
     return 0;
 }
@@ -173,6 +177,7 @@ void sdb_set_batch_mode()
     is_batch_mode = true;
 }
 
+
 void sdb_mainloop()
 {
     if (is_batch_mode)
@@ -218,6 +223,7 @@ void sdb_mainloop()
         {
             printf("Unknown command '%s'\n", cmd);
         }
+      //  check_stop_flag();
     }
 }
 

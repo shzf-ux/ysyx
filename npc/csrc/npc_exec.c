@@ -1,7 +1,7 @@
 #include "common.h"
 #include <dlfcn.h>
-extern Vysyx_25030085_top *top;
-extern VerilatedVcdC *vcd;
+#include "difftest/dut.h"
+
 extern int sim_time;
 extern int flag_stop;
 extern int  NPC_State;
@@ -16,7 +16,6 @@ LogBuf *s;
 
 void npc_exec(uint64_t n)
 {
-
     int batch_mode = (int)n == -1;
 
     while ((sim_time < MAX_SIM_TIME) && flag_stop == 0 && (n--) > 0)
@@ -25,6 +24,7 @@ void npc_exec(uint64_t n)
         int is_rising_edge = (top->clk == 1);//记录上升沿
         top->instruction = pmem_read(top->pc_out);
         #ifdef CONFIG_ITRACE_COND
+
         if (is_rising_edge&&!batch_mode)
         {
             s = (LogBuf *)malloc(sizeof(LogBuf));
@@ -57,6 +57,10 @@ void npc_exec(uint64_t n)
         free(s);
         }
        #endif
+       if (is_rising_edge)
+       {
+        difftest_step(top->pc_out);
+       }
         top->eval();
         vcd->dump(sim_time);
         sim_time++;

@@ -30,14 +30,20 @@ const char *regs[] = {
     "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
     "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
 
-static int reg_index = 0; 
+static int reg_index = 0;
 
-extern "C" void info_register(uint32_t reg_value)
+
+extern "C" void info_register(uint32_t reg_value,int en_display)
 {
-       
+ 
        if (reg_index < 32)
        {
-              printf("%-3s: 0x%08x\n", regs[reg_index], reg_value); 
+              CPU_state.gpr[reg_index] = reg_value;
+              CPU_state.pc = top->pc_out;
+              if (en_display)
+              {
+              printf("%-3s: 0x%08x\n", regs[reg_index], reg_value);
+              }
               reg_index++;
               if(reg_index==32)
               reg_index = 0;

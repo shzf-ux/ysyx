@@ -1,4 +1,4 @@
-import "DPI-C"  function void info_register  (input int value); 
+import "DPI-C"  function void info_register  (input int value,input bit en_display); 
 //import "DPI-C" context function void set_scope();
 module ysyx_25030085_regfile ( 
     input clk,
@@ -24,6 +24,7 @@ module ysyx_25030085_regfile (
     assign rd =instruction[11:7];
     reg [31:0] register [0:31];
     reg is_info_register;
+    reg is_en_display;
     integer i; 
     initial begin
      
@@ -32,15 +33,16 @@ module ysyx_25030085_regfile (
 
     
     export "DPI-C" function info_register_en;
-    function void info_register_en(input bit enable);
+    function void info_register_en(input bit enable,input bit en_display);
       //$display("%d",is_info_register);
        is_info_register=enable;
+       is_en_display=en_display;
       // $display("%d",is_info_register);
     endfunction
   
     always @(posedge is_info_register) begin
         for(i=0;i<32;i++)begin
-        info_register(register[i]);
+        info_register(register[i],is_en_display);
         end
     end
     //保持零寄存器为0

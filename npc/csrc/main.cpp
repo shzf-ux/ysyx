@@ -1,15 +1,15 @@
 #include <iostream>
 #include "common.h"
 int flag_stop = 0;
+//0正常；1 ebreak指令；2不合理指令，3
 int NPC_State = 0;
 int sim_time = 0;
-Vysyx_25030085_top *top = new Vysyx_25030085_top;
-VerilatedVcdC *vcd = new VerilatedVcdC;
-
 
 void init_monitor(int, char *[]);
 void sdb_mainloop();
-
+Vysyx_25030085_top *top = new Vysyx_25030085_top;
+VerilatedVcdC *vcd = new VerilatedVcdC;
+CPU CPU_state;
 uint32_t pmem_read(uint32_t pc);
 int main(int argc, char **argv)
 {
@@ -22,7 +22,7 @@ int main(int argc, char **argv)
         NPC_State = 1;
 
     }
-    else // 不合理的指令
+    else 
     {
         printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
         printf("at pc = %08x\n", top->pc_out);

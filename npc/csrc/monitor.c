@@ -1,15 +1,19 @@
 #include "common.h" //不能用<>
+#include "difftest/dut.h"
 void sdb_set_batch_mode();
-extern Vysyx_25030085_top *top;
-extern VerilatedVcdC *vcd;
+
 extern int sim_time;
 void init_disasm();
+
 uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #define Log(format, ...)                                    \
     _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \
          __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
 static char *img_file = NULL;
+static char *diff_so_file = NULL;
+static int difftest_port = 1234;
+
 //
 void init_mem()
 {
@@ -81,6 +85,7 @@ static int parse_args(int argc, char *argv[])
         switch (o)
         {
         case 'b':sdb_set_batch_mode();break; // 设置批处理模式
+        case 'd': diff_so_file = optarg;break;
         case 1:img_file = optarg;return 0;
         default:
             printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
@@ -102,6 +107,7 @@ void welcome()
 }
 void init_rtl(int argc, char *argv[])
 {
+   
     Verilated::commandArgs(argc, argv);
 
 
@@ -140,7 +146,8 @@ void init_monitor(int argc, char *argv[])
     parse_args(argc, argv); // 解析命令行参数
     init_mem();
     init_isa();
-    load_img();
+    long img_size = load_img();
     init_disasm();
     init_rtl(argc, argv);
+    init_difftest(diff_so_file, img_size, difftest_port);
 }

@@ -42,6 +42,10 @@
     "stdbool.h": "c",
     "xcore.h": "c",
     "getopt.h": "c",
-    "reg.h": "c"
+    "reg.h": "c",
+    "sstream": "c",
+    "regex": "c",
+    "paddr.h": "c",
+    "dut.h": "c"
   }
 }
