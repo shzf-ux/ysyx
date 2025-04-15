@@ -20,15 +20,14 @@
 //addr为向nemu虚拟地址0x80000000，buf为npc数组的物理地址，
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   //addr转化到nemu的数组n起点
- 
-    memcpy(guest_to_host(addr), buf, n); // 把实际地址赋值到nemu的数组地址里面
-  
- 
+  printf("dir:%d\n", direction);
+  memcpy(guest_to_host(addr), buf, n); // 把实际地址赋值到nemu的数组地址里面
 }
 // 传入寄存器结构体，向这个寄存器结构体赋值nemu的寄存器状态;
 __EXPORT void difftest_regcpy(void *dut, bool direction)
 {
- char *regs[] = {
+  printf("dir:%d\n", direction);
+  char *regs[] = {
       "x0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
       "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
       "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
