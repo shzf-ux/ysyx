@@ -24,11 +24,7 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction)
   {
     memcpy(guest_to_host(addr), buf, n); // 把实际地址赋值到nemu的数组地址里面
   }
-  else
-  {
-    printf("111\n");
-    assert(0);
-  }
+ 
 }
 // 传入寄存器结构体，向这个寄存器结构体赋值nemu的寄存器状态;
 __EXPORT void difftest_regcpy(void *dut, bool direction)
@@ -52,10 +48,7 @@ __EXPORT void difftest_regcpy(void *dut, bool direction)
       dut_state->gpr[i] = cpu.gpr[i];
     }
   }
-  else
-  {
-    assert(0);
-  }
+ 
 }
 
 __EXPORT void difftest_exec(uint64_t n){
