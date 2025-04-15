@@ -56,13 +56,13 @@ void npc_exec(uint64_t n)
         free(s);
         }
        #endif
-       
-      if (is_rising_edge)
-       {
-        printf("pc:%08x\n",top->pc_out);
-        difftest_step(top->pc_out);
-        top->pc_out += 4;
-       }
+
+        top->eval();
+        if (is_rising_edge)
+        {
+            printf("pc:%08x\n", top->pc_out);
+            difftest_step(top->pc_out);
+        }
         top->eval();
         vcd->dump(sim_time);
         sim_time++;

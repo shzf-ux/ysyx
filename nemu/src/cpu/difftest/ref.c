@@ -51,13 +51,12 @@ __EXPORT void difftest_regcpy(void *dut, bool direction)
 
      
     }
-
     for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
     {
       dut_state->gpr[i] = cpu.gpr[i];
     }
+    dut_state->pc = cpu.pc;
   }
- 
 }
 
 __EXPORT void difftest_exec(uint64_t n){
