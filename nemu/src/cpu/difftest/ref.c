@@ -17,13 +17,44 @@
 #include <cpu/cpu.h>
 #include <difftest-def.h>
 #include <memory/paddr.h>
-
+//addr为向nemu起始地址，buf为npc的地址，
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  assert(0);
+  //addr转化到nemu的数组n起点
+  if (direction == DIFFTEST_TO_REF)//
+  {
+    memmove(guest_to_host(addr), buf, n); 
+  }
+  else
+  {
+    assert(0);
+  }
 }
+// 传入寄存器结构体，向这个寄存器结构体赋值nemu的寄存器状态;
+__EXPORT void difftest_regcpy(void *dut, bool direction)
+{
+ char *regs[] = {
+      "x0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+      "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+      "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+      "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
+  typedef struct
+  {
+    int gpr[32];        
+  } CPU;
+  CPU *dut_state = (CPU *)dut;//把dut转化
 
-__EXPORT void difftest_regcpy(void *dut, bool direction) {
-  assert(0);
+  if (direction == DIFFTEST_TO_REF) //
+  {
+
+    for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
+    {
+      dut_state->gpr[i] = cpu.gpr[i];
+    }
+  }
+  else
+  {
+    assert(0);
+  }
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
