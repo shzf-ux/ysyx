@@ -24,7 +24,9 @@ VERILATOR_FLAGS +=-cc --exe --build --trace \
                    --assert -Mdir $(OBJ_DIR) \
                    --top-module $(TOP_MODULE)			   
 
-ARGS :=
+NEMU_LIB_NAME := /home/zzy/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
+NPCFLAGS+=-d $(NEMU_LIB_NAME)
+ARGS +=$(NPCFLAGS)
 IMG :=
 $(shell mkdir -p $(BUILD_DIR))
 $(shell mkdir -p $(OBJ_DIR))

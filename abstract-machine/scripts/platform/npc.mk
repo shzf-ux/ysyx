@@ -12,7 +12,7 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
-NPCFLAGS  +=-b -d $(NEMU_LIB_NAME)
+NPCFLAGS  += -b -d $(NEMU_LIB_NAME)
 NEMU_LIB_NAME := /home/zzy/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
 #$(abspath$(wildcard $(NEMU_HOME)/build/riscv32-nemu-interpreter-so))
 #-b无需参数，直接传递文件即可

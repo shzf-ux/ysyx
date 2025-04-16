@@ -21,7 +21,7 @@ void init_difftest(char *ref_so_file, long img_size, int port)
     handle = dlopen(ref_so_file, RTLD_LAZY);
    if (!handle) {
         fprintf(stderr, "dlopen error: %s\n", dlerror());  // 打印错误
-        exit(1);
+       exit(1);
     }
     
     ref_difftest_memcpy = (void (*)(uint32_t, void *, size_t, bool))dlsym(handle, "difftest_memcpy");
@@ -68,14 +68,14 @@ static int checkregs(CPU *ref, uint32_t pc)
     if (!isa_difftest_checkregs(ref, pc))
     {
         printf("%sError!,register no equal%s\n", ANSI_BG_RED, ANSI_NONE);
-      
+        exit(1);
     }
     return 0;
 }
 bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
 {
-     char*regs[] = {
-        "x0", "rinta", "sp", "gp", "tp", "t0", "t1", "t2",
+   const char *rv_regs[] = {
+        "x0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
         "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
         "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
         "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"};
@@ -90,16 +90,20 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
       //  printf("%d,%08x\n", i, CPU_state.gpr[i]);
         if (CPU_state.gpr[i] != ref_r->gpr[i])
         {
+            printf("标准：%s,%08x\n", rv_regs[i], ref_r->gpr[i]);
+            printf("测试：%s,%08x\n", rv_regs[i],CPU_state.gpr[i]);
+          
 
             sign = false;
             return false;
         }
     }
-    printf("%08x,%08x\n", CPU_state.pc, ref_r->pc);
+  //  printf("%08x,%08x\n", CPU_state.pc, ref_r->pc);
     if (sign && CPU_state.pc == ref_r->pc)
     {
         return true;
     }
+    printf("标准pc at:%08x,测试pc:at%08x\n", ref_r->pc, CPU_state.pc);
     pc = ref_r->pc;
 
     return false;
