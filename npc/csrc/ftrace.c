@@ -1,5 +1,6 @@
 #include "common.h"
 #include <elf.h>
+#ifdef CONFIG_FTRACE
 typedef struct
 {
     char name[64];
@@ -179,3 +180,10 @@ extern "C" void display_ret_func(uint32_t pc, uint32_t target) // 当前地址�
 
     printf("ret  [%s] return address:0x%08x\n", symbol[i].name,target);
 }
+#else
+void parse_elf(char *elf_file){}
+extern "C" void display_ret_func(uint32_t pc, uint32_t target){}
+
+extern "C" void display_call_func(uint32_t pc, uint32_t target){}
+void printf_symbol_tab(){}
+#endif
