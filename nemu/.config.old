@@ -74,6 +74,6 @@ CONFIG_RT_CHECK=y
 # end of Miscellaneous
 
 CONFIG_WATCHPOINT=y
-CONFIG_IRINGBUF=y
-# CONFIG_MTRACE is not set
+# CONFIG_IRINGBUF is not set
+CONFIG_MTRACE=y
 # CONFIG_FTRACE is not set

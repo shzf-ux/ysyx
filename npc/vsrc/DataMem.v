@@ -29,11 +29,11 @@ module ysyx_25030085_DataMem (//数据存储器
     always@(posedge clk)begin//立即赋值，不然能读到数据，但是没有赋值
         aligned_addr=addr&32'hFFFFFFFC;//先对齐地址;
         if(MemRead)begin//读数据
-        $display("************************");
-         $display("地址：%08x offset%d",addr,addr[1:0]);
-         $display("offset: %d",offset);
+       // $display("************************");
+        // $display("地址：%08x offset%d",addr,addr[1:0]);
+        // $display("offset: %d",offset);
             rdata = pmem_readv(aligned_addr);//进行选择相关位,设置n低两位为0，地址对齐
-         $display("lw hou data %08x",rdata);
+         //$display("lw hou data %08x",rdata);
             case(MemOp)
             3'b000:begin//lb 需要符号扩展
           
@@ -62,17 +62,17 @@ module ysyx_25030085_DataMem (//数据存储器
             //$display("read is %08x",ReadData);  
             end
             3'b100:begin//lbu
-            $display("come in lbu"); 
-            $display("offset rdata%08x",rdata)  ;   
+           // $display("come in lbu"); 
+           // $display("offset rdata%08x",rdata)  ;   
             case(offset)
             2'b00:read_byteu=rdata[7:0];//读低字节
             2'b01:read_byteu=rdata[15:8];
             2'b10:read_byteu=rdata[23:16];
             2'b11:read_byteu=rdata[31:24];
             endcase
-              $display("offset read %08x",read_byteu)  ; 
+              ///$display("offset read %08x",read_byteu)  ; 
             ReadData={{24{1'b0}},read_byteu};//零扩展 
-            $display("lbu %08x",ReadData)  ;             
+            //$display("lbu %08x",ReadData)  ;             
             end
             3'b101:begin//lhu
             case(offset)
