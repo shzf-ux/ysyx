@@ -47,6 +47,8 @@
     "regex": "c",
     "paddr.h": "c",
     "dut.h": "c",
-    "difftest-def.h": "c"
+    "difftest-def.h": "c",
+    "macro.h": "c",
+    "autoconf.h": "c"
   }
 }
