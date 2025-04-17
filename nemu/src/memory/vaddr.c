@@ -15,8 +15,11 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
-
+void display_memory_read(uint32_t addr, int len);
 word_t vaddr_ifetch(vaddr_t addr, int len) {
+#ifdef CONFIG_MTRACE
+  display_memory_read(addr, len);
+#endif
   return paddr_read(addr, len);
 }
 
