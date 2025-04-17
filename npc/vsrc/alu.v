@@ -36,6 +36,8 @@ module ysyx_25030085_alu(
                 Alu_Result=(rs1_data<B)?32'd1:32'd0;
             end
             4'b0101:begin//算数右移
+            $display("yiwei:%08x",B);
+            $display("shu:%08x",rs1_data);
                 Alu_Result=({32{rs1_data[31]}}<<(32-B))|rs1_data>>B;
             end
             4'b0110:begin//逻辑右移
