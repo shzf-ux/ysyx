@@ -74,7 +74,7 @@ always @(inst) begin
                               
                 end
                 default:begin
-                    
+                invalid =1'b1;    
                 end
             endcase   
             end
@@ -100,7 +100,7 @@ always @(inst) begin
                  AluOp=4'b0101;               
                 end
                 default:begin
-                    
+                invalid =1'b1;    
                 end
         
             endcase              
@@ -152,7 +152,7 @@ always @(inst) begin
                 imm= {27'b0, inst[24:20]} ;  
                 end
                 default:begin
-                AluOp=4'b0000;
+                invalid =1'b1;;
                 end
                 endcase
             end             
@@ -191,7 +191,7 @@ always @(inst) begin
             MemOp=3'b101;
             end
             default:begin
-                
+            invalid =1'b1;    
             end    
             
             endcase          
@@ -221,7 +221,7 @@ always @(inst) begin
                 
             end
             default:begin
-                
+            invalid =1'b1;    
             end
             endcase
                 
@@ -243,7 +243,8 @@ always @(inst) begin
             3'b101: Branch = (Read_rs1[31]!=Read_rs2[31])?(Read_rs1[31]?1'd0:1'd1):(Read_rs1[30:0]>=Read_rs2[30:0]?1'd1:1'd0); // bge
             3'b110: Branch = (Read_rs1 < Read_rs2);   // bltu
             3'b111: Branch = (Read_rs1 >= Read_rs2);  // bgeu
-            default:begin              
+            default:begin 
+            invalid =1'b1;                 
             end
             endcase   
 
@@ -302,7 +303,8 @@ always @(inst) begin
             case(func3)
             3'b000:begin               
             end
-            default:begin               
+            default:begin 
+            invalid =1'b1;                  
             end
             endcase    
             end
