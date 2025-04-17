@@ -63,6 +63,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
+  
 #ifdef CONFIG_MTRACE
   display_memory_write(addr, data);
 #endif
