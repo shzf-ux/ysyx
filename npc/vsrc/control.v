@@ -128,8 +128,9 @@ always @(inst) begin
             3'b000:begin//addi指令
             AluOp=4'b0000;             
             end          
-            3'b001:begin//slli 逻辑左移立即数
-            AluOp=4'b0001;          
+            3'b001:begin//slli 逻辑左移立即数 三个移位立即数都是零扩展,并且只使用低5位数
+            AluOp=4'b0001;  
+            imm= {27'b0, inst[24:20]} ;        
             end
             3'b010:begin//slti 有符号比较
             AluOp=4'b0010;          
@@ -144,9 +145,11 @@ always @(inst) begin
                 case(func7)
                 7'b0100_000:begin//srai算数右移
                 AluOp=4'b0101;
+                imm= {27'b0, inst[24:20]} ; 
                 end
                 7'b0000_000:begin//srli逻辑右移
                 AluOp=4'b0110;
+                imm= {27'b0, inst[24:20]} ;  
                 end
                 default:begin
                 AluOp=4'b0000;

@@ -1,5 +1,7 @@
 #include"common.h"
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
+void display_memory_read(uint32_t addr, int len);
+void display_memory_write(uint32_t addr, int len, uint32_t data);
 static inline uint32_t host_read(void *addr, int len);
 static inline uint32_t host_read(void *addr, int len)
 {
@@ -33,8 +35,8 @@ uint8_t *guest_to_host(uint32_t paddr)
 extern "C" uint32_t pmem_readv(int raddr)
 {
     //printf("c  lw %08x\n", raddr);
-
-    uint32_t ret=pmem_read(raddr, 4);
+    display_memory_read(raddr, 4);
+    uint32_t ret = pmem_read(raddr, 4);
     //printf("ret:%08x\n", ret);
     return ret;
 }
@@ -49,10 +51,20 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 
     // mask 00001111
     // 把32为的data按照wmask写入addr里面
+    display_memory_write( waddr, 4, wdata);
     uint8_t *p = guest_to_host(waddr); // 获取8字节的指针
     for (int i = 0; i < 4; i++)
     {
         if ((wmask >> i) & 1)//是1就写入
             p[i] = (wdata >> (i * 8)) & 0xFF;//111111111//保留相关位
     }
+}
+void display_memory_read(uint32_t addr, int len)
+{
+    printf(ANSI_FMT("read memory: ", ANSI_FG_GREEN)", len: %d\n", addr, len); // 设置颜色
+}
+
+void display_memory_write(uint32_t addr, int len, uint32_t data)
+{
+    printf(ANSI_FMT("write memory: ", ANSI_FG_YELLOW)",  len : %d, data:" FMT_WORD "\n", addr, len, data);
 }

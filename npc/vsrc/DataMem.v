@@ -14,22 +14,23 @@ module ysyx_25030085_DataMem (//数据存储器
     input MemWrite, //储存器控制信号，决定写sb sw sh
     input [2:0]MemOp,
     input [31:0] Read_rs2,//存入的数据
-    input [31:0] addr,//存入或读出的地址
+    input reg [31:0] addr,//存入或读出的地址
     output reg [31:0]ReadData//读出的数据
 );
   
      reg [31:0] rdata;
      reg [1:0]  offset;//获取偏移量
      assign offset=addr[1:0];//为地址后两位
-     wire [31:0] aligned_addr=addr&32'hFFFFFFFC;//先对齐地址;
+    reg [31:0] aligned_addr;
     reg [7:0]read_byte;
     reg [7:0] read_byteu;
     reg [15:0]read_half_word;
     reg [15:0]read_half_wordu;
     always@(posedge clk)begin//立即赋值，不然能读到数据，但是没有赋值
+        aligned_addr=addr&32'hFFFFFFFC;//先对齐地址;
         if(MemRead)begin//读数据
-        $display("*************");
-         $display("地址：%08x",aligned_addr);
+        $display("************************");
+         $display("地址：%08x offset%d",addr,addr[1:0]);
          $display("offset: %d",offset);
             rdata = pmem_readv(aligned_addr);//进行选择相关位,设置n低两位为0，地址对齐
          $display("lw hou data %08x",rdata);
