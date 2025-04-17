@@ -10,6 +10,7 @@ module ysyx_25030085_pc (
     input [31:0]inst,//控制ftrace，识别跳转和调用
     input [31:0]Alu_Result,
     input [1:0]Jump,
+    input Branch,
 
     output  [31:0] pc//改成wire
 );
@@ -22,15 +23,19 @@ always @(posedge clk or posedge rst) begin
      current_pc <= 32'h8000_0000;  // 复位值 
      dnpc  <= 32'h0;  
     end     
-    else if(Jump==2'b01)begin//JAL
+    else if(Jump==2'b01)begin//JAL最低位固定为 0
     current_pc<=imm+current_pc;  //JAL跳转地址
     dnpc <=imm+current_pc; 
     end
-    else if(Jump==2'b10)begin//jalr 返回or调用
-   
+    else if(Jump==2'b10)begin//jalr 返回or调用  计算目标地址：rs1 + 符号扩展的立即数 imm，并将 ​最低位强制置 0​（地址对齐） 
     current_pc<=(Alu_Result&32'hFFFFFFFE);
     dnpc<=(Alu_Result&32'hFFFFFFFE);
     end
+    else if(Branch)begin
+    current_pc<=Alu_Result;
+    dnpc<= Alu_Result;   
+    end
+
     else 
     current_pc<=current_pc+4; 
 end

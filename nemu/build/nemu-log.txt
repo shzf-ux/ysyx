@@ -6,3 +6,4 @@
 [1;34m[src/monitor/monitor.c:33 welcome] Build time: 10:35:20, Apr 16 2025[0m
 0x80000000: 00 00 02 97 auipc	t0, 0
 0x80000004: 00 02 88 23 sb	zero, 0x10(t0)
+0x80000008: 01 02 c5 03 lbu	a0, 0x10(t0)
