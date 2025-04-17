@@ -32,6 +32,7 @@ ysyx_25030085_pc pc_init(
     .clk(clk),
     .rst(rst),
     .Jump(Jump),
+    .Branch(Branch),
     .imm(imm),
     .pc(pc_out),
     .inst(instruction),
@@ -50,8 +51,9 @@ ysyx_25030085_control control_init(
     .MemOp(MemOp),
     .Branch(Branch),
     .Jump(Jump),
-    .imm(imm) 
-    
+    .imm(imm),
+    .Read_rs1(Read_rs1),
+    .Read_rs2(Read_rs2)
 );
 
 ysyx_25030085_regfile regfile_init(
@@ -64,7 +66,8 @@ ysyx_25030085_regfile regfile_init(
     .MemtoReg(MemtoReg),
     .Alu_Result(Alu_Result),
     .Read_rs1(Read_rs1),
-    .Read_rs2(Read_rs2)
+    .Read_rs2(Read_rs2),
+    .MemRead(ReadData)
     
 );
    
@@ -78,7 +81,7 @@ ysyx_25030085_alu alu_init(
     .Alu_Result(Alu_Result)
 ); 
 ysyx_25030085_DataMem DataMem(
-    .rst(rst),
+    .clk(clk),
     .MemOp(MemOp),
     .MemRead(MemRead),
     .MemWrite(MemWrite),//控制信号

@@ -4,21 +4,20 @@ void sdb_set_batch_mode();
 
 extern int sim_time;
 void init_disasm();
+uint32_t pmem_read(uint32_t raddr,int len);
+uint8_t *guest_to_host(uint32_t paddr);
+void init_mem();
 
-uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #define Log(format, ...)                                    \
     _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \
          __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
-static char *img_file = NULL;
+    static char *img_file = NULL;
 static char *diff_so_file = NULL;
 static int difftest_port = 1234;
 
 //
-void init_mem()
-{
-    memset(pmem, rand() % 128, CONFIG_MSIZE);
-}
+
 // 设置初始ji
 static const uint32_t img[] = {
     0x00500093, // addi x1,x0,5
@@ -27,7 +26,6 @@ static const uint32_t img[] = {
     0x00508113, // addi x2,x1,5
     0x00100073,};
 
-uint8_t *guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 void init_isa()
 {
     /* Load built-in image. */
@@ -35,12 +33,6 @@ void init_isa()
 }
 
 // 加载镜像文件
-uint32_t pmem_read(uint32_t pc)
-{
-
-    uint32_t paddr = pc - CONFIG_MBASE;
-    return *((uint32_t *)(pmem + paddr)); // 修正为按字节读取 32 位
-}
 
 static long load_img()
 {
@@ -59,7 +51,7 @@ static long load_img()
     fseek(fp, 0, SEEK_END);
     long size = ftell(fp);
 
-    printf("%sThe image is %s, size = %ld\n%s", ANSI_FG_BLUE, img_file, size, ANSI_NONE);
+    printf("%sThe image is %s, size = %ld %s\n", ANSI_FG_BLUE, img_file, size, ANSI_NONE);
 
     fseek(fp, 0, SEEK_SET);
     int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
@@ -133,14 +125,14 @@ void init_rtl(int argc, char *argv[])
     top->clk = 1;
     top->rst = 1;
     top->eval();
-    top->instruction = pmem_read(top->pc_out);
+    top->instruction = pmem_read(top->pc_out,4);
     vcd->dump(sim_time); // 写入复位信号置位状态
     sim_time++;
 
     // 3. 释放复位信号
     top->rst = 0;
     top->clk = 0;
-    top->instruction = pmem_read(top->pc_out);
+    top->instruction = pmem_read(top->pc_out,4);
     top->eval();
     vcd->dump(sim_time); // 写入复位释放状态
     sim_time++;

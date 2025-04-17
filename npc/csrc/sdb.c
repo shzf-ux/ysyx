@@ -43,7 +43,7 @@ static char *rl_gets()
 
     return buffer; // 返回静态缓冲区地址
 }
-uint32_t pmem_read(uint32_t pc);
+uint32_t pmem_read(uint32_t raddr,int len);
 static int cmd_x(char *args)
 { // 扫描内存，第一个参数为数量，第二个参数为起始位置
     char *n = strtok(args, " ");
@@ -56,8 +56,8 @@ static int cmd_x(char *args)
     {
 
         printf("0x%08x:  ", addr);
-        printf("Hex:0x%08x", pmem_read(addr)); 
-        printf("\tDec:%d\n", pmem_read(addr)); 
+        printf("Hex:0x%08x", pmem_read(addr,4)); 
+        printf("\tDec:%d\n", pmem_read(addr,4)); 
         addr = addr + 4;
     }
 

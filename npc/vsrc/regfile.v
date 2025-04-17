@@ -9,7 +9,7 @@ module ysyx_25030085_regfile (
     input RegWrite,
     input [1:0] MemtoReg, //选择写回数据来源（ALU结果/存储器数据/PC+4等）
    //0为alu计算结果，1为储存器数据，2为pc+4，jal jalr等
-
+    input [31:0]MemRead,//储存器数据
     input [31:0]Alu_Result,//alu计算结果
     output [31:0]Read_rs1,
     output [31:0]Read_rs2
@@ -57,14 +57,17 @@ module ysyx_25030085_regfile (
             register[i]=0;
             end
         end
-
         else if (RegWrite&&rd!=0) begin//写回rd使能信号，选择写回来源
+        
         case(MemtoReg) //0为alu计算结果
-        2'b00:begin
+    
+        2'b00:begin//包含u型指令的pc+立即数写回
         register[rd] <= Alu_Result;//写回rd寄存器
        // $display("Write: x%d = 0x%08x", rd, Alu_Result);
         end
         2'b01:begin//1为储存器数据
+        
+        register[rd]<=MemRead;
             
         end
         2'b10:begin//2为pc+4，jal

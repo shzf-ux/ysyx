@@ -10,7 +10,7 @@ void sdb_mainloop();
 Vysyx_25030085_top *top = new Vysyx_25030085_top;
 VerilatedVcdC *vcd = new VerilatedVcdC;
 CPU CPU_state;
-uint32_t pmem_read(uint32_t pc);
+
 int main(int argc, char **argv)
 {
    

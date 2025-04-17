@@ -34,6 +34,7 @@
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 #define MAX_SIM_TIME 100
 extern unsigned char isa_logo[];
+
 typedef struct
 {
     int gpr[32];
