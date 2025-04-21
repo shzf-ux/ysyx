@@ -62,9 +62,7 @@ module ysyx_25030085_DataMem (//数据存储器
             //$display("read is %08x",ReadData);  
             end
             3'b100:begin//lbu
-            $display("come in lbu"); 
-            $display("offset rdata %08x",aligned_addr) ; 
-            $display("offset  %0d",offset)  ;    
+           
             case(offset)
             2'b00:read_byteu=rdata[7:0];//读低字节
             2'b01:read_byteu=rdata[15:8];
