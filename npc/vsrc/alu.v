@@ -56,13 +56,5 @@ module ysyx_25030085_alu(
             default: begin
             end
         endcase
-        
-
-
-
-
-
     end
-
-
 endmodule
