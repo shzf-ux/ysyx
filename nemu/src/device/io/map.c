@@ -69,4 +69,5 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   host_write(map->space + offset, len, data);
   printf("host_write\n");
   invoke_callback(map->callback, offset, len, true);
+  printf("write\n");
 }
