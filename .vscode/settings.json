@@ -50,6 +50,7 @@
     "difftest-def.h": "c",
     "macro.h": "c",
     "autoconf.h": "c",
-    "utils.h": "c"
+    "utils.h": "c",
+    "chrono": "c"
   }
 }
