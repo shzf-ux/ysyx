@@ -238,5 +238,10 @@ config FTRACE
     default y
     help
       Enable function trace checking for debugging. 
+config DTRACE
+    bool "Enable device trace"
+    default y
+    help
+      Enable device trace checking for debugging. 
 
 

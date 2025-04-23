@@ -52,3 +52,8 @@ void display_memory_write(uint32_t addr, uint32_t data)
 {
     printf(ANSI_FMT("write memory at pc: ", ANSI_FG_YELLOW) "0x%08x, data: 0x%08x\n", addr, data);
 }
+
+void dtrace(IOMap*map)
+{
+    printf("%s dtrace:%s %s\n", ANSI_BG_YELLOW, map->name, ANSI_NONE);
+}
