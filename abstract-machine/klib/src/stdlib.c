@@ -31,9 +31,9 @@ int atoi(const char* nptr) {
 
 Area heapp = {
     // 这里可以根据实际情况修改堆区起始地址
-    .start = (void *)0x10000000,
+    .start = (void *)0x80f00000,
     // 这里可以根据实际情况修改堆区结束地址
-    .end = (void *)0x20000000
+    .end = (void *)0x8ffffffff
   };
 
 static void *addr = NULL;
