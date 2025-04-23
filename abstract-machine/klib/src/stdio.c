@@ -63,14 +63,23 @@ int vsprintf(char *out, const char *fmt, va_list ap)//扫描格式化字符串�
         break;
       case 's':
         char *s = va_arg(ap, char *);
-        while (*s)
+        if (s == NULL)
         {
-          *(out + (index)) = *s;
-          s++;
-          index++;
+          // 替换为 "(null)" 或跳过输出
+          const char *nullstr = "(null)";
+          while (*nullstr)
+          {
+            out[index++] = *nullstr++;
+          }
         }
-
-        break;
+        else
+        {
+          while (*s)
+          {
+            out[index++] = *s++;
+          }
+        }
+         break;
       default:
         break;
       }
