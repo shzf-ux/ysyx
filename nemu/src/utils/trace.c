@@ -55,5 +55,5 @@ void display_memory_write(uint32_t addr, uint32_t data)
 
 void dtrace(IOMap*map)
 {
-    printf("   dtrace:%s %s %s\n", ANSI_FG_YELLOW, map->name, ANSI_NONE);
+    printf("\t%sdtrace:%s %s\n", ANSI_FG_YELLOW, map->name, ANSI_NONE);
 }
