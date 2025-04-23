@@ -51,6 +51,7 @@
     "macro.h": "c",
     "autoconf.h": "c",
     "utils.h": "c",
-    "chrono": "c"
+    "chrono": "c",
+    "time.h": "c"
   }
 }
