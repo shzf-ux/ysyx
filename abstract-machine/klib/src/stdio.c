@@ -63,9 +63,8 @@ int vsprintf(char *out, const char *fmt, va_list ap)//扫描格式化字符串�
         break;
       case 's':
         char *s = va_arg(ap, char *);
-        if (s == NULL)
+        if (s == NULL)//跳过空指针
         {
-          // 替换为 "(null)" 或跳过输出
           const char *nullstr = "(null)";
           while (*nullstr)
           {
@@ -81,6 +80,7 @@ int vsprintf(char *out, const char *fmt, va_list ap)//扫描格式化字符串�
         }
          break;
       default:
+        va_arg(ap, int);
         break;
       }
     }
