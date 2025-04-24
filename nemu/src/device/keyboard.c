@@ -42,7 +42,10 @@ enum {
 static uint32_t keymap[256] = {};
 
 // #define MAP(c, f) c(f)
-
+static void init_keymap() {
+  printf("11111\n");
+  MAP(NEMU_KEYS, SDL_KEYMAP)
+}
 
 #define KEY_QUEUE_LEN 1024
 static int key_queue[KEY_QUEUE_LEN] = {};
@@ -95,5 +98,5 @@ void init_i8042() {
 #else
   add_mmio_map("keyboard", CONFIG_I8042_DATA_MMIO, i8042_data_port_base, 4, i8042_data_io_handler);
 #endif
-  //IFNDEF(CONFIG_TARGET_AM, init_keymap());
+  IFNDEF(CONFIG_TARGET_AM, init_keymap());
 }
