@@ -47,8 +47,10 @@ static void init_keymap() {
   MAP(NEMU_KEYS, SDL_KEYMAP)
   for (int i = 0; i < 256; i++)
   {
-   
+    if (keymap[i] != 0)
+    {
       printf("keymap[%d] = %d\n", i, keymap[i]);
+    }
   }
 }
 
