@@ -53,7 +53,7 @@ static int key_queue[KEY_QUEUE_LEN] = {};
 static int key_f = 0, key_r = 0;
 
 static void key_enqueue(uint32_t am_scancode) {
-  printf("scan:%d", am_scancode);
+  printf("scan:%d\n", am_scancode);
   key_queue[key_r] = am_scancode;
   key_r = (key_r + 1) % KEY_QUEUE_LEN;
   Assert(key_r != key_f, "key queue overflow!");
@@ -94,7 +94,7 @@ static void i8042_data_io_handler(uint32_t offset, int len, bool is_write) {
   i8042_data_port_base[0] = key_dequeue();
   if(i8042_data_port_base[0]!=0)
   {
-    printf("k:%d", i8042_data_port_base[0]);
+    printf("k:%d\n", i8042_data_port_base[0]);
   }
 }
 
