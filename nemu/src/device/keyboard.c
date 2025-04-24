@@ -45,6 +45,11 @@ static uint32_t keymap[256] = {};
 static void init_keymap() {
  
   MAP(NEMU_KEYS, SDL_KEYMAP)
+  for (int i = 0; i < 256; i++)
+  {
+   
+      printf("keymap[%d] = %d\n", i, keymap[i]);
+  }
 }
 
 #define KEY_QUEUE_LEN 1024
