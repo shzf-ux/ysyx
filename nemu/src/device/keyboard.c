@@ -43,7 +43,7 @@ static uint32_t keymap[256] = {};
 
 // #define MAP(c, f) c(f)
 static void init_keymap() {
-  printf("11111\n");
+ 
   MAP(NEMU_KEYS, SDL_KEYMAP)
 }
 
@@ -67,6 +67,7 @@ static uint32_t key_dequeue() {
 }
 
 void send_key(uint8_t scancode, bool is_keydown) {
+  printf("11111\n");
   if (nemu_state.state == NEMU_RUNNING && keymap[scancode] != NEMU_KEY_NONE) {
     uint32_t am_scancode = keymap[scancode] | (is_keydown ? KEYDOWN_MASK : 0);
     key_enqueue(am_scancode);
