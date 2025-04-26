@@ -19,16 +19,16 @@
 #define SCREEN_W (MUXDEF(CONFIG_VGA_SIZE_800x600, 800, 400))
 #define SCREEN_H (MUXDEF(CONFIG_VGA_SIZE_800x600, 600, 300))
 
-static uint32_t screen_width() {
+static uint32_t screen_width() {//  宽设为400
   return MUXDEF(CONFIG_TARGET_AM, io_read(AM_GPU_CONFIG).width, SCREEN_W);
 }
 
-static uint32_t screen_height() {
+static uint32_t screen_height() {//高设为300
   return MUXDEF(CONFIG_TARGET_AM, io_read(AM_GPU_CONFIG).height, SCREEN_H);
 }
 
 static uint32_t screen_size() {
-  return screen_width() * screen_height() * sizeof(uint32_t);
+  return screen_width() * screen_height() * sizeof(uint32_t); // 一个像素占32个bit的存储空间
 }
 
 static void *vmem = NULL;
@@ -74,11 +74,17 @@ static inline void update_screen() {
 void vga_update_screen() {
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
+  uint32_t sync = vgactl_port_base[1];
+  if (sync)
+  {
+    update_screen();
+    vgactl_port_base[1] = 0;
+  }
 }
 
 void init_vga() {
   vgactl_port_base = (uint32_t *)new_space(8);
-  vgactl_port_base[0] = (screen_width() << 16) | screen_height();
+  vgactl_port_base[0] = (screen_width() << 16) | screen_height();//低16位储存了高，高16为储存了宽
 #ifdef CONFIG_HAS_PORT_IO
   add_pio_map ("vgactl", CONFIG_VGA_CTL_PORT, vgactl_port_base, 8, NULL);
 #else
