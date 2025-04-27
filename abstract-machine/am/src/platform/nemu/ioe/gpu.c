@@ -33,7 +33,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   {
     for (int j = x; j < x + w; j++)//扫描每一列
     {
-      fb[screen_w * i + j] = pixels[w * (i) + (j )];
+      fb[screen_w * i + j] = pixels[w * (i) + (j - x)];
     }
   }
   if (ctl->sync)
