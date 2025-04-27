@@ -29,7 +29,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   uint32_t *pixels = ctl->pixels;//获取像素
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   uint32_t screen_w = inl(VGACTL_ADDR) >> 16;//读屏幕宽度
-  for (int i = y; i < y + h; i++)            // 遍历绘制区域的每一行
+  for (int i = y; i < y + h; i++)// 遍历绘制区域的每一行
   {
     for (int j = x; j < x + w; j++)//扫描每一列
     {
