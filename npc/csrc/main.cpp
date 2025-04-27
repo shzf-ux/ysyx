@@ -1,7 +1,7 @@
 #include <iostream>
 #include "common.h"
 int flag_stop = 0;
-//0正常；1 ebreak指令；2不合理指令，3
+//0正常；1 ebreak指令；2不合理指令
 int NPC_State = 0;
 int sim_time = 0;
 
