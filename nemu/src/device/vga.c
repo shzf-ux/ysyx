@@ -49,10 +49,11 @@ static void init_screen() {
   SDL_CreateWindowAndRenderer(
       SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
       SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
-      0, &window, &renderer);
-  SDL_SetWindowTitle(window, title);
+      0, &window, &renderer);//创建窗口和渲染器
+  SDL_SetWindowTitle(window, title);//设置渲染器
+
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
-      SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);
+      SDL_TEXTUREACCESS_STATIC, SCREEN_W, SCREEN_H);//设置纹理
   SDL_RenderPresent(renderer);
 }
 
@@ -75,11 +76,9 @@ static inline void update_screen() {
 void vga_update_screen() {
   // TODO: call `update_screen()` when the sync register is non-zero,
   // then zero out the sync register
-  uint32_t sync = vgactl_port_base[1];
-  if (sync) {
+
     update_screen();
-    vgactl_port_base[1] = 0;
-  }
+ 
 
 }
 
