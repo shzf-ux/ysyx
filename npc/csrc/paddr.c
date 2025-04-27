@@ -51,7 +51,7 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 {
     if (waddr == 0xa00003f8)
     {
-        printf("111\n");
+      
         putc(wdata,stdout);
         return;
     }

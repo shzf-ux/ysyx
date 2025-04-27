@@ -17,11 +17,12 @@ LogBuf *s;
 void npc_exec(uint64_t n)
 {  
     int batch_mode = (int)n == -1;
-    while ((sim_time < MAX_SIM_TIME) && flag_stop == 0 && (n--) > 0)
+    while ( flag_stop == 0 && (n--) > 0)
     {
         top->clk = !top->clk;
         int is_rising_edge = (top->clk == 1);//记录上升沿
         top->instruction = pmem_read(top->pc_out,4);
+         //printf("pc:%08x\n", top->pc_out);
         #ifdef CONFIG_ITRACE_COND
 
         if (is_rising_edge&&!batch_mode)
