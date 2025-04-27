@@ -49,7 +49,13 @@ void init_mem()
 }
 extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 {
- 
+    if (waddr == 0xa00003f8)
+    {
+        printf("111\n");
+        putc(wdata,stdout);
+        return;
+    }
+
 //0001  0011  1111
 //0010  1100
 //0100         
