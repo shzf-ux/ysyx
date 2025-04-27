@@ -57,7 +57,7 @@ void npc_exec(uint64_t n)
         }
        #endif
 
-        //top->eval();
+        top->eval();
         if (is_rising_edge)
         {
           // printf("pc:%08x\n", top->pc_out);
