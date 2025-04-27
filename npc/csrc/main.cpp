@@ -21,15 +21,18 @@ int main(int argc, char **argv)
     {
         printf("%sHIT BAD TRAP  %s", ANSI_FG_RED, ANSI_NONE);
         printf("at pc = %08x\n", top->pc_out);
-        NPC_State = 1;
+        NPC_State = 2;
 
     }
-    else 
+    
+    else if(flag_stop==1)//遇到ebreak指令
     {
         printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
         printf("at pc = %08x\n", top->pc_out);
         NPC_State = 0;
     }
+    else
+    NPC_State = 1;
 
     // 清理
     vcd->close();

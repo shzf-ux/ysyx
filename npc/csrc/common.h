@@ -32,7 +32,7 @@
 #define RESET_VECTOR 0x80000000
 #define CONFIG_MBASE 0x80000000
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
-#define MAX_SIM_TIME 100
+#define MAX_SIM_TIME 655300
 extern unsigned char isa_logo[];
 
 typedef struct
