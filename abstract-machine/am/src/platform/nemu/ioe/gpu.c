@@ -29,12 +29,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   uint32_t screen_w = inl(VGACTL_ADDR) >> 16;//读宽度
  
-      fb[screen_w ] = pixels[w * y + x];
-  
-  if (ctl->sync)
-  {
-    outl(SYNC_ADDR, 1);//
-  }
+ fb[screen_w ] = pixels[w * y + x];
+ 
 }
 
 void __am_gpu_status(AM_GPU_STATUS_T *status) {
