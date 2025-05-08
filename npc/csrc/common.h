@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <time.h>
 #include <assert.h>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
@@ -47,5 +48,12 @@ class VerilatedVcdC;
 
 // 声明全局可访问的指针
 extern Vysyx_25030085_top *top; 
-extern VerilatedVcdC *vcd;     
+extern VerilatedVcdC *vcd;
+
+#define SERIAL_ADDR 0xa00003f8
+#define UPTIME_ADDR 0xa0000048
+
 #endif
+
+
+
