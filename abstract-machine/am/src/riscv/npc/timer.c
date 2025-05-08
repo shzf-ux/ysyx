@@ -2,9 +2,9 @@
 
 void __am_timer_init() {
 }
-
+static inline uint32_t inl(uintptr_t addr) { return *(volatile uint32_t *)addr; }
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uptime->us = 0;
+  uptime->us = inl(0xa0000048);
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {

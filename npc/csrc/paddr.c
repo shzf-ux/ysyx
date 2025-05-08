@@ -2,6 +2,7 @@
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 void display_memory_read(uint32_t addr, uint32_t data);
 void display_memory_write(uint32_t addr, uint32_t data);
+uint64_t get_time();
 static inline uint32_t host_read(void *addr, int len);
 static inline uint32_t host_read(void *addr, int len)
 {
@@ -35,8 +36,13 @@ uint8_t *guest_to_host(uint32_t paddr)
 extern "C" uint32_t pmem_readv(int raddr)
 {
     //printf("c  lw %08x\n", raddr);
-    
+    if (raddr == UPTIME_ADDR)
+    {
+
+        return get_time();
+    }
     uint32_t ret = pmem_read(raddr, 4);
+
     //printf("ret:%08x\n", ret);
     #ifdef CONFIG_MTRACE
     display_memory_read(raddr, ret);
@@ -49,7 +55,7 @@ void init_mem()
 }
 extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 {
-    if (waddr == 0xa00003f8)
+    if (waddr == SERIAL_ADDR)
     {
       
         putc(wdata,stdout);
