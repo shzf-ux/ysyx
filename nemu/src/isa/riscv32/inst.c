@@ -19,10 +19,25 @@
 #include <cpu/decode.h>
 void display_call_func(uint32_t pc, uint32_t target);
 void display_ret_func(uint32_t pc,uint32_t target); // 返回地址
-
+static word_t *csr_register(word_t imm);
 #define R(i) gpr(i)
 #define Mr vaddr_read
 #define Mw vaddr_write
+#define CSR(i) *csr_register(i)
+static word_t *csr_register(word_t imm)//返回一个指针可以修改
+{
+  switch (imm)
+  {
+  case 0x300:return &cpu.csr.mstatus;//mstatus的地址
+  case 0x305:return &cpu.csr.mtvec; // mtvec的地址
+  case 0x341:return &cpu.csr.mepc; // mepc的地址
+  case 0x342:return &cpu.csr.mcause;//mcause的地址
+  default:
+    printf("no match csr register\n");
+    return 0;
+    break;
+  }
+}
 
     enum {
       TYPE_I,
@@ -135,6 +150,11 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw, S, Mw(src1 + imm, 4, src2));
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh, S, Mw(src1 + imm, 2, src2));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak, N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
+
+//异常处理机制
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, I, R(rd) = CSR(imm);CSR(imm)=src1); // 读csr寄存器的的值到rd，并更新
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, I, R(rd) = CSR(imm);CSR(imm)|=src1); // 读csr寄存器的的值到rd，并置位
+
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
   INSTPAT_END();
 
