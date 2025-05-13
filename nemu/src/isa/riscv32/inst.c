@@ -24,6 +24,8 @@ static word_t *csr_register(word_t imm);
 #define Mr vaddr_read
 #define Mw vaddr_write
 #define CSR(i) *csr_register(i)
+#define ECALL(dnpc) { bool success; dnpc = (isa_raise_intr(isa_reg_str2val("a7", &success), s->pc)); }
+
 static word_t *csr_register(word_t imm)//返回一个指针可以修改
 {
   switch (imm)
@@ -154,6 +156,7 @@ static int decode_exec(Decode *s) {
 //异常处理机制
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, I, R(rd) = CSR(imm);CSR(imm)=src1); // 读csr寄存器的的值到rd，并更新
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, I, R(rd) = CSR(imm);CSR(imm)|=src1); // 读csr寄存器的的值到rd，并置位
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, N, ECALL(s->dnpc));
 
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
   INSTPAT_END();
