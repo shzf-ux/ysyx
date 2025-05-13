@@ -62,5 +62,6 @@ word_t isa_reg_str2val(const char *s, bool *success) {//n返回寄存器的值
         }
     }
     *success = false;
+    assert(0);
     return 0;
 }
