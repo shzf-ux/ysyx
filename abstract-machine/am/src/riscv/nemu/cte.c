@@ -35,11 +35,11 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 }
 
 void yield() {
- 
+  //printf("111\n");
 #ifdef __riscv_e
   asm volatile("li a5, -1; ecall");
 #else
-  asm volatile("li a7, 11; ecall"); // 设置系统调用号。CPU 进入陷阱处理流程。
+  asm volatile("li a7, -1; ecall"); // 设置系统调用号。CPU 进入陷阱处理流程。
 #endif
 }
 
