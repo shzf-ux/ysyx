@@ -7,7 +7,7 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
-    printf("mcause:%08x\n", c->mcause);
+    printf("mcause:%x\n", c->mcause);
     switch (c->mcause)
     {
     default:
