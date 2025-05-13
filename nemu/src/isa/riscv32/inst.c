@@ -28,7 +28,7 @@ static word_t *csr_register(word_t imm);
   {                                                                  \
     printf("ecall\n"); \
     bool success;                                                    \
-    dnpc = (isa_raise_intr(isa_reg_str2val("a7", &success), s->pc)); \
+    dnpc = (isa_raise_intr(isa_reg_str2val("$a7", &success), s->pc)); \
   }
 
 static word_t *csr_register(word_t imm)//返回一个指针可以修改
