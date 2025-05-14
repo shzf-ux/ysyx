@@ -26,11 +26,16 @@ static word_t *csr_register(word_t imm);
 #define CSR(i) *csr_register(i)
 #define ECALL(dnpc)                                                  \
   {                                                                  \
-    printf("ecall\n"); \
     bool success;                                                    \
     dnpc = (isa_raise_intr(isa_reg_str2val("$a7", &success), s->pc)); \
   }
-
+#define MRET() \
+{\
+s->dnpc = CSR(0x341);\
+cpu.csr.mstatus |= ((cpu.csr.mstatus & (1 << 7)) >>4);\
+cpu.csr.mstatus |= (1 << 7);\
+cpu.csr.mstatus &= ~((1 << 11) + (1 << 12));\
+}
 static word_t *csr_register(word_t imm)//返回一个指针可以修改
 {
   switch (imm)
@@ -162,6 +167,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw, I, R(rd) = CSR(imm);CSR(imm)=src1); // 读csr寄存器的的值到rd，并更新
   INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs, I, R(rd) = CSR(imm);CSR(imm)|=src1); // 读csr寄存器的的值到rd，并置位
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall, N, ECALL(s->dnpc));
+  INSTPAT("0011000 00000 00000 000 00000 11100 11", mret,  N,MRET());
 
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv, N, INV(s->pc));
   INSTPAT_END();
