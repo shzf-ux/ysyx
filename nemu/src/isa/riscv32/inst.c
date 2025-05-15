@@ -28,7 +28,7 @@ static word_t *csr_register(word_t imm);
   {                                                                   \
       printf("\n"                                                     \
         ANSI_FMT("[ETRACE]", ANSI_FG_YELLOW)                          \
-        "ecall in mepc = " FMT_WORD ", mcause = " FMT_WORD "\n",      \
+        "mepc = " FMT_WORD ", mcause = "FMT_WORD "\n",      \
         cpu.csr.mepc, cpu.csr.mcause)  ;                               \
       bool success;                                                   \
     dnpc = (isa_raise_intr(isa_reg_str2val("$a7", &success), s->pc)); \
