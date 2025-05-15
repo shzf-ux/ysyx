@@ -24,11 +24,16 @@ static word_t *csr_register(word_t imm);
 #define Mr vaddr_read
 #define Mw vaddr_write
 #define CSR(i) *csr_register(i)
-#define ECALL(dnpc)                                                  \
-  {                                                                  \
-    bool success;                                                    \
+  #define ECALL(dnpc)                                                 \
+  {                                                                   \
+      printf("\n"                                                     \
+        ANSI_FMT("[ETRACE]", ANSI_FG_YELLOW)                          \
+        "ecall in mepc = " FMT_WORD ", mcause = " FMT_WORD "\n",      \
+        cpu.csr.mepc, cpu.csr.mcause)  ;                               \
+      bool success;                                                   \
     dnpc = (isa_raise_intr(isa_reg_str2val("$a7", &success), s->pc)); \
   }
+  
 #define MRET() \
 {\
 s->dnpc = CSR(0x341);\
