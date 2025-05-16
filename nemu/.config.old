@@ -100,3 +100,4 @@ CONFIG_RT_CHECK=y
 # CONFIG_MTRACE is not set
 # CONFIG_FTRACE is not set
 # CONFIG_DTRACE is not set
+CONFIG_ETRACE=y
