@@ -35,7 +35,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
-  printf("111\n");
+ 
   uintptr_t sp = (uintptr_t)kstack.end;
   sp = (sp - sizeof(Context)) & ~0x7; // 对齐栈顶
   Context *ctx = (Context *)sp;
