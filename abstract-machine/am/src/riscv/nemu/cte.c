@@ -40,7 +40,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   sp = (sp - sizeof(Context)) & ~0x7; // 对齐栈顶
   Context *ctx = (Context *)sp;
   ctx->mepc = (uintptr_t)entry;  // 入口地址
-  ctx->gpr[2] = (uintptr_t)sp;   // 栈指针 (x2)
+  //ctx->gpr[2] = (uintptr_t)sp;   // 栈指针 (x2)
   ctx->gpr[10] = (uintptr_t)arg; // 参数 (a0)
   ctx->mstatus = 0x1800;         // 允许中断
   return ctx;
