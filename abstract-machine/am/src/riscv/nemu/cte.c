@@ -35,7 +35,8 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 }
 
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
- 
+
+  // Area kstack  左边为低地址start，右边为高end
   uintptr_t sp = (uintptr_t)kstack.end;
   sp = (sp - sizeof(Context)) & ~0x7; // 对齐栈顶
   Context *ctx = (Context *)sp;
