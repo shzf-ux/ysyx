@@ -98,7 +98,7 @@ static void sig_handler(int sig, siginfo_t *info, void *ucontext) {
     case SIGUSR1: thiscpu->ev.event = EVENT_IRQ_IODEV; break;
     case SIGUSR2: thiscpu->ev.event = EVENT_YIELD; break;
     case SIGVTALRM:
-      printf("[DEBUG] SIGVTALRM received, mapping to EVENT_IRQ_TIMER\n");
+    
       thiscpu->ev.event = EVENT_IRQ_TIMER;
       break;
     case SIGSEGV:
