@@ -10,8 +10,8 @@ module ysyx_25030085_control (
     output reg    MemRead,//储存器控制信号  读
     output reg [2:0]MemOp,//数据存储器操作方式，0字节，1半字，2一个字
 
-    output reg [1:0]MemtoReg,//选择写回数据来源（ALU结果/存储器数据/PC+4等）
-   //00为alu计算结果，01为储存器数据，10为pc+4，jal,11为立即数直接写回lui
+    output reg [2:0]MemtoReg,//选择写回数据来源（ALU结果/存储器数据/PC+4等）
+   //000为alu计算结果，001为储存器数据，010为pc+4，jal,011为立即数直接写回lui，100为csr
     output reg    RegWrite,//决定是否写回寄存器堆
 
     output reg    Branch,//分支信号
@@ -19,10 +19,14 @@ module ysyx_25030085_control (
     output reg    ALUSrc,//（0=寄存器，1=立即数）
     output reg  [3:0] AluOp,
 
-    output reg  [31:0]imm
+    output reg  [31:0]imm,
+
+    //csr
+    output [1:0] csr_wen//0为不使能，01为写入，10为相或
    
 );
     reg invalid;//不合理的指令
+    reg is_ebreak;
     reg [6:0] opcode=inst[6:0];
     reg [2:0] func3=inst[14:12];
     reg [6:0] func7=inst[31:25];
@@ -44,14 +48,14 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b00;
-            MemtoReg =2'b00;
+            MemtoReg =3'b000;
             RegWrite=1'b0;
             ALUSrc  =1'b0;
             AluOp   =4'b0000;
             imm  =32'h0000_0000;
             invalid =1'b0;
             MemOp =3'b000;
-
+            is_ebreak=1'b0;
     if(pc>=32'h8000_0000)begin
      case (opcode)
             7'b0110011:begin//R型运算指令 add sub sll
@@ -59,7 +63,7 @@ always @(inst) begin
             MemRead  =1'b0;
             Branch   =1'b0;
             Jump     =2'b00;
-            MemtoReg =2'b00;//alu计算结果写回
+            MemtoReg =3'b000;//alu计算结果写回
             RegWrite =1'b1;//有效
             ALUSrc   =1'b0;//选择寄存器
             invalid  =1'b0;
@@ -119,7 +123,7 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b00;
-            MemtoReg =2'b00;//alu计算结果
+            MemtoReg =3'b000;//alu计算结果
             RegWrite=1'b1;//有效
             ALUSrc  =1'b1;//立即数
             invalid =1'b0;
@@ -169,7 +173,7 @@ always @(inst) begin
             MemRead =1'b1;//读使能
             Branch  =1'b0;
             Jump    =2'b00;
-            MemtoReg =2'b01;//加载的数据，写回寄存器堆，
+            MemtoReg =3'b001;//加载的数据，写回寄存器堆，
             RegWrite=1'b1;//写入rd
             ALUSrc  =1'b1;//立即数
             invalid =1'b0;
@@ -201,7 +205,7 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b00;
-            MemtoReg =2'b00;
+            MemtoReg =3'b000;
             RegWrite=1'b0;
             ALUSrc  =1'b1;//与立即数相加
             AluOp   =4'b0000;//rs1+立即数
@@ -230,7 +234,7 @@ always @(inst) begin
             MemWrite=1'b0;
             MemRead =1'b0;
             Jump    =2'b00;//无跳转跳转
-            MemtoReg =2'b00;//不写回
+            MemtoReg =3'b000;//不写回
             RegWrite=1'b0;//不写入
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b1001;//跳转地址跳转pc+立即数
@@ -254,7 +258,7 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b01;//无跳转跳转
-            MemtoReg =2'b10;//写回rd为pc+4
+            MemtoReg =3'b010;//写回rd为pc+4
             RegWrite=1'b1;//写入rd为pc+4,使能信号
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b0000;
@@ -266,7 +270,7 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b10;//无跳转跳转
-            MemtoReg=2'b10;//写回rd为pc+4
+            MemtoReg=3'b010;//写回rd为pc+4
             RegWrite=1'b1;//写入rd为pc+4,使能信号
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b0000;//控制rs1+Read_rs2
@@ -278,7 +282,7 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b00;//无跳转跳转
-            MemtoReg=2'b11;
+            MemtoReg=3'b011;
             RegWrite=1'b1;//写入rd,使能信号
             ALUSrc  =1'b1;//来源立即数
             AluOp   =4'b0000;
@@ -290,7 +294,7 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b00;//无跳转跳转
-            MemtoReg=2'b00;//相加写回
+            MemtoReg=3'b000;//相加写回
             RegWrite=1'b1;//写入rd,使能信号
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b1001;//特殊。pc+立即数
@@ -299,13 +303,42 @@ always @(inst) begin
                 
             end
             //错误情况
-            7'b1110011:begin//系统调用指令
+            7'b1110011:begin//系统调用指令，也属于I型指令
+            invalid =1'b0;
+            imm  =immI;
+            MemtoReg =3'b100;//选择csr寄存器的h值
+            RegWrite =1'b1;//有效，需要写回rd
             case(func3)
-            3'b000:begin               
+            3'b000:begin 
+              case(inst[31:20])
+              12'h1:begin//ebreak指令
+                is_ebreak=1'b1;
+              end
+
+              12'h0:begin//ecall指令
+              end
+              12'h302:begin//mret
+                
+              end
+              
+              default:begin
+                invalid =1'b1;
+              end
+              endcase
             end
+            3'b001:begin//csrrw,//根据立即数a选择csr寄存器，并把寄存器的数读到rd里面，再更新csr寄存器的值为src1
+                csr_wen=2'b01;//0为不使能，01为写入，10为相或
+            end
+            3'b010:begin//csrrs,//根据立即数a选择csr寄存器，并把寄存器的数读到rd里面，再更新csr寄存器的值为与src1相或
+                csr_wen=2'b10;//0为不使能，01为写入，10为相或
+            end
+
+
+
             default:begin 
             invalid =1'b1;                  
             end
+
             endcase    
             end
             default: begin
@@ -313,7 +346,7 @@ always @(inst) begin
             MemRead =1'b0;
             Branch  =1'b0;
             Jump    =2'b00;
-            MemtoReg =2'b00;
+            MemtoReg =3'b000;
             RegWrite=1'b0;
             ALUSrc  =1'b0;
             AluOp   =4'b000;
@@ -324,9 +357,7 @@ always @(inst) begin
     end
 end
 //系统类别的指令ebreak call
-   wire is_ebreak;
-   assign is_ebreak= (opcode == 7'b1110011) && (func3 == 0) && (inst[31:20] == 1);
-
+  
     always@(is_ebreak,invalid)begin
         if(is_ebreak)begin
       ebreak_instruction(inst);   

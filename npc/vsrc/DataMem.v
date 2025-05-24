@@ -18,9 +18,9 @@ module ysyx_25030085_DataMem (//数据存储器
     output reg [31:0]ReadData//读出的数据
 );
   
-     reg [31:0] rdata;
-     reg [1:0]  offset;//获取偏移量
-     assign offset=addr[1:0];//为地址后两位
+    reg [31:0] rdata;
+    reg [1:0]  offset;//获取偏移量
+    assign offset=addr[1:0];//为地址后两位
     reg [31:0] aligned_addr;
     reg [7:0]read_byte;
     reg [7:0] read_byteu;

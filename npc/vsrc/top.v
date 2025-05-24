@@ -13,7 +13,7 @@ module ysyx_25030085_top (
     wire [31:0] ReadData;//数据存储器读出来的数据
     wire [31:0] imm;
     wire        MemRead;
-    wire [1:0]  MemtoReg;
+    wire [2:0]  MemtoReg;
     wire        MemWrite;
     wire        RegWrite;
     wire        Branch;
@@ -38,7 +38,7 @@ ysyx_25030085_pc pc_init(
     .inst(instruction),
     .Alu_Result(Alu_Result)
 );
-
+    wire[1:0]csr_wen;
 ysyx_25030085_control control_init(
     .pc(pc_out),
     .inst(instruction),
@@ -53,7 +53,17 @@ ysyx_25030085_control control_init(
     .Jump(Jump),
     .imm(imm),
     .Read_rs1(Read_rs1),
-    .Read_rs2(Read_rs2)
+    .Read_rs2(Read_rs2),
+    .csr_wen(csr_wen)
+);
+    wire [31:0] csr_rdata;
+ysyx_25030085_csr_regfile csr_regfile_init(
+    .clk(clk),
+    .csr_addr(imm[11:0]),
+    .csr_wen(csr_wen),
+    .csr_wdata(Read_rs1),//src1
+    .csr_rdata(csr_rdata)//读到的数据送回rd
+
 );
 
 ysyx_25030085_regfile regfile_init(
@@ -67,7 +77,9 @@ ysyx_25030085_regfile regfile_init(
     .Alu_Result(Alu_Result),
     .Read_rs1(Read_rs1),
     .Read_rs2(Read_rs2),
-    .MemRead(ReadData)
+    .MemRead(ReadData),
+    .csr_rdata(csr_rdata)
+
     
 );
    
