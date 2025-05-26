@@ -36,9 +36,17 @@ ysyx_25030085_pc pc_init(
     .imm(imm),
     .pc(pc_out),
     .inst(instruction),
-    .Alu_Result(Alu_Result)
+    .Alu_Result(Alu_Result),
+    .mtvec(mtvec),
+    .mepc(mepc),//返回
+    .is_ecall(is_ecall),
+    .is_mret(is_mret)
 );
+
     wire[1:0]csr_wen;
+    reg is_ecall;
+    reg is_mret;
+
 ysyx_25030085_control control_init(
     .pc(pc_out),
     .inst(instruction),
@@ -54,15 +62,27 @@ ysyx_25030085_control control_init(
     .imm(imm),
     .Read_rs1(Read_rs1),
     .Read_rs2(Read_rs2),
-    .csr_wen(csr_wen)
+    .csr_wen(csr_wen),
+    .is_ecall(is_ecall),
+    .is_mret(is_mret)
 );
+
     wire [31:0] csr_rdata;
+    wire [31:0] mtvec;
+    wire [31:0] mepc;
+    wire [31:0] value_a5;
 ysyx_25030085_csr_regfile csr_regfile_init(
     .clk(clk),
+    .pc(pc_out),
+    .is_ecall(is_ecall),
+    .is_mret(is_mret),
     .csr_addr(imm[11:0]),
     .csr_wen(csr_wen),
     .csr_wdata(Read_rs1),//src1
-    .csr_rdata(csr_rdata)//读到的数据送回rd
+    .csr_rdata(csr_rdata),//读到的数据送回rd
+    .ecall_mtvec(mtvec),//跳转地址送到pc
+    .mret_mepc(mepc),
+    .value_a5(value_a5)
 
 );
 
@@ -78,7 +98,8 @@ ysyx_25030085_regfile regfile_init(
     .Read_rs1(Read_rs1),
     .Read_rs2(Read_rs2),
     .MemRead(ReadData),
-    .csr_rdata(csr_rdata)
+    .csr_rdata(csr_rdata),
+    .value_a5(value_a5)
 
     
 );

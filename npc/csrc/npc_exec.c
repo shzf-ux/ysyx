@@ -1,7 +1,7 @@
 #include "common.h"
 #include <dlfcn.h>
 #include "difftest/dut.h"
-
+#define MAX_EXE 1000000
 extern int sim_time;
 extern int flag_stop;
 extern int  NPC_State;
@@ -13,11 +13,11 @@ typedef struct LogBuf
 
 LogBuf *s;
 
-
+int max_exe = MAX_EXE;
 void npc_exec(uint64_t n)
 {  
     int batch_mode = (int)n == -1;
-    while ( flag_stop == 0 && (n--) > 0)
+    while (flag_stop == 0 && (n--) > 0)
     {
         top->clk = !top->clk;
         int is_rising_edge = (top->clk == 1);//记录上升沿
@@ -67,7 +67,7 @@ void npc_exec(uint64_t n)
           #endif
         }
         top->eval();
-      //  vcd->dump(sim_time);
+        vcd->dump(sim_time);
         sim_time++;
    }
 }

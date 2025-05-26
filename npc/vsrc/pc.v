@@ -11,6 +11,10 @@ module ysyx_25030085_pc (
     input [31:0]Alu_Result,
     input [1:0]Jump,
     input Branch,
+    input [31:0] mtvec,
+    input [31:0] mepc,
+    input is_ecall,
+    input is_mret,
 
     output  [31:0] pc//改成wire
 );
@@ -35,7 +39,17 @@ always @(posedge clk or posedge rst) begin
     current_pc<=Alu_Result;
     dnpc<= Alu_Result;   
     end
-
+    else if(is_ecall)begin//ecallh指令
+   // $display("mtvec: %08x",mtvec);
+    current_pc<=mtvec;
+    dnpc<=mtvec; 
+        
+    end
+    else if(is_mret)begin//mret指令
+   
+    current_pc<=mepc;
+    dnpc<=mepc;        
+    end    
     else 
     current_pc<=current_pc+4; 
 end
