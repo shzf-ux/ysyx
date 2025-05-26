@@ -13,7 +13,8 @@ module ysyx_25030085_regfile (
     input [31:0]Alu_Result,//alu计算结果
     input [31:0]csr_rdata,
     output [31:0]Read_rs1,
-    output [31:0]Read_rs2
+    output [31:0]Read_rs2,
+    output [31:0]value_a5
 );
     reg [4:0]rs1;
     reg [4:0]rs2;
@@ -90,6 +91,7 @@ module ysyx_25030085_regfile (
     
     assign Read_rs1=register[rs1];//根据rs1寄存器编码找到对于数据
     assign Read_rs2=register[rs2];
+    assign value_a5 = register[15];
 
 
 endmodule
@@ -98,11 +100,17 @@ endmodule
 
 module ysyx_25030085_csr_regfile (
     input clk,
+    input [31:0]pc,
+    input [31:0] value_a5,
+    input is_ecall,//识别ecall指令
+    input is_mret,//识别ecall指令
     input [11:0] csr_addr,//来自立即数字段
     input [1:0] csr_wen,//写使能控制o信号
     //0为不使能，01为写入，10为相或
     input [31:0] csr_wdata,//写入的数据，来自src1
-    output reg [31:0] csr_rdata
+    output reg [31:0] csr_rdata,
+    output reg [31:0] ecall_mtvec,//ecall设置mtvec
+    output reg [31:0] mret_mepc//ecall设置mtvec
 
 );
 //csr寄存器
@@ -111,6 +119,11 @@ module ysyx_25030085_csr_regfile (
    reg [31:0] mtvec;
    reg [31:0] mepc;
    reg [31:0] mcause;
+
+
+    localparam MSTATUS_MPP_MASK = 32'h00001800; // MPP位掩码（bits 12-11）
+    localparam MSTATUS_MPIE_BIT = 32'h00000080; // MPIE位（bit 7）
+    localparam MSTATUS_MIE_BIT  = 32'h00000008; // MIE位（bit 3）
 
 //读操作
 
@@ -128,18 +141,20 @@ end
 //同步写入操作
 always @(posedge clk) begin
     if(csr_wen!=2'd0)begin
+        //$display("addr:%08x",csr_addr);
         case(csr_addr)
         12'h300:begin
-          mstatus<= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mstatus|csr_wdata): mstatus);  
+          mstatus= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mstatus|csr_wdata): mstatus);
+        
         end
         12'h305:begin
-          mtvec<= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mtvec|csr_wdata):mtvec);  
+          mtvec= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mtvec|csr_wdata):mtvec);  
         end
         12'h341:begin
-          mepc<= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mepc|csr_wdata): mepc); 
+          mepc= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mepc|csr_wdata): mepc); 
         end
         12'h342:begin
-          mcause<= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? ( mcause|csr_wdata):mcause); 
+          mcause= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? ( mcause|csr_wdata):mcause); 
         end
         default:begin
             
@@ -150,6 +165,35 @@ always @(posedge clk) begin
         
     end
 end
+
+    //ecall指令
+    always @(posedge clk) begin
+        if(is_ecall)begin
+        // $display("ecall a5:%08x",value_a5);
+        mstatus = (mstatus & ~MSTATUS_MIE_BIT)|((mstatus & MSTATUS_MIE_BIT) << 4)|MSTATUS_MPP_MASK; 
+        mepc =pc;
+        mcause = value_a5;//a7寄存器的值
+         //$display("npc mcause:%08x",mcause);
+        ecall_mtvec =mtvec;                   
+// 清除MIE（bit 3） 0
+// 原MIE值移动到MPIE（bit 7）1
+// 设置MPP为机器模式（bits 12-11）11
+        end
+        else if(is_mret)begin
+        mstatus =(mstatus & MSTATUS_MIE_BIT)|((mstatus & MSTATUS_MIE_BIT) << 4)|~MSTATUS_MPP_MASK; 
+        mret_mepc=mepc;//保存之前的地址
+        end
+// 恢复MIE（bit 3） 1 
+// 原MIE值移动到MPIE（bit 7）1 规范要求
+// 设置MPP为普通模式（bits 12-11）00
+    end
+
+
+
+
+
+
+
 
 
 

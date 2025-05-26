@@ -1,14 +1,23 @@
 #include <am.h>
 #include <riscv/riscv.h>
 #include <klib.h>
+#include <stdio.h>
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
+   /*for (int i = 0; i < 16; i++)
+    {
+      printf("x%d = %d\n", i, c->gpr[i]);
+    }
+
+    printf("mcause  = %d\n", c->mcause);
+    printf("mstatus = %d\n", c->mstatus);
+    printf("mepc    = %d\n", c->mepc);*/
     Event ev = {0};
     switch (c->mcause) {
-      case 11:ev.event = EVENT_YIELD;break;
+      case 11: ev.event = EVENT_YIELD;break;
       default: ev.event = EVENT_ERROR; break;
     }
 
@@ -37,7 +46,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
 
 void yield() {
 #ifdef __riscv_e
-  asm volatile("li a5, -1; ecall");
+  asm volatile("li a5, 11; ecall");
 #else
   asm volatile("li a7, 11; ecall");
 #endif

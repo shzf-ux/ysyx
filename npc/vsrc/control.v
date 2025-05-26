@@ -22,7 +22,9 @@ module ysyx_25030085_control (
     output reg  [31:0]imm,
 
     //csr
-    output [1:0] csr_wen//0为不使能，01为写入，10为相或
+    output [1:0] csr_wen,//0为不使能，01为写入，10为相或
+    output reg is_ecall,
+    output reg is_mret
    
 );
     reg invalid;//不合理的指令
@@ -56,6 +58,9 @@ always @(inst) begin
             invalid =1'b0;
             MemOp =3'b000;
             is_ebreak=1'b0;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;
     if(pc>=32'h8000_0000)begin
      case (opcode)
             7'b0110011:begin//R型运算指令 add sub sll
@@ -67,6 +72,9 @@ always @(inst) begin
             RegWrite =1'b1;//有效
             ALUSrc   =1'b0;//选择寄存器
             invalid  =1'b0;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;
             case(func3)
             3'b000:begin//add sub
             case(func7)
@@ -128,6 +136,9 @@ always @(inst) begin
             ALUSrc  =1'b1;//立即数
             invalid =1'b0;
             imm  =immI;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;
             case(func3)
             3'b000:begin//addi指令
             AluOp=4'b0000;             
@@ -178,6 +189,9 @@ always @(inst) begin
             ALUSrc  =1'b1;//立即数
             invalid =1'b0;
             imm  =immI;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;
             case(func3)
             3'b000:begin//lb
             MemOp=3'b000;               
@@ -211,6 +225,9 @@ always @(inst) begin
             AluOp   =4'b0000;//rs1+立即数
             imm     =immS;
             invalid =1'b0;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;
             case(func3)
             3'b000:begin//sb
             MemOp=3'b000;
@@ -238,7 +255,10 @@ always @(inst) begin
             RegWrite=1'b0;//不写入
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b1001;//跳转地址跳转pc+立即数
-            imm     =immB;   
+            imm     =immB;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;   
             invalid =1'b0; 
             case(func3)
             3'b000: Branch = (Read_rs1 == Read_rs2);  // beq
@@ -263,7 +283,10 @@ always @(inst) begin
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b0000;
             imm     =immJ;   
-            invalid =1'b0; 
+            invalid =1'b0;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0; 
             end  
             7'b1100111:begin//jalr指令 跳转地址为(rs1+IMMI)&0，a先前jal写的值已经被存到寄存器ra里面了，这时候跳转地址rs1就是ra寄存器的值
             MemWrite=1'b0;
@@ -275,7 +298,10 @@ always @(inst) begin
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b0000;//控制rs1+Read_rs2
             imm     =immI;
-            invalid =1'b0;                   
+            invalid =1'b0;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;                   
             end
             7'b0110111:begin//U型指令lui
             MemWrite=1'b0;
@@ -287,7 +313,10 @@ always @(inst) begin
             ALUSrc  =1'b1;//来源立即数
             AluOp   =4'b0000;
             imm     =immU;
-            invalid =1'b0;                    
+            invalid =1'b0;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;                    
             end
             7'b0010111:begin//U型指令auipc 立即数左移12+PC存入rd
             MemWrite=1'b0;
@@ -299,12 +328,20 @@ always @(inst) begin
             ALUSrc  =1'b1;//立即数
             AluOp   =4'b1001;//特殊。pc+立即数
             imm     =immU;
-            invalid =1'b0;    
+            invalid =1'b0;
+            is_ecall =1'b0;
+            is_mret =1'b0;
+            csr_wen =2'd0;    
                 
             end
-            //错误情况
             7'b1110011:begin//系统调用指令，也属于I型指令
+            MemWrite=1'b0;
+            MemRead =1'b0;
             invalid =1'b0;
+            Branch  =1'b0;
+            ALUSrc  =1'b0;//立即数
+            AluOp   =4'b0;//特殊。pc+立即数
+            Jump    =2'b00;//无跳转跳转
             imm  =immI;
             MemtoReg =3'b100;//选择csr寄存器的h值
             RegWrite =1'b1;//有效，需要写回rd
@@ -314,11 +351,15 @@ always @(inst) begin
               12'h1:begin//ebreak指令
                 is_ebreak=1'b1;
               end
-
               12'h0:begin//ecall指令
+              //$display("ecall");
+                is_ecall=1'b1;
+
+
               end
               12'h302:begin//mret
-                
+              is_mret =1'b1;
+              //$display("mret");
               end
               
               default:begin
@@ -328,13 +369,11 @@ always @(inst) begin
             end
             3'b001:begin//csrrw,//根据立即数a选择csr寄存器，并把寄存器的数读到rd里面，再更新csr寄存器的值为src1
                 csr_wen=2'b01;//0为不使能，01为写入，10为相或
+              //   $display("csrw");
             end
             3'b010:begin//csrrs,//根据立即数a选择csr寄存器，并把寄存器的数读到rd里面，再更新csr寄存器的值为与src1相或
                 csr_wen=2'b10;//0为不使能，01为写入，10为相或
             end
-
-
-
             default:begin 
             invalid =1'b1;                  
             end
@@ -352,6 +391,8 @@ always @(inst) begin
             AluOp   =4'b000;
             imm  =32'h0000_0000;
             invalid =1'b1;
+            csr_wen =2'd0;
+            is_mret =1'b0;
             end
         endcase
     end
