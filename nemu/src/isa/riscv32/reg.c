@@ -29,8 +29,12 @@ void isa_reg_display() {
 
     for (int i = 0; i < sizeof(regs) / sizeof(regs[0]); i++)
     {
+        if (cpu.gpr[i]!=0)
+        {
+            printf("%-5s: 0x%08x\n", regs[i], cpu.gpr[i]);
+        }
 
-        printf("%-5s: 0x%08x\n", regs[i], cpu.gpr[i]);
+           
 
     }
 
@@ -58,5 +62,6 @@ word_t isa_reg_str2val(const char *s, bool *success) {//n返回寄存器的值
         }
     }
     *success = false;
+    assert(0);
     return 0;
 }
