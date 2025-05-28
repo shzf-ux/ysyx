@@ -44,7 +44,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 
   
     #ifdef CONFIG_WATCHPOINT//是否定义了监视点的检查,如果发现有改变就停止
-    find_value_change();//进行比对
+   find_value_change();//进行比对
     #endif
   
   
@@ -106,11 +106,14 @@ static void statistic() {
 }
 
 void assert_fail_msg() {//检查程序是否出错
+  
   isa_reg_display();
+
 #ifdef CONFIG_IRINGBUF//环形缓冲器
   void Display_inst();
   Display_inst();
 #endif
+  
   statistic();
 }
 

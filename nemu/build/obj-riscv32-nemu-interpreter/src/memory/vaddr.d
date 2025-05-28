@@ -3,7 +3,6 @@ cmd_/home/zzy/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/memory/
 source_/home/zzy/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/memory/vaddr.o := src/memory/vaddr.c
 
 deps_/home/zzy/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/memory/vaddr.o := \
-    $(wildcard include/config/mtrace.h) \
   /home/zzy/ysyx-workbench/nemu/include/isa.h \
   /home/zzy/ysyx-workbench/nemu/src/isa/riscv32/include/isa-def.h \
     $(wildcard include/config/rve.h) \
