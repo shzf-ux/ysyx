@@ -6,13 +6,7 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 int printf(const char *fmt, ...) {
-  char sprint_buf[1024];
-  va_list arg;        // 遍历可变参数列表
-  va_start(arg, fmt); // 第二个参数为最后一个固定参数名字
-  int len = vsprintf(sprint_buf, fmt, arg);
-  va_end(arg);
-  putstr(sprint_buf);//不断调用putch
-  return len; //  返回值是写入的字符个数
+  panic("Not implemented");
 }
 
 char *num_to_str(char *out, int *index, int num)
@@ -46,13 +40,13 @@ char *num_to_str(char *out, int *index, int num)
   return out;
 }
 
-int vsprintf(char *out, const char *fmt, va_list ap)//扫描格式化字符串，把格式化的字符存到out里面
+int vsprintf(char *out, const char *fmt, va_list ap)
 {
   // panic("Not implemented");
   int index = 0;
-  while (*fmt != '\0')//Name: %s, Age: %d, Symbol
+  while (*fmt != '\0')
   {
-    if (*fmt == '%')//遇到格式化，把相关的替换为参数
+    if (*fmt == '%')
     {
       fmt++; // 跳过%
       switch (*fmt)
@@ -63,24 +57,15 @@ int vsprintf(char *out, const char *fmt, va_list ap)//扫描格式化字符串�
         break;
       case 's':
         char *s = va_arg(ap, char *);
-        if (s == NULL)//跳过空指针
+        while (*s)
         {
-          const char *nullstr = "(null)";
-          while (*nullstr)
-          {
-            out[index++] = *nullstr++;
-          }
+          *(out + (index)) = *s;
+          s++;
+          index++;
         }
-        else
-        {
-          while (*s)
-          {
-            out[index++] = *s++;
-          }
-        }
-         break;
+
+        break;
       default:
-        va_arg(ap, int);
         break;
       }
     }
@@ -92,17 +77,17 @@ int vsprintf(char *out, const char *fmt, va_list ap)//扫描格式化字符串�
     fmt++;
   }
   *(out + (index)) = '\0';
-  return index;//返回值为写入的个数
+  return index;
 }
 
-int sprintf(char *out, const char *fmt, ...) // sprintf(buffer, "Name: %s, Age: %d, Symbol, "Alice", 25, 'A');
-{                                              
+int sprintf(char *out, const char *fmt, ...) // sprintf(buffer, "Name: %s, Age: %d, Symbol: %c%%", "Alice", 25, 'A');
+{                                               //  返回值是写入的字符个数
   // panic("Not implemented");
   va_list arg;        // 遍历可变参数列表
   va_start(arg, fmt); // 第二个参数为最后一个固定参数名字
   int len = vsprintf(out, fmt, arg);
   va_end(arg);
-  return len; //  返回值是写入的字符个数
+  return len;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {

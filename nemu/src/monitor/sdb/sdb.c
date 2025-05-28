@@ -123,8 +123,8 @@ static int cmd_x(char *args){//扫描内存，第一个参数为数量，第二�
     for(int i = 0 ; i < len ; i ++)
     {
 	    printf("0x%08x:  ",addr);
-      printf("Hex:0x%08x",paddr_read(addr,4));//addr len
-      printf("\tDec:%d\n",paddr_read(addr,4));//addr len
+        printf("Hex:0x%08x",paddr_read(addr,4));//addr len
+         printf("\tDec:%d\n",paddr_read(addr,4));//addr len
         addr = addr + 4;
     }
     return 0;

@@ -3,7 +3,6 @@ cmd_/home/zzy/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/device/
 source_/home/zzy/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/device/io/map.o := src/device/io/map.c
 
 deps_/home/zzy/ysyx-workbench/nemu/build/obj-riscv32-nemu-interpreter/src/device/io/map.o := \
-    $(wildcard include/config/dtrace.h) \
   /home/zzy/ysyx-workbench/nemu/include/isa.h \
   /home/zzy/ysyx-workbench/nemu/src/isa/riscv32/include/isa-def.h \
     $(wildcard include/config/rve.h) \
