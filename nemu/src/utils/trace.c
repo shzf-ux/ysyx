@@ -43,12 +43,17 @@ void Display_inst()//进入时，index为错误指令的下一条，0，1，2，
   
 }
 
-void display_memory_read(paddr_t addr, int len)
+void display_memory_read(uint32_t addr, uint32_t data)
 {
-    printf(ANSI_FMT("read memory: ", ANSI_FG_GREEN) FMT_PADDR ", len: %d\n", addr, len);//设置颜色
+    printf(ANSI_FMT("read memory at pc: ", ANSI_FG_GREEN) "0x%08x, data: 0x%08x\n", addr, data);
 }
 
-void display_memory_write(paddr_t addr, int len, word_t data)
+void display_memory_write(uint32_t addr, uint32_t data)
 {
-    printf(ANSI_FMT("write memory: ", ANSI_FG_YELLOW) FMT_PADDR ",  len : %d, data:" FMT_WORD "\n", addr, len, data);
+    printf(ANSI_FMT("write memory at pc: ", ANSI_FG_YELLOW) "0x%08x, data: 0x%08x\n", addr, data);
+}
+
+void dtrace(IOMap*map)
+{
+    printf("\t%sdtrace:%s %s\n", ANSI_FG_YELLOW, map->name, ANSI_NONE);
 }
