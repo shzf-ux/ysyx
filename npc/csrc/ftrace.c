@@ -15,7 +15,7 @@ int func_num = 0;
 
 void parse_elf(char* elf_file)//传入一个elf文件
 {
-    printf("111111111\n");
+   
     if(elf_file==NULL)
     {
         assert(0);
