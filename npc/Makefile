@@ -42,7 +42,7 @@ compile:
 
 # 运行仿真
 run: compile
-	$(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
+	@echo $(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
 
 # 清理
 clean:

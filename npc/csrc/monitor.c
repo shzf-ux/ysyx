@@ -81,12 +81,8 @@ static int parse_args(int argc, char *argv[])
         switch (o)
         {
         case 'b':sdb_set_batch_mode();break; // 设置批处理模式
-        case 'd': diff_so_file = optarg;
-            printf("%s\n", diff_so_file);
-            break;
-        case 'e':
-            elf_file = optarg;
-            break;
+        case 'd': diff_so_file = optarg;printf("%s\n", diff_so_file);break;
+        case 'e': elf_file = optarg;break;
         case 1:img_file = optarg;return 0;
         default:
             printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
