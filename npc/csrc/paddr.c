@@ -57,8 +57,8 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 {
     if (waddr == SERIAL_ADDR)
     {
-      
-        putc(wdata,stdout);
+
+        putc(wdata, stderr);
         return;
     }
 
