@@ -4,4 +4,4 @@
  * NPC Configuration Menu
  *
  */
-#define CONFIG_ITRACE_COND 1
+#define CONFIG_FTRACE 1
