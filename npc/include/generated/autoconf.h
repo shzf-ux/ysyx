@@ -5,3 +5,4 @@
  *
  */
 #define CONFIG_FTRACE 1
+#define CONFIG_ITRACE_COND 1

@@ -38,7 +38,7 @@ all: compile run
 compile:
 	@echo "Sources: $(SOURCES)"
 	@echo "Testbench: $(TESTBENCH)"
-	@$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
+	$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
 
 # 运行仿真
 run: compile
