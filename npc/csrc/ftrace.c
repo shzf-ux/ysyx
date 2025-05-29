@@ -15,10 +15,13 @@ int func_num = 0;
 
 void parse_elf(char* elf_file)//传入一个elf文件
 {
+    printf("111111111\n");
     if(elf_file==NULL)
     {
+        assert(0);
         return;
     }
+  
     FILE *fp;
     fp = fopen(elf_file, "rb");//打开文件以只读二进制形式
     if(fp==NULL)
@@ -104,7 +107,7 @@ void parse_elf(char* elf_file)//传入一个elf文件
                 if ((sym.st_info&0x0F)== STT_FUNC)//取低四位找到符号类型为func
                 {
                     
-                    char *name = str_tab+sym.st_name; //通过索引值找到
+                    char *name = str_tab + sym.st_name; // 通过索引值找到
                     strncpy(symbol[func_num].name, name, sizeof(symbol[func_num].name) - 1);
                     symbol[func_num].addr = sym.st_value;
                     symbol[func_num].size = sym.st_size; // 对于函数符号，若是能确定代码长度，也可用它表示函数代码的大小
@@ -126,7 +129,8 @@ int flag = 0;
 // 调用函数
 void printf_symbol_tab()
 {
-    if(flag==0&&rec_depth==1)
+
+    if (flag == 0 && rec_depth == 1)
     {
         printf("| %-20s | %-15s | %-10s |\n", "Function Name", "Function Address", "Function Size");
         printf("|---------------------|-----------------|------------|\n");

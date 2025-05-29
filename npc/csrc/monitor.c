@@ -7,16 +7,16 @@ void init_disasm();
 uint32_t pmem_read(uint32_t raddr,int len);
 uint8_t *guest_to_host(uint32_t paddr);
 void init_mem();
+void parse_elf(char *elf_file); // 传入一个elf文件
 
+static char *img_file = NULL;
+static char *diff_so_file = NULL;
+static int difftest_port = 1234;
 #define Log(format, ...)                                    \
     _Log(ANSI_FMT("[%s:%d %s] " format, ANSI_FG_BLUE) "\n", \
          __FILE__, __LINE__, __func__, ##__VA_ARGS__)
 
-    static char *img_file = NULL;
-static char *diff_so_file = NULL;
-static int difftest_port = 1234;
 
-//
 
 // 设置初始ji
 static const uint32_t img[] = {
@@ -60,6 +60,7 @@ static long load_img()
     fclose(fp);
     return size;
 }
+char *elf_file;
 static int parse_args(int argc, char *argv[])
 {
   
@@ -82,6 +83,9 @@ static int parse_args(int argc, char *argv[])
         case 'b':sdb_set_batch_mode();break; // 设置批处理模式
         case 'd': diff_so_file = optarg;
             printf("%s\n", diff_so_file);
+            break;
+        case 'e':
+            elf_file = optarg;
             break;
         case 1:img_file = optarg;return 0;
         default:
@@ -141,9 +145,9 @@ void init_monitor(int argc, char *argv[])
 {
     welcome();
     parse_args(argc, argv); // 解析命令行参数
-   
+    parse_elf(elf_file); // 传入一个elf文件
     init_mem();
-  
+
     init_isa();
     
     long img_size = load_img();
