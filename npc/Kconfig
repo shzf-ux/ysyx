@@ -1,0 +1,22 @@
+mainmenu "NPC Configuration Menu"
+
+
+config ITRACE_COND
+   bool "Enable Instrution trace"
+   default y
+    help
+   Enable Instrution trace checking for debugging. 
+config FTRACE
+   bool "Enable function trace"
+   default y
+    help
+   Enable function trace checking for debugging. 
+config MTRACE
+   bool "Enable memory trace"
+   default y
+    help
+   Enable memory trace checking for debugging. 
+config DIFFTEST
+   bool "Enable DIFFTEST"
+   default y
+   
