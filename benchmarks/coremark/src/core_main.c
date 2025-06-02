@@ -44,9 +44,13 @@ void *iterate(void *pres) {
 	res->crclist=0;
 	res->crcmatrix=0;
 	res->crcstate=0;
-
-	for (i=0; i<iterations; i++) {
+	printf("%d\n", iterations);
+	int a = 0;
+	for (i = 0; i < iterations; i++)
+	{
 		crc=core_bench_list(res,1);
+		
+		printf("%d\n",a+=1);
 		res->crc=crcu16(crc,res->crc);
 		crc=core_bench_list(res,-1);
 		res->crc=crcu16(crc,res->crc);
@@ -91,6 +95,7 @@ MAIN_RETURN_TYPE main(void) {
 	char *argv[1];
 #else
 MAIN_RETURN_TYPE main(int argc, char *argv[]) {
+	
 #endif
 	ee_u16 i,j=0,num_algorithms=0;
 	ee_s16 known_id=-1,total_errors=0;
@@ -100,14 +105,16 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 #if (MEM_METHOD==MEM_STACK)
 	ee_u8 stack_memblock[TOTAL_DATA_SIZE*MULTITHREAD];
 #endif
+	
+	ioe_init();
 
-  ioe_init();
-
-  ee_printf("Running CoreMark for %d iterations\n", ITERATIONS);
+	ee_printf("Running CoreMark for %d iterations\n", ITERATIONS);
 
 	/* first call any initializations needed */
 	portable_init(&(results[0].port), &argc, argv);
 	/* First some checks to make sure benchmark will run ok */
+	
+
 	if (sizeof(struct list_head_s)>128) {
 		ee_printf("list_head structure too big for comparable data!\n");
 		return MAIN_RETURN_VAL;
@@ -134,6 +141,7 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 		results[0].seed2=0x3415;
 		results[0].seed3=0x66;
 	}
+	
 #if (MEM_METHOD==MEM_STATIC)
 	results[0].memblock[0]=(void *)static_memblk;
 	results[0].size=TOTAL_DATA_SIZE;
@@ -185,6 +193,7 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 			j++;
 		}
 	}
+	
 	/* call inits */
 	for (i=0 ; i<MULTITHREAD; i++) {
 		if (results[i].execs & ID_LIST) {
@@ -217,6 +226,7 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 		results[0].iterations*=1+10/divisor;
 	}
 	/* perform actual benchmark */
+	
 	start_time();
 #if (MULTITHREAD>1)
 	if (default_num_contexts>MULTITHREAD) {
@@ -231,9 +241,13 @@ MAIN_RETURN_TYPE main(int argc, char *argv[]) {
 		core_stop_parallel(&results[i]);
 	}
 #else
+	printf("11111\n");
 	iterate(&results[0]);
+	printf("11111\n");
 #endif
+	
 	stop_time();
+	
 	total_time=get_time();
 	/* get a function of the input to report */
 	seedcrc=crc16(results[0].seed1,seedcrc);
