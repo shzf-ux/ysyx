@@ -63,6 +63,8 @@ static long load_img() {
 
   fseek(fp, 0, SEEK_SET);
   int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
+
+  // guest_to_host(RESET_VECTOR): 目标内存地址  读取size到内存地址里面
   assert(ret == 1);
 
   fclose(fp);

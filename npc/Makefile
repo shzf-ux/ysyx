@@ -36,9 +36,7 @@ all: compile run
 
 # 编译规则
 compile:
-	@echo "Sources: $(SOURCES)"
-	@echo "Testbench: $(TESTBENCH)"
-	$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
+	@$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
 
 # 运行仿真
 run: compile

@@ -57,10 +57,9 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 {
     if (waddr == SERIAL_ADDR)
     {
-
-       // putc(wdata, stderr);
         putc(wdata, stdout);
-        fflush(stdout); // 确保立即刷新输出缓冲区
+        // putc(wdata, stdout);
+        fflush(stdout); // 确保立即刷新输出缓冲区,可以使msh显示出来
 
         return;
     }
