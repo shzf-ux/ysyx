@@ -43,7 +43,9 @@ static inline void pattern_decode(const char *str, int len,
       __shift = (c == '?' ? __shift + 1 : 0); \
     } \
   }
-
+// key 键值 遇到'1'则在对应位置设为1，遇到'0'则设为0，
+// mask掩码 标记模式字符串中哪些位是有效位（需要匹配），哪些是无关位（通配符）
+//记录模式字符串末尾连续的通配符'?'的数量
 #define macro2(i)  macro(i);   macro((i) + 1)
 #define macro4(i)  macro2(i);  macro2((i) + 2)
 #define macro8(i)  macro4(i);  macro4((i) + 4)
@@ -85,7 +87,7 @@ finish:
   *shift = __shift;
 }
 
-
+//拿当前指令移位后
 // --- pattern matching wrappers for decode ---
 #define INSTPAT(pattern, ...) do { \
   uint64_t key, mask, shift; \

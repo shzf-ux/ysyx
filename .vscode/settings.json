@@ -55,6 +55,7 @@
     "time.h": "c",
     "sdl.h": "c",
     "sdl_main.h": "c",
-    "random": "c"
+    "random": "c",
+    "stdarg.h": "c"
   }
 }
