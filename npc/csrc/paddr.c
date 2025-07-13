@@ -2,6 +2,7 @@
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 void display_memory_read(uint32_t addr, uint32_t data);
 void display_memory_write(uint32_t addr, uint32_t data);
+extern "C" void pmem_write(int waddr, int wdata, uint8_t wmask);
 uint64_t get_time();
 static inline uint32_t host_read(void *addr, int len);
 static inline uint32_t host_read(void *addr, int len)
@@ -49,6 +50,7 @@ extern "C" uint32_t pmem_readv(int raddr)
     #endif
     return ret;
 }
+
 void init_mem()
 {
     memset(pmem, rand(), CONFIG_MSIZE);
@@ -57,6 +59,8 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 {
     if (waddr == SERIAL_ADDR)
     {
+       // fflush(stdout);
+        //printf("%d", wmask);
         putc(wdata, stdout);
         // putc(wdata, stdout);
         fflush(stdout); // 确保立即刷新输出缓冲区,可以使msh显示出来
