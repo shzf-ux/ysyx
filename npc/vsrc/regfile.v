@@ -170,9 +170,11 @@ end
     always @(posedge clk) begin
         if(is_ecall)begin
         // $display("ecall a5:%08x",value_a5);
-        mstatus = (mstatus & ~MSTATUS_MIE_BIT)|((mstatus & MSTATUS_MIE_BIT) << 4)|MSTATUS_MPP_MASK; 
+       mstatus = (mstatus & ~(MSTATUS_MIE_BIT | MSTATUS_MPP_MASK))  // 清除MIE和MPP
+          | ((mstatus & MSTATUS_MIE_BIT) << 4)              // MIE→MPIE
+          | MSTATUS_MPP_MASK;                               // 设置MPP=11
         mepc =pc;
-        mcause = value_a5;//a7寄存器的值
+        mcause = value_a5;//a5寄存器的值
          //$display("npc mcause:%08x",mcause);
         ecall_mtvec =mtvec;                   
 // 清除MIE（bit 3） 0
@@ -180,8 +182,10 @@ end
 // 设置MPP为机器模式（bits 12-11）11
         end
         else if(is_mret)begin
-        mstatus =(mstatus & MSTATUS_MIE_BIT)|((mstatus & MSTATUS_MIE_BIT) << 4)|~MSTATUS_MPP_MASK; 
-        mret_mepc=mepc;//保存之前的地址
+        mstatus = (mstatus & ~MSTATUS_MPP_MASK) |     // 1. 清除MPP（设置为00）
+                  ((mstatus >> 4) & MSTATUS_MIE_BIT) | // 2. MPIE→MIE
+                 (mstatus & ~MSTATUS_MPIE_BIT);       // 3. 清除MPIE
+       mret_mepc=mepc;//保存之前的地址
         end
 // 恢复MIE（bit 3） 1 
 // 原MIE值移动到MPIE（bit 7）1 规范要求

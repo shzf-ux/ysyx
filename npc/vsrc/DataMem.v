@@ -33,7 +33,7 @@ module ysyx_25030085_DataMem (//数据存储器
         // $display("地址：%08x offset%d",addr,addr[1:0]);
         // $display("offset: %d",offset);
             rdata = pmem_readv(aligned_addr);//进行选择相关位,设置n低两位为0，地址对齐
-         //$display("lw hou data %08x",rdata);
+        // $display("lw hou data %08x",rdata);
             case(MemOp)
             3'b000:begin//lb 需要符号扩展
           
@@ -69,7 +69,7 @@ module ysyx_25030085_DataMem (//数据存储器
             2'b10:read_byteu=rdata[23:16];
             2'b11:read_byteu=rdata[31:24];
             endcase
-              ///$display("offset read %08x",read_byteu)  ; 
+            // $display("offset read %08x",rdata)  ; 
             ReadData={{24{1'b0}},read_byteu};//零扩展 
             //$display("lbu %08x",ReadData)  ;             
             end
@@ -97,6 +97,7 @@ module ysyx_25030085_DataMem (//数据存储器
                 endcase   
                 end 
                 3'b001:begin//sh
+               //$display("data: %0x",Read_rs2);
                 case(offset)
                 2'b00: pmem_write(aligned_addr,Read_rs2,8'b0011);
                 2'b10: pmem_write(aligned_addr,Read_rs2,8'b1100);

@@ -206,6 +206,7 @@ always @(inst) begin
             MemOp=3'b100;    
             end
             3'b101:begin//lhu
+          //  $display("lhu");
             MemOp=3'b101;
             end
             default:begin

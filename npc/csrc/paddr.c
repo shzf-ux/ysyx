@@ -78,7 +78,7 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 #endif
 
 uint8_t *p = guest_to_host(waddr); // 获取8字节的指针
-
+//p表示对齐后的地址的地位，00 01 02 03分别表示 p0 p1 p2 p3
 if (wmask == 0x01 || wmask == 0x02 || wmask == 0x04 || wmask == 0x08)
 {
 
@@ -88,20 +88,22 @@ if (wmask == 0x01 || wmask == 0x02 || wmask == 0x04 || wmask == 0x08)
             p[i] = wdata & 0xFF; // 111111111//保留相关位
     }
 }
+//01表示写入地址低8位的数据的低8位
 else if (wmask == 0x03 || wmask == 0x0c)
 {
-
     if (wmask == 0x03)
     {
-        p[0] = wdata; // 111111111//保留相关位
-        p[1] = wdata >> 8;
+        p[0] = wdata & 0xFF;        // 低字节（bit7-0）
+        p[1] = (wdata >> 8) & 0xFF; // 高字节（bit15-8）
     }
-    else if (wmask == 0x03)
+    else if (wmask == 0x0c)
     {
-        p[2] = wdata >> 16; // 111111111//保留相关位
-        p[3] = wdata >> 24;
+        p[2] = wdata & 0xFF;        // 低字节（bit7-0）
+        p[3] = (wdata >> 8) & 0xFF; // 高字节（bit15-8）
     }
 }
+//0c  表示对齐后的值地位不写入，高16位写入数据的低16位
+//03表示 对齐后低位写入数据的低16位，高位不写入
 else if (wmask == 0xf)
 {
 
