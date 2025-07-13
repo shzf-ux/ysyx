@@ -108,8 +108,10 @@ int strcmp(const char *s1, const char *s2) // 相同返回0，s1大于s2返回�
   }
   return 0;
 }
+
 int strncmp(const char *s1, const char *s2, size_t n)
 {
+  //printf("s1:%s s2 %s\n", s1, s2);
   for (; n > 0; n--, s1++, s2++)
   {
     if (*s1 != *s2)

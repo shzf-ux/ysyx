@@ -137,6 +137,7 @@ void init_rtl(int argc, char *argv[])
     vcd->dump(sim_time); // 写入复位释放状态
     sim_time++;
 }
+
 void init_monitor(int argc, char *argv[])
 {
     welcome();

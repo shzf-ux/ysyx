@@ -6,4 +6,5 @@
  /home/zzy/ysyx-workbench/abstract-machine/am/src/platform/nemu/include/nemu.h \
  /home/zzy/ysyx-workbench/abstract-machine/klib/include/klib-macros.h \
  /home/zzy/ysyx-workbench/abstract-machine/am/src/riscv/riscv.h \
- /home/zzy/ysyx-workbench/abstract-machine/klib/include/klib.h
+ /home/zzy/ysyx-workbench/abstract-machine/klib/include/klib.h \
+ /home/zzy/ysyx-workbench/abstract-machine/am/include/arch/riscv.h
