@@ -125,14 +125,14 @@ void init_rtl(int argc, char *argv[])
     top->clk = 1;
     top->rst = 1;
     top->eval();
-    top->instruction = pmem_read(top->pc_out,4);
+    //top->instruction = pmem_read(top->pc_out,4);
     vcd->dump(sim_time); // 写入复位信号置位状态
     sim_time++;
 
     // 3. 释放复位信号
     top->rst = 0;
     top->clk = 0;
-    top->instruction = pmem_read(top->pc_out,4);
+    //top->instruction = pmem_read(top->pc_out,4);
     top->eval();
     vcd->dump(sim_time); // 写入复位释放状态
     sim_time++;

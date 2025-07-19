@@ -21,8 +21,9 @@ void npc_exec(uint64_t n)
     {
         top->clk = !top->clk;
         int is_rising_edge = (top->clk == 1);//记录上升沿
-        top->instruction = pmem_read(top->pc_out,4);
-         //printf("pc:%08x\n", top->pc_out);
+        int inst_t = top->inst;
+
+        // printf("pc:%08x\n", top->pc_out);
         #ifdef CONFIG_ITRACE_COND
 
         if (is_rising_edge&&!batch_mode)
@@ -32,7 +33,7 @@ void npc_exec(uint64_t n)
         p += snprintf(p, sizeof(s->logbuf), "%08x:", top->pc_out);
         int ilen =4;
         int i;
-        uint8_t *inst = (uint8_t *)&top->instruction; // 储存指令，并把指令分为四段
+        uint8_t *inst = (uint8_t *)&inst_t; // 储存指令，并把指令分为四段
 
         for (i = ilen - 1; i >= 0; i--)
         {
@@ -49,9 +50,9 @@ void npc_exec(uint64_t n)
         
         p += space_len;
         void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-        
+
         disassemble(p, s->logbuf + sizeof(s->logbuf) - p, // 向buf加入反汇编后的内容
-                    top->pc_out, (uint8_t *)&top->instruction, ilen);
+                    top->pc_out, (uint8_t *)&inst_t, ilen);
 
         printf("%s\n", s->logbuf);
         free(s);

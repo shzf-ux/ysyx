@@ -1,6 +1,10 @@
 import "DPI-C" function void ebreak_instruction (input int inst) ;
 import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
 module ysyx_25030085_control (
+
+
+
+  
     input  [31:0] inst,
     input  [31:0] pc,
     input  [31:0]Read_rs1,
@@ -43,358 +47,225 @@ module ysyx_25030085_control (
     assign immS={{20{inst[31]}}, inst[31:25], inst[11:7]};
     assign immB={{20{inst[31]}},inst[7],inst[30:25],inst[11:8],1'b0};
 //最低位补0
+// 操作码常量
+localparam OP_LOAD     = 7'b0000011;
+localparam OP_STORE    = 7'b0100011;
+localparam OP_BRANCH   = 7'b1100011;
+localparam OP_JAL      = 7'b1101111;
+localparam OP_JALR     = 7'b1100111;
+localparam OP_OP_IMM   = 7'b0010011;
+localparam OP_OP       = 7'b0110011;
+localparam OP_LUI      = 7'b0110111;
+localparam OP_AUIPC    = 7'b0010111;
+localparam OP_SYSTEM   = 7'b1110011;
 
-always @(inst) begin
-    //初始值
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b00;
-            MemtoReg =3'b000;
-            RegWrite=1'b0;
-            ALUSrc  =1'b0;
-            AluOp   =4'b0000;
-            imm  =32'h0000_0000;
-            invalid =1'b0;
-            MemOp =3'b000;
-            is_ebreak=1'b0;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;
-    if(pc>=32'h8000_0000)begin
-     case (opcode)
-            7'b0110011:begin//R型运算指令 add sub sll
-            MemWrite =1'b0;
-            MemRead  =1'b0;
-            Branch   =1'b0;
-            Jump     =2'b00;
-            MemtoReg =3'b000;//alu计算结果写回
-            RegWrite =1'b1;//有效
-            ALUSrc   =1'b0;//选择寄存器
-            invalid  =1'b0;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;
-            case(func3)
-            3'b000:begin//add sub
-            case(func7)
-                7'b0000000:begin//add
-                AluOp=4'b0000;
-                end
-                7'b0100000:begin//sub
-                AluOp=4'b1010;
-                              
-                end
-                default:begin
-                invalid =1'b1;    
-                end
-            endcase   
-            end
-            3'b001:begin//sll
-                AluOp=4'b0001;
-                
-            end
-            3'b010:begin//slt
-                AluOp=4'b0010; 
-            end
-            3'b011:begin//sltu
-                AluOp=4'b0011;
-            end
-            3'b100:begin//xor
-               AluOp=4'b0100 ;  
-            end
-            3'b101:begin//srl sra
-            case(func7)
-                7'b0000000:begin//srl
-                  AluOp=4'b0110; 
-                end
-                7'b0100000:begin//sra  
-                 AluOp=4'b0101;               
-                end
-                default:begin
-                invalid =1'b1;    
-                end
-        
-            endcase              
-                
-            end
-            3'b110:begin//or
-              AluOp=4'b0111 ;    
-            end
-            3'b111:begin//and
-              AluOp=4'b1000 ;    
-            end
-            endcase           
-            end 
-            7'b0010011: begin  // I-type指令 rs1与立即数操作
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b00;
-            MemtoReg =3'b000;//alu计算结果
-            RegWrite=1'b1;//有效
-            ALUSrc  =1'b1;//立即数
-            invalid =1'b0;
-            imm  =immI;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;
-            case(func3)
-            3'b000:begin//addi指令
-            AluOp=4'b0000;             
-            end          
-            3'b001:begin//slli 逻辑左移立即数 三个移位立即数都是零扩展,并且只使用低5位数
-            AluOp=4'b0001;  
-            imm= {27'b0, inst[24:20]} ;        
-            end
-            3'b010:begin//slti 有符号比较
-            AluOp=4'b0010;          
-            end
-            3'b011:begin//slliu 无符号比较
-            AluOp=4'b0011;         
-            end
-            3'b100:begin//xori 异或操作
-            AluOp=4'b0100 ;         
-            end
-            3'b101:begin
-                case(func7)
-                7'b0100_000:begin//srai算数右移
-                AluOp=4'b0101;
-                imm= {27'b0, inst[24:20]} ; 
-                end
-                7'b0000_000:begin//srli逻辑右移
-                AluOp=4'b0110;
-                imm= {27'b0, inst[24:20]} ;  
-                end
-                default:begin
-                invalid =1'b1;;
-                end
+// 功能码常量 (func3)
+localparam F3_ADD_SUB  = 3'b000;
+localparam F3_SLL      = 3'b001;
+localparam F3_SLT      = 3'b010;
+localparam F3_SLTU     = 3'b011;
+localparam F3_XOR      = 3'b100;
+localparam F3_SR       = 3'b101;
+localparam F3_OR       = 3'b110;
+localparam F3_AND      = 3'b111;
+
+// func7常量
+localparam F7_SUB      = 7'b0100000;
+localparam F7_SRA      = 7'b0100000;
+localparam F7_DEFAULT  = 7'b0000000;
+
+// ALU操作码常量
+localparam ALU_ADD     = 4'b0000;
+localparam ALU_SLL     = 4'b0001;
+localparam ALU_SLT     = 4'b0010;
+localparam ALU_SLTU    = 4'b0011;
+localparam ALU_XOR     = 4'b0100;
+localparam ALU_SRA     = 4'b0101;
+localparam ALU_SRL     = 4'b0110;
+localparam ALU_OR      = 4'b0111;
+localparam ALU_AND     = 4'b1000;
+localparam ALU_SUB     = 4'b1010;
+localparam ALU_PCADD   = 4'b1001; // 用于AUIPC
+
+// 跳转类型常量
+localparam JUMP_NONE   = 2'b00;
+localparam JUMP_JAL    = 2'b01;
+localparam JUMP_JALR   = 2'b10;
+
+// MemtoReg选择常量
+localparam MTR_ALU     = 3'b000;
+localparam MTR_MEM     = 3'b001;
+localparam MTR_PCP4    = 3'b010;
+localparam MTR_IMM     = 3'b011;
+localparam MTR_CSR     = 3'b100;
+
+// 内存操作类型常量
+localparam MEM_B       = 3'b000;
+localparam MEM_H       = 3'b001;
+localparam MEM_W       = 3'b010;
+localparam MEM_BU      = 3'b100;
+localparam MEM_HU      = 3'b101;
+
+// CSR操作类型
+localparam CSR_NONE    = 2'b00;
+localparam CSR_WRITE   = 2'b01;
+localparam CSR_SET     = 2'b10;
+
+// 系统调用常量
+localparam ECALL_CODE  = 12'h0;
+localparam EBREAK_CODE = 12'h1;
+localparam MRET_CODE   = 12'h302;
+
+always @(*) begin
+    // 默认值设置
+    MemWrite  = 1'b0;
+    MemRead   = 1'b0;
+    Branch    = 1'b0;
+    Jump      = JUMP_NONE;
+    MemtoReg  = MTR_ALU;
+    RegWrite  = 1'b0;
+    ALUSrc    = 1'b0;
+    AluOp     = ALU_ADD;
+    imm       = 32'h0;
+    invalid   = 1'b0;
+    MemOp     = MEM_W;
+    is_ebreak = 1'b0;
+    is_ecall  = 1'b0;
+    is_mret   = 1'b0;
+    csr_wen   = CSR_NONE;
+
+    if (pc >= 32'h8000_0000) begin
+        case (opcode)
+            OP_OP: begin // R-type指令
+                RegWrite = 1'b1;
+                case (func3)
+                    F3_ADD_SUB: AluOp = (func7 == F7_SUB) ? ALU_SUB : ALU_ADD;
+                    F3_SLL:     AluOp = ALU_SLL;
+                    F3_SLT:     AluOp = ALU_SLT;
+                    F3_SLTU:    AluOp = ALU_SLTU;
+                    F3_XOR:     AluOp = ALU_XOR;
+                    F3_SR:      AluOp = (func7 == F7_SRA) ? ALU_SRA : ALU_SRL;
+                    F3_OR:      AluOp = ALU_OR;
+                    F3_AND:     AluOp = ALU_AND;
+                    default:    invalid = 1'b1;
                 endcase
-            end             
-            3'b110:begin//or 
-            AluOp=4'b0111 ;         
             end
-            3'b111:begin//and 
-            AluOp=4'b1000 ;         
-            end              
-            endcase
-            end
-            7'b0000011:begin//lw lb lh lbu lhu加载指令
-            MemWrite=1'b0;
-            MemRead =1'b1;//读使能
-            Branch  =1'b0;
-            Jump    =2'b00;
-            MemtoReg =3'b001;//加载的数据，写回寄存器堆，
-            RegWrite=1'b1;//写入rd
-            ALUSrc  =1'b1;//立即数
-            invalid =1'b0;
-            imm  =immI;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;
-            case(func3)
-            3'b000:begin//lb
-            MemOp=3'b000;               
-            end
-            3'b001:begin//lh
-            MemOp=3'b001;    
-            end
-            3'b010:begin//lw
-            MemOp=3'b010;    
-            end
-            3'b100:begin//lbu
-            MemOp=3'b100;    
-            end
-            3'b101:begin//lhu
-          //  $display("lhu");
-            MemOp=3'b101;
-            end
-            default:begin
-            invalid =1'b1;    
-            end    
             
-            endcase          
-            end
-            7'b0100011:begin//s类型指令（rs2 → Mem[rs1 + offset]）
-            MemWrite=1'b1;//内存写入使能
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b00;
-            MemtoReg =3'b000;
-            RegWrite=1'b0;
-            ALUSrc  =1'b1;//与立即数相加
-            AluOp   =4'b0000;//rs1+立即数
-            imm     =immS;
-            invalid =1'b0;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;
-            case(func3)
-            3'b000:begin//sb
-            MemOp=3'b000;
+            OP_OP_IMM: begin // I-type指令
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                imm      = (func3 == F3_SLL || func3 == F3_SR) ? {27'b0, inst[24:20]} : immI;
                 
+                case (func3)
+                    F3_ADD_SUB: AluOp = ALU_ADD;
+                    F3_SLL:     AluOp = ALU_SLL;
+                    F3_SLT:     AluOp = ALU_SLT;
+                    F3_SLTU:    AluOp = ALU_SLTU;
+                    F3_XOR:     AluOp = ALU_XOR;
+                    F3_SR:      AluOp = (func7 == F7_SRA) ? ALU_SRA : ALU_SRL;
+                    F3_OR:      AluOp = ALU_OR;
+                    F3_AND:     AluOp = ALU_AND;
+                    default:    invalid = 1'b1;
+                endcase
             end
-            3'b001:begin//sh
-            MemOp=3'b001;
+            
+            OP_LOAD: begin // 加载指令
+                MemRead  = 1'b1;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_MEM;
+                imm      = immI;
                 
+                case (func3)
+                    3'b000: MemOp = MEM_B;
+                    3'b001: MemOp = MEM_H;
+                    3'b010: MemOp = MEM_W;
+                    3'b100: MemOp = MEM_BU;
+                    3'b101: MemOp = MEM_HU;
+                    default: invalid = 1'b1;
+                endcase
             end
-            3'b010:begin//sw
-            MemOp=3'b010;
+            
+            OP_STORE: begin // 存储指令
+                MemWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                imm      = immS;
                 
+                case (func3)
+                    3'b000: MemOp = MEM_B;
+                    3'b001: MemOp = MEM_H;
+                    3'b010: MemOp = MEM_W;
+                    default: invalid = 1'b1;
+                endcase
             end
-            default:begin
-            invalid =1'b1;    
-            end
-            endcase
+            
+            OP_BRANCH: begin // 分支指令
+                ALUSrc = 1'b1;
+                AluOp  = ALU_PCADD;
+                imm    = immB;
                 
+                case (func3)
+                    3'b000: Branch = (Read_rs1 == Read_rs2);  // beq
+                    3'b001: Branch = (Read_rs1 != Read_rs2);  // bne
+                    3'b100: Branch = $signed(Read_rs1) < $signed(Read_rs2);  // blt
+                    3'b101: Branch = $signed(Read_rs1) >= $signed(Read_rs2); // bge
+                    3'b110: Branch = Read_rs1 < Read_rs2;   // bltu
+                    3'b111: Branch = Read_rs1 >= Read_rs2;  // bgeu
+                    default: invalid = 1'b1;
+                endcase
             end
-            7'b1100011:begin//B型指令
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Jump    =2'b00;//无跳转跳转
-            MemtoReg =3'b000;//不写回
-            RegWrite=1'b0;//不写入
-            ALUSrc  =1'b1;//立即数
-            AluOp   =4'b1001;//跳转地址跳转pc+立即数
-            imm     =immB;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;   
-            invalid =1'b0; 
-            case(func3)
-            3'b000: Branch = (Read_rs1 == Read_rs2);  // beq
-            3'b001: Branch = (Read_rs1 != Read_rs2);  // bne
-            3'b100: Branch = (Read_rs1[31]!=Read_rs2[31])?(Read_rs1[31]?1'd1:1'd0):(Read_rs1[30:0]<Read_rs2[30:0]?1'd1:1'd0);  // blt
-            3'b101: Branch = (Read_rs1[31]!=Read_rs2[31])?(Read_rs1[31]?1'd0:1'd1):(Read_rs1[30:0]>=Read_rs2[30:0]?1'd1:1'd0); // bge
-            3'b110: Branch = (Read_rs1 < Read_rs2);   // bltu
-            3'b111: Branch = (Read_rs1 >= Read_rs2);  // bgeu
-            default:begin 
-            invalid =1'b1;                 
+            
+            OP_JAL: begin // JAL指令
+                Jump     = JUMP_JAL;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_PCP4;
+                imm      = immJ;
             end
-            endcase   
-
+            
+            OP_JALR: begin // JALR指令
+                Jump     = JUMP_JALR;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_PCP4;
+                imm      = immI;
             end
-            7'b1101111:begin //jal rd, offset  rd = PC + 4
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b01;//无跳转跳转
-            MemtoReg =3'b010;//写回rd为pc+4
-            RegWrite=1'b1;//写入rd为pc+4,使能信号
-            ALUSrc  =1'b1;//立即数
-            AluOp   =4'b0000;
-            imm     =immJ;   
-            invalid =1'b0;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0; 
-            end  
-            7'b1100111:begin//jalr指令 跳转地址为(rs1+IMMI)&0，a先前jal写的值已经被存到寄存器ra里面了，这时候跳转地址rs1就是ra寄存器的值
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b10;//无跳转跳转
-            MemtoReg=3'b010;//写回rd为pc+4
-            RegWrite=1'b1;//写入rd为pc+4,使能信号
-            ALUSrc  =1'b1;//立即数
-            AluOp   =4'b0000;//控制rs1+Read_rs2
-            imm     =immI;
-            invalid =1'b0;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;                   
+            
+            OP_LUI: begin // LUI指令
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_IMM;
+                imm      = immU;
             end
-            7'b0110111:begin//U型指令lui
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b00;//无跳转跳转
-            MemtoReg=3'b011;
-            RegWrite=1'b1;//写入rd,使能信号
-            ALUSrc  =1'b1;//来源立即数
-            AluOp   =4'b0000;
-            imm     =immU;
-            invalid =1'b0;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;                    
+            
+            OP_AUIPC: begin // AUIPC指令
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                AluOp    = ALU_PCADD;
+                imm      = immU;
             end
-            7'b0010111:begin//U型指令auipc 立即数左移12+PC存入rd
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b00;//无跳转跳转
-            MemtoReg=3'b000;//相加写回
-            RegWrite=1'b1;//写入rd,使能信号
-            ALUSrc  =1'b1;//立即数
-            AluOp   =4'b1001;//特殊。pc+立即数
-            imm     =immU;
-            invalid =1'b0;
-            is_ecall =1'b0;
-            is_mret =1'b0;
-            csr_wen =2'd0;    
+            
+            OP_SYSTEM: begin // 系统调用指令
+                RegWrite = (func3 != 3'b000);
+                MemtoReg = MTR_CSR;
+                imm      = immI;
                 
+                case (func3)
+                    3'b000: begin
+                        case (inst[31:20])
+                            EBREAK_CODE: is_ebreak = 1'b1;
+                            ECALL_CODE:  is_ecall  = 1'b1;
+                            MRET_CODE:   is_mret   = 1'b1;
+                            default:     invalid = 1'b1;
+                        endcase
+                    end
+                    3'b001: csr_wen = CSR_WRITE; // csrrw
+                    3'b010: csr_wen = CSR_SET;   // csrrs
+                    default: invalid = 1'b1;
+                endcase
             end
-            7'b1110011:begin//系统调用指令，也属于I型指令
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            invalid =1'b0;
-            Branch  =1'b0;
-            ALUSrc  =1'b0;//立即数
-            AluOp   =4'b0;//特殊。pc+立即数
-            Jump    =2'b00;//无跳转跳转
-            imm  =immI;
-            MemtoReg =3'b100;//选择csr寄存器的h值
-            RegWrite =1'b1;//有效，需要写回rd
-            case(func3)
-            3'b000:begin 
-              case(inst[31:20])
-              12'h1:begin//ebreak指令
-                is_ebreak=1'b1;
-              end
-              12'h0:begin//ecall指令
-              //$display("ecall");
-                is_ecall=1'b1;
-
-
-              end
-              12'h302:begin//mret
-              is_mret =1'b1;
-              //$display("mret");
-              end
-              
-              default:begin
-                invalid =1'b1;
-              end
-              endcase
-            end
-            3'b001:begin//csrrw,//根据立即数a选择csr寄存器，并把寄存器的数读到rd里面，再更新csr寄存器的值为src1
-                csr_wen=2'b01;//0为不使能，01为写入，10为相或
-              //   $display("csrw");
-            end
-            3'b010:begin//csrrs,//根据立即数a选择csr寄存器，并把寄存器的数读到rd里面，再更新csr寄存器的值为与src1相或
-                csr_wen=2'b10;//0为不使能，01为写入，10为相或
-            end
-            default:begin 
-            invalid =1'b1;                  
-            end
-
-            endcase    
-            end
-            default: begin
-            MemWrite=1'b0;
-            MemRead =1'b0;
-            Branch  =1'b0;
-            Jump    =2'b00;
-            MemtoReg =3'b000;
-            RegWrite=1'b0;
-            ALUSrc  =1'b0;
-            AluOp   =4'b000;
-            imm  =32'h0000_0000;
-            invalid =1'b1;
-            csr_wen =2'd0;
-            is_mret =1'b0;
-            end
+            
+            default: invalid = 1'b1;
         endcase
     end
 end

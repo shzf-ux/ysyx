@@ -97,36 +97,31 @@ module ysyx_25030085_regfile (
 endmodule
 
 
-
 module ysyx_25030085_csr_regfile (
     input clk,
     input [31:0]pc,
     input [31:0] value_a5,
-    input is_ecall,//识别ecall指令
-    input is_mret,//识别ecall指令
-    input [11:0] csr_addr,//来自立即数字段
-    input [1:0] csr_wen,//写使能控制o信号
-    //0为不使能，01为写入，10为相或
-    input [31:0] csr_wdata,//写入的数据，来自src1
+    input is_ecall,
+    input is_mret,
+    input [11:0] csr_addr,
+    input [1:0] csr_wen,
+    input [31:0] csr_wdata,
     output reg [31:0] csr_rdata,
-    output reg [31:0] ecall_mtvec,//ecall设置mtvec
-    output reg [31:0] mret_mepc//ecall设置mtvec
-
+    output [31:0] ecall_mtvec,  // 改为wire输出
+    output [31:0] mret_mepc     // 改为wire输出
 );
-//csr寄存器
 
-   reg [31:0] mstatus;
-   reg [31:0] mtvec;
-   reg [31:0] mepc;
-   reg [31:0] mcause;
+// CSR寄存器
+reg [31:0] mstatus;
+reg [31:0] mtvec;
+reg [31:0] mepc;
+reg [31:0] mcause;
 
+// 直接连接输出
+assign ecall_mtvec = mtvec;
+assign mret_mepc = mepc;
 
-    localparam MSTATUS_MPP_MASK = 32'h00001800; // MPP位掩码（bits 12-11）
-    localparam MSTATUS_MPIE_BIT = 32'h00000080; // MPIE位（bit 7）
-    localparam MSTATUS_MIE_BIT  = 32'h00000008; // MIE位（bit 3）
-
-//读操作
-
+// 读操作
 always @(*) begin
     case (csr_addr)
         12'h300: csr_rdata = mstatus;
@@ -136,94 +131,45 @@ always @(*) begin
         default: csr_rdata = 32'h0;
     endcase
 end
-//写入操作
 
-//同步写入操作
+// 写入操作
 always @(posedge clk) begin
-    if(csr_wen!=2'd0)begin
-        //$display("addr:%08x",csr_addr);
+    if(csr_wen != 2'd0) begin
         case(csr_addr)
-        12'h300:begin
-          mstatus= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mstatus|csr_wdata): mstatus);
-        
-        end
-        12'h305:begin
-          mtvec= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mtvec|csr_wdata):mtvec);  
-        end
-        12'h341:begin
-          mepc= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? (mepc|csr_wdata): mepc); 
-        end
-        12'h342:begin
-          mcause= (csr_wen==2'b01)?csr_wdata:((csr_wen==2'b10)? ( mcause|csr_wdata):mcause); 
-        end
+        12'h300: mstatus <= (csr_wen==2'b01) ? csr_wdata : (csr_wen==2'b10) ? (mstatus|csr_wdata) : mstatus;
+        12'h305: mtvec   <= (csr_wen==2'b01) ? csr_wdata : (csr_wen==2'b10) ? (mtvec|csr_wdata) : mtvec;
+        12'h341: mepc    <= (csr_wen==2'b01) ? csr_wdata : (csr_wen==2'b10) ? (mepc|csr_wdata) : mepc;
+        12'h342: mcause  <= (csr_wen==2'b01) ? csr_wdata : (csr_wen==2'b10) ? (mcause|csr_wdata) : mcause;
         default:begin
             
         end
         endcase
     end
-    else begin
-        
-    end
 end
 
-    //ecall指令
-    always @(posedge clk) begin
-        if(is_ecall)begin
-        // $display("ecall a5:%08x",value_a5);
-       mstatus = (mstatus & ~(MSTATUS_MIE_BIT | MSTATUS_MPP_MASK))  // 清除MIE和MPP
-          | ((mstatus & MSTATUS_MIE_BIT) << 4)              // MIE→MPIE
-          | MSTATUS_MPP_MASK;                               // 设置MPP=11
-        mepc =pc;
-        mcause = value_a5;//a5寄存器的值
-         //$display("npc mcause:%08x",mcause);
-        ecall_mtvec =mtvec;                   
-// 清除MIE（bit 3） 0
-// 原MIE值移动到MPIE（bit 7）1
-// 设置MPP为机器模式（bits 12-11）11
-        end
-        else if(is_mret)begin
-        mstatus = (mstatus & ~MSTATUS_MPP_MASK) |     // 1. 清除MPP（设置为00）
-                  ((mstatus >> 4) & MSTATUS_MIE_BIT) | // 2. MPIE→MIE
-                 (mstatus & ~MSTATUS_MPIE_BIT);       // 3. 清除MPIE
-       mret_mepc=mepc;//保存之前的地址
-        end
-// 恢复MIE（bit 3） 1 
-// 原MIE值移动到MPIE（bit 7）1 规范要求
-// 设置MPP为普通模式（bits 12-11）00
+// ecall和mret处理
+localparam MSTATUS_MPP_MASK = 32'h00001800;
+localparam MSTATUS_MPIE_BIT = 32'h00000080;
+localparam MSTATUS_MIE_BIT  = 32'h00000008;
+
+always @(posedge clk) begin
+    if(is_ecall) begin
+        $display("ecall a5:%08x", value_a5);
+        $display("mtvec :%08x", mtvec);  // 直接显示mtvec
+        
+        // 更新状态寄存器
+        mstatus <= (mstatus & ~(MSTATUS_MIE_BIT | MSTATUS_MPP_MASK)) |
+                  ((mstatus & MSTATUS_MIE_BIT) << 4) |
+                  MSTATUS_MPP_MASK;
+        
+        mepc <= pc;
+        mcause <= value_a5;
     end
-
-
-
-
-
-
-
-
-
-
-    
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    else if(is_mret) begin
+        mstatus <= (mstatus & ~MSTATUS_MPP_MASK) |
+                  ((mstatus >> 4) & MSTATUS_MIE_BIT) |
+                  (mstatus & ~MSTATUS_MPIE_BIT);
+    end
+end
 
 endmodule

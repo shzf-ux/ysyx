@@ -1,12 +1,12 @@
 module ysyx_25030085_top (
     input clk,
     input rst,
-    input [31:0] instruction,
-    output [31:0] pc_out
+    output [31:0] pc_out,
+    output [31:0]inst
 
 );
-
-
+    assign inst =instruction;
+    wire [31:0]instruction;
     wire [31:0] Alu_Result;
     wire [31:0] Read_rs1;
     wire [31:0] Read_rs2;
@@ -22,8 +22,8 @@ module ysyx_25030085_top (
     wire [3:0]  AluOp;
     wire [2:0]  MemOp;
 
-    always @(instruction) begin
-        //  $display("inst:0x%08x",instruction);
+    always @(posedge clk) begin
+        //$display("inst:0x%08x pc:0x%08x",instruction,pc_out);
     end
 
   
