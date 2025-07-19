@@ -118,7 +118,7 @@ static int cmd_c(char *args)
 
 static int cmd_q(char *args) // 退出
 {
-    
+    flag_stop = 0;
     return -1;
 }
 

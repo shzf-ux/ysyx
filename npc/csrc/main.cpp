@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
     }
     
-    else if(flag_stop==1)//遇到ebreak指令
+    else if(flag_stop==1||flag_stop==0)//遇到ebreak指令
     {
         printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
         printf("at pc = %08x\n", top->pc_out);
