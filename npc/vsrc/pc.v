@@ -6,18 +6,24 @@ module ysyx_25030085_pc (
     input rst,
     input [31:0] imm,
     input [31:0] Alu_Result,
-    input [1:0] Jump,
-    input Branch,
+
+    input [20:0] ctrl,
     input [31:0] mtvec,
     input [31:0] mepc,
-    input is_ecall,
-    input is_mret,
 
-    output [31:0] inst,
-    output [31:0] pc
+
+    output out_valid,    // 输出数据有效
+    output [31:0] inst,  // 指令输出
+    output [31:0] pc,    // PC值输出
+    input out_ready      // 下游准备接收
 );
     reg [31:0] current_pc;
     reg [31:0] if_inst;
+
+    wire Branch=ctrl[13];
+    wire is_ecall=ctrl[17];
+    wire is_mret =ctrl[18];
+    wire [1:0]Jump =ctrl[15:14];
     
     assign inst = if_inst;
     assign pc = current_pc;
@@ -60,5 +66,4 @@ module ysyx_25030085_pc (
             display_ret_func(current_pc, next_pc);  // 函数返回追踪
         end
     end
-
 endmodule

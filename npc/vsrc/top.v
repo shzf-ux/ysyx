@@ -6,21 +6,12 @@ module ysyx_25030085_top (
 
 );
     assign inst =instruction;
-    wire [31:0]instruction;
-    wire [31:0] Alu_Result;
-    wire [31:0] Read_rs1;
-    wire [31:0] Read_rs2;
-    wire [31:0] ReadData;//数据存储器读出来的数据
-    wire [31:0] imm;
-    wire        MemRead;
-    wire [2:0]  MemtoReg;
-    wire        MemWrite;
-    wire        RegWrite;
-    wire        Branch;
-    wire [1:0]  Jump;
-    wire        ALUSrc;
-    wire [3:0]  AluOp;
-    wire [2:0]  MemOp;
+    reg [31:0]instruction;
+    reg [31:0] Alu_Result;
+    reg [31:0] Read_rs1;
+    reg [31:0] Read_rs2;
+    reg [31:0] ReadData;//数据存储器读出来的数据
+    reg [31:0] imm;
 
     always @(posedge clk) begin
         //$display("inst:0x%08x pc:0x%08x",instruction,pc_out);
@@ -31,42 +22,53 @@ ysyx_25030085_pc pc_init(
 
     .clk(clk),
     .rst(rst),
-    .Jump(Jump),
-    .Branch(Branch),
-    .imm(imm),
+
+
+    .ctrl(ctrl),
     .pc(pc_out),
+    .out_valid(if_id_valid),
     .inst(instruction),
+    .out_ready(id_if_ready),
     .Alu_Result(Alu_Result),
     .mtvec(mtvec),
-    .mepc(mepc),//返回
-    .is_ecall(is_ecall),
-    .is_mret(is_mret)
+    .imm(imm),
+    .mepc(mepc)//返回
+ 
 );
 
     wire[1:0]csr_wen;
     reg is_ecall;
     reg is_mret;
+    wire id_if_ready,if_id_valid=1;
 
+wire [4:0] rs1_addr,rs2_addr;
 ysyx_25030085_control control_init(
-    .pc(pc_out),
-    .inst(instruction),
-    .MemRead(MemRead),
-    .MemtoReg(MemtoReg),
-    .MemWrite(MemWrite),
-    .RegWrite(RegWrite),
-    .ALUSrc(ALUSrc),
-    .AluOp(AluOp),
-    .MemOp(MemOp),
-    .Branch(Branch),
-    .Jump(Jump),
-    .imm(imm),
-    .Read_rs1(Read_rs1),
-    .Read_rs2(Read_rs2),
-    .csr_wen(csr_wen),
-    .is_ecall(is_ecall),
-    .is_mret(is_mret)
-);
+    .clk(clk),
+    .rst(rst),
 
+    .in_valid(if_id_valid),
+    .in_pc(pc_out),
+    .in_inst(instruction),
+    .in_ready(id_if_ready),
+
+
+    .rs1_addr(rs1_addr),
+    .rs2_addr(rs2_addr),
+    .rs1_data(Read_rs1),
+    .rs2_data(Read_rs2),
+    
+    //ex
+    .out_valid(id_ex_valid),
+    .imm_out(id_ex_imm),
+    .ctrl_out(id_ex_ctrl),
+    .out_rs1_data(id_ex_rs1),
+    .out_rs2_data(id_ex_rs2),
+    .pc_out(id_ex_pc),
+    .out_ready(ex_id_ready) 
+);
+wire id_ex_valid,ex_id_ready;
+
+    wire [20:0] ctrl;
     wire [31:0] csr_rdata;
     wire [31:0] mtvec;
     wire [31:0] mepc;
@@ -74,10 +76,10 @@ ysyx_25030085_control control_init(
 ysyx_25030085_csr_regfile csr_regfile_init(
     .clk(clk),
     .pc(pc_out),
-    .is_ecall(is_ecall),
-    .is_mret(is_mret),
+    .ctrl(ctrl),
+
     .csr_addr(imm[11:0]),
-    .csr_wen(csr_wen),
+    
     .csr_wdata(Read_rs1),//src1
     .csr_rdata(csr_rdata),//读到的数据送回rd
     .ecall_mtvec(mtvec),//跳转地址送到pc
@@ -86,42 +88,68 @@ ysyx_25030085_csr_regfile csr_regfile_init(
 
 );
 
-ysyx_25030085_regfile regfile_init(
-    .clk(clk),
-    .rst(rst),
-    .imm(imm),
-    .pc_out(pc_out),
-    .instruction(instruction),
-    .RegWrite(RegWrite),
-    .MemtoReg(MemtoReg),
-    .Alu_Result(Alu_Result),
-    .Read_rs1(Read_rs1),
-    .Read_rs2(Read_rs2),
-    .MemRead(ReadData),
-    .csr_rdata(csr_rdata),
-    .value_a5(value_a5)
+ysyx_25030085_regfile regfile_init(  
+  
+    .reg_wen( reg_wen),
+    .reg_waddr(reg_waddr),
+    .reg_wdata(reg_wdata),
 
+    .reg_rs1_addr(rs1_addr),
+    .reg_rs2_addr(rs2_addr),
+    .rs1_data(Read_rs1),
+    .rs2_data(Read_rs2),
+    .value_a5(value_a5)
     
 );
    
+wire [31:0] id_ex_rs1,id_ex_rs2,id_ex_pc,id_ex_imm;
+wire [20:0] id_ex_ctrl;
 ysyx_25030085_alu alu_init(
-    .rs1_data(Read_rs1),
-    .rs2_data(Read_rs2),
-    .pc(pc_out),
-    .imm(imm),
-    .AluOp(AluOp),
-    .ALUSrc(ALUSrc),
+    .clk(clk),
+    .rst(rst),
+
+    .in_valid(id_ex_valid),
+    .in_rs1_data(id_ex_rs1),
+    .in_rs2_data(id_ex_rs2),
+    .in_pc(id_ex_pc),
+    .in_imm(id_ex_imm),
+    .in_ctrl(id_ex_ctrl),
+    .in_ready(ex_id_ready),
+
+
+
     .Alu_Result(Alu_Result)
 ); 
 ysyx_25030085_DataMem DataMem(
     .clk(clk),
-    .MemOp(MemOp),
-    .MemRead(MemRead),
-    .MemWrite(MemWrite),//控制信号
-    .Read_rs2(Read_rs2),//作存储时输入数据
-    .addr(Alu_Result),//作储存时输入地址，作加载时，加载地址
-    .ReadData(ReadData)//作加载时，加载出来的地址
+    .rst(rst),
+    
+    .ctrl(ctrl),
+    .sram_wdata(Read_rs2),//作存储时输入数据
+    .sram_addr(Alu_Result),//作储存时输入地址，作加载时，加载地址
+    .sram_rdata(ReadData)//作加载时，加载出来的地址
 );
+
+
+
+ysyx_25030085_wb wb_init(
+    .clk(clk),
+    .rst(rst), 
+    .alu_result(Alu_Result),
+    .mem_rdata(ReadData),
+    .pc(pc_out),
+    .imm(imm),
+    .csr_rdata(csr_rdata),
+    .ctrl(ctrl),
+    .rd_addr(instruction[11:7]),
+    .reg_wen( reg_wen),
+    .reg_waddr(reg_waddr),
+    .reg_wdata(reg_wdata)
+
+);
+reg reg_wen;
+reg [31:0]reg_wdata;
+reg [4:0]reg_waddr;
 
 
 endmodule
