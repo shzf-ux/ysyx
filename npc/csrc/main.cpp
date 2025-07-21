@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     if (flag_stop == 2) // 不合理
     {
         printf("%sHIT BAD TRAP  %s", ANSI_FG_RED, ANSI_NONE);
-        printf("at pc = %08x\n", top->pc_out);
+        printf("at pc = %08x\n", top->top_pc);
         NPC_State = 2;
 
     }
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     else if(flag_stop==1||flag_stop==0)//遇到ebreak指令
     {
         printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
-        printf("at pc = %08x\n", top->pc_out);
+        printf("at pc = %08x\n", top->top_pc);
         NPC_State = 0;
     }
     else

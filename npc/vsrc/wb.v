@@ -8,7 +8,7 @@ module  ysyx_25030085_wb (
     input [31:0] in_mem_rdata,    // 存储器读取数据
     input [31:0] in_pc,     // PC+4（用于JAL）
     input [31:0] in_imm,          // 立即数（用于LUI）
-     input [20:0] in_ctrl,   
+    input [20:0] in_ctrl,   
     input [31:0] in_csr_rdata,    // CSR读取数据
     output in_ready,
    

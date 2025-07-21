@@ -1,12 +1,20 @@
 module ysyx_25030085_top (
     input clk,
     input rst,
-    output [31:0] pc_out,
-    output [31:0]inst
 
+    //itrace difftest;
+    output [31:0] top_pc,
+    output [31:0] top_inst,
+
+    output top_valid,
+    output top_ready
 );
-    assign inst =if_id_inst;
-    wire [31:0]if_id_inst;
+    assign top_valid=if_id_valid;
+    assign top_ready =id_if_ready;
+    assign top_inst =if_id_inst;
+    assign top_pc  =if_id_pc;
+
+    wire [31:0]if_id_inst,if_id_pc;
     wire [31:0] ex_me_alu;
     wire [31:0] rs1_data;
     wire [31:0] rs2_data;
@@ -24,10 +32,9 @@ ysyx_25030085_pc pc_init(
     .wb_done(wb_done),
     .next_pc(next_pc),
 
-
      //输出
     .out_valid(if_id_valid),
-    .pc(pc_out),
+    .pc(if_id_pc),
     .inst(if_id_inst),
     .out_ready(id_if_ready)
 
@@ -46,7 +53,7 @@ ysyx_25030085_control control_init(
     .rst(rst),
 
     .in_valid(if_id_valid),
-    .in_pc(pc_out),
+    .in_pc(if_id_pc),
     .in_inst(if_id_inst),
     .in_ready(id_if_ready),
 

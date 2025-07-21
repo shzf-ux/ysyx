@@ -39,7 +39,7 @@ extern "C" void info_register(uint32_t reg_value,int en_display)
        if (reg_index < 32)
        {
               CPU_state.gpr[reg_index] = reg_value;
-              CPU_state.pc = top->pc_out;
+              CPU_state.pc = top->top_pc;
               if (en_display)
               {
               printf("%-3s: 0x%08x\n", regs[reg_index], reg_value);

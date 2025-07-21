@@ -123,7 +123,7 @@ reg [20:0] ctrl_reg;
 
 
 
-wire[20:0] ctrl_bus = {ALUSrc,AluOp,MemRead,MemWrite,MemOp,MemtoReg,Branch,Jump,RegWrite,is_ecall,is_mret,csr_wen};
+wire [20:0] ctrl_bus = {csr_wen,is_mret,is_ecall,RegWrite,Jump,Branch,MemtoReg,MemOp,MemWrite,  MemRead,AluOp,ALUSrc};
 
 //最低位补0
 // 操作码常量
@@ -196,6 +196,24 @@ localparam EBREAK_CODE = 12'h1;
 localparam MRET_CODE   = 12'h302;
 
 always @(*) begin
+
+  AluOp=ALU_ADD;
+  ALUSrc=0;
+
+  MemWrite=0;
+  MemOp=0;
+  MemtoReg=MTR_ALU;
+
+  RegWrite=0;
+  RegWrite=0;
+
+  csr_wen=CSR_NONE;
+
+  Branch=0;
+  Jump=JUMP_NONE;
+
+  is_ecall=0;
+  is_ebreak=0;
     if (state==DECODE) begin
         case (opcode)
             OP_OP: begin // R-type指令
@@ -327,7 +345,7 @@ always @(*) begin
                 endcase
             end
             
-            default: invalid = 1'b1;
+            default: invalid = 1'b0;
         endcase
     end
 end

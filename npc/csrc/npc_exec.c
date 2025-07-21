@@ -21,16 +21,20 @@ void npc_exec(uint64_t n)
     {
         top->clk = !top->clk;
         int is_rising_edge = (top->clk == 1);//记录上升沿
-        int inst_t = top->inst;
+        //握手
+        int valid = top->top_valid;
+        int ready = top->top_ready;
+        int inst_fetch = valid && ready;
+        int inst_t = top->top_inst;
 
-        // printf("pc:%08x\n", top->pc_out);
-        #ifdef CONFIG_ITRACE_COND
+// printf("pc:%08x\n", top->top_pc);
+#ifdef CONFIG_ITRACE_COND
 
-        if (is_rising_edge&&!batch_mode)
+        if (is_rising_edge && !batch_mode && inst_fetch)
         {
             s = (LogBuf *)malloc(sizeof(LogBuf));
         char *p = s->logbuf;
-        p += snprintf(p, sizeof(s->logbuf), "%08x:", top->pc_out);
+        p += snprintf(p, sizeof(s->logbuf), "%08x:", top->top_pc);
         int ilen =4;
         int i;
         uint8_t *inst = (uint8_t *)&inst_t; // 储存指令，并把指令分为四段
@@ -52,20 +56,19 @@ void npc_exec(uint64_t n)
         void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
         disassemble(p, s->logbuf + sizeof(s->logbuf) - p, // 向buf加入反汇编后的内容
-                    top->pc_out, (uint8_t *)&inst_t, ilen);
+                    top->top_pc, (uint8_t *)&inst_t, ilen);
 
         printf("%s\n", s->logbuf);
         free(s);
         }
        #endif
-
         top->eval();
         if (is_rising_edge)
         {
-          // printf("pc:%08x\n", top->pc_out);
-          #ifdef CONFIG_DIFFTEST
-            difftest_step(top->pc_out);
-          #endif
+// printf("pc:%08x\n", top->top_pc);
+#ifdef CONFIG_DIFFTEST
+            difftest_step(top->top_pc);
+#endif
         }
         top->eval();
         vcd->dump(sim_time);

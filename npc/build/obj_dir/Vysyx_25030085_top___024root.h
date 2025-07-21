@@ -24,10 +24,11 @@ class Vysyx_25030085_top___024root final : public VerilatedModule {
         CData/*0:0*/ ysyx_25030085_top__DOT__control_init__DOT__invalid;
         CData/*0:0*/ ysyx_25030085_top__DOT__control_init__DOT__is_ebreak;
         CData/*0:0*/ ysyx_25030085_top__DOT__regfile_init__DOT__is_info_register;
+        VL_OUT8(top_valid,0,0);
+        VL_OUT8(top_ready,0,0);
         CData/*1:0*/ ysyx_25030085_top__DOT__csr_wen;
         CData/*0:0*/ ysyx_25030085_top__DOT__is_ecall;
         CData/*0:0*/ ysyx_25030085_top__DOT__is_mret;
-        CData/*0:0*/ ysyx_25030085_top__DOT__id_if_ready;
         CData/*0:0*/ ysyx_25030085_top__DOT__ex_id_ready;
         CData/*0:0*/ ysyx_25030085_top__DOT__me_ex_ready;
         CData/*0:0*/ ysyx_25030085_top__DOT__me_wb_valid;
@@ -63,10 +64,9 @@ class Vysyx_25030085_top___024root final : public VerilatedModule {
         CData/*7:0*/ ysyx_25030085_top__DOT__DataMem__DOT__read_byteu;
         CData/*0:0*/ ysyx_25030085_top__DOT__wb_init__DOT__has_data;
         CData/*0:0*/ __Vdpi_export_trigger;
-        CData/*1:0*/ __Vdly__ysyx_25030085_top__DOT__pc_init__DOT__state;
         CData/*1:0*/ __Vdly__ysyx_25030085_top__DOT__control_init__DOT__state;
         CData/*1:0*/ __Vdly__ysyx_25030085_top__DOT__alu_init__DOT__state;
-        CData/*0:0*/ __Vdly__ysyx_25030085_top__DOT__wb_init__DOT__has_data;
+        CData/*0:0*/ __Vdly__ysyx_25030085_top__DOT__DataMem__DOT__has_data;
         CData/*0:0*/ __Vtrigrprev__TOP__clk;
         CData/*0:0*/ __Vtrigrprev__TOP__rst;
         CData/*0:0*/ __Vtrigrprev__TOP__ysyx_25030085_top__DOT__control_init__DOT__invalid;
@@ -76,8 +76,8 @@ class Vysyx_25030085_top___024root final : public VerilatedModule {
         CData/*0:0*/ __VactContinue;
         SData/*15:0*/ ysyx_25030085_top__DOT__DataMem__DOT__read_half_word;
         SData/*15:0*/ ysyx_25030085_top__DOT__DataMem__DOT__read_half_wordu;
-        VL_OUT(pc_out,31,0);
-        VL_OUT(inst,31,0);
+        VL_OUT(top_pc,31,0);
+        VL_OUT(top_inst,31,0);
         IData/*31:0*/ ysyx_25030085_top__DOT__rs1_data;
         IData/*31:0*/ ysyx_25030085_top__DOT__rs2_data;
         IData/*20:0*/ ysyx_25030085_top__DOT__ctrl;
@@ -86,6 +86,7 @@ class Vysyx_25030085_top___024root final : public VerilatedModule {
     };
     struct {
         IData/*31:0*/ ysyx_25030085_top__DOT__pc_init__DOT__if_inst;
+        IData/*31:0*/ ysyx_25030085_top__DOT__pc_init__DOT__if_reg;
         IData/*31:0*/ ysyx_25030085_top__DOT__control_init__DOT__inst;
         IData/*31:0*/ ysyx_25030085_top__DOT__control_init__DOT__pc;
         IData/*31:0*/ ysyx_25030085_top__DOT__control_init__DOT__imm_reg;
