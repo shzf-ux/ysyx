@@ -16,7 +16,7 @@ extern "C" {
 
 
     // DPI EXPORTS
-    // DPI export at /home/zzy/ysyx-workbench/npc/vsrc/regfile.v:37:19
+    // DPI export at /home/zzy/ysyx-workbench/npc/vsrc/regfile.v:30:19
     extern void info_register_en(svBit enable, svBit en_display);
 
     // DPI IMPORTS

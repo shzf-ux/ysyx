@@ -4,66 +4,71 @@ import "DPI-C" function void display_ret_func (input int pc, input int dnpc);
 module ysyx_25030085_pc (
     input clk,
     input rst,
-    input [31:0] imm,
-    input [31:0] Alu_Result,
 
-    input [20:0] ctrl,
-    input [31:0] mtvec,
-    input [31:0] mepc,
-
+    input wb_done,
+    input [31:0] next_pc,
 
     output out_valid,    // 输出数据有效
     output [31:0] inst,  // 指令输出
     output [31:0] pc,    // PC值输出
     input out_ready      // 下游准备接收
 );
-    reg [31:0] current_pc;
-    reg [31:0] if_inst;
+    parameter IDLE = 0;
+    parameter WAIT_FETCH = 1;
+    parameter OUTPUT = 2;
+    reg[1:0] state;
 
-    wire Branch=ctrl[13];
-    wire is_ecall=ctrl[17];
-    wire is_mret =ctrl[18];
-    wire [1:0]Jump =ctrl[15:14];
-    
+    reg [31:0] current_pc;
+    reg [31:0] next_pc_reg;
+    reg [31:0] if_inst;
+    reg fetch_valid;
+
+    assign out_valid = (state == OUTPUT) ? 1 : 0;
     assign inst = if_inst;
     assign pc = current_pc;
 
-    // 计算下一条PC
-    wire [31:0] next_pc = 
-        (Jump == 2'b01) ? (imm + current_pc) :          // JAL
-        (Jump == 2'b10) ? (Alu_Result & 32'hFFFFFFFE) : // JALR
-        Branch ? Alu_Result :                           // Branch
-        is_ecall ? mtvec :                              // ECALL
-        is_mret ? mepc :                                // MRET
-        (current_pc + 4);                              // 顺序执行
-
-    // 指令读取逻辑
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            current_pc <= 32'h8000_0000;
-            if_inst <= pmem_readv(32'h80000000);
-        end else begin
-            current_pc <= next_pc;
-            if_inst <= pmem_readv(next_pc);
-        end
-    end
-
-    // 函数调用追踪
-     // ftrace调试信号
-    wire is_jar_call;
-    wire is_jalr_call;
-    wire is_jalr_ret;
-
-    assign is_jar_call = (inst[11:7] == 5'd1) && (Jump == 2'b01);  // JAL调用
-    assign is_jalr_call = (inst[11:7] == 5'd1) && (Jump == 2'b10);  // JALR调用
-    assign is_jalr_ret = (inst[11:7] == 5'd0) && (inst[19:15] == 5'd1) && (Jump == 2'b10);  // JALR返回
-
     always @(posedge clk) begin
-        if (is_jar_call || is_jalr_call) begin
-            display_call_func(current_pc, next_pc);  // 函数调用追踪
-        end
-        if (is_jalr_ret) begin
-            display_ret_func(current_pc, next_pc);  // 函数返回追踪
+        if (rst) begin
+            $display("RESET: initializing PC");
+            state <= IDLE;
+            current_pc <= 32'h8000_0000;
+            fetch_valid <= 0;
+            next_pc_reg <= 0;
+        end else begin
+            case (state)
+                IDLE: begin
+                    // 复位后立即开始取指
+                    $display("IDLE: fetching PC=0x%08x", current_pc);
+                    if_inst <= pmem_readv(current_pc);
+                    state <= WAIT_FETCH;
+                    fetch_valid <= 1;
+                end
+                
+                WAIT_FETCH: begin
+                    // 等待指令获取完成
+                    if (fetch_valid) begin
+                        $display("FETCHED: inst=0x%08x at PC=0x%08x", if_inst, current_pc);
+                        state <= OUTPUT;
+                    end
+                end
+                
+                OUTPUT: begin
+                    // 当下游准备好接收指令
+                    if (out_ready) begin
+                        $display("OUTPUT: sending PC=0x%08x, inst=0x%08x", current_pc, if_inst);
+                        
+                        // 更新PC到下一位置
+                        next_pc_reg <= next_pc;
+                        state <= IDLE;
+                        
+                        // 检查是否需要停止
+                        if (wb_done) begin
+                            $display("WB_DONE: updating PC to 0x%08x", next_pc);
+                            current_pc <= next_pc;
+                        end
+                    end
+                end
+            endcase
         end
     end
 endmodule

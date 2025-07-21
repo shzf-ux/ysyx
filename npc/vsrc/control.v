@@ -15,6 +15,8 @@ module ysyx_25030085_control (
     output [4:0]rs2_addr,
     input  [31:0]rs1_data,
     input  [31:0]rs2_data,
+    input  [31:0]in_reg_a5,
+
 
     //发送数据
     output out_valid,
@@ -23,14 +25,17 @@ module ysyx_25030085_control (
     output [31:0]out_rs2_data,
     output [20:0]ctrl_out , // 21位控制总线
     output [31:0]imm_out,
+    output [31:0]reg_a5_out,
     input out_ready
 
 );
   parameter IDLE = 0;
   parameter DECODE = 1;
-  parameter OUTPUT = 1;
+  parameter OUTPUT = 2;
    reg [1:0] state;
    reg [31:0]inst,pc;
+
+
    assign in_ready=(state==IDLE);
    assign out_valid=(state==OUTPUT);
 
@@ -40,7 +45,7 @@ reg [20:0] ctrl_reg;
     always @(posedge clk or posedge rst) begin
       if(rst)begin
         inst<=0;
-        pc<=0;
+        pc<=32'h8000_0000;
         state<=IDLE;
       end
       else begin
@@ -71,6 +76,7 @@ reg [20:0] ctrl_reg;
     assign out_rs1_data=rs1_reg;
     assign out_rs2_data=rs2_reg;
     assign ctrl_out=ctrl_reg;
+    assign reg_a5_out=in_reg_a5;
 
 
 
@@ -189,157 +195,139 @@ localparam ECALL_CODE  = 12'h0;
 localparam EBREAK_CODE = 12'h1;
 localparam MRET_CODE   = 12'h302;
 
-always @(posedge clk or posedge rst) begin
-  if(rst)begin
-    // 默认值设置
-    MemWrite  <= 1'b0;
-    MemRead   <= 1'b0;
-    Branch    <= 1'b0;
-    Jump      <= JUMP_NONE;
-    MemtoReg  <= MTR_ALU;
-    RegWrite  <= 1'b0;
-    ALUSrc    <= 1'b0;
-    AluOp     <= ALU_ADD;
-    imm       <= 32'h0;
-    invalid   <= 1'b0;
-    MemOp     <= MEM_W;
-    is_ebreak <= 1'b0;
-    is_ecall  <= 1'b0;
-    is_mret   <= 1'b0;
-    csr_wen   <= CSR_NONE;
-  end
-    if (pc >= 32'h8000_0000) begin
+always @(*) begin
+    if (state==DECODE) begin
         case (opcode)
             OP_OP: begin // R-type指令
-                RegWrite <= 1'b1;
+                RegWrite = 1'b1;
                 case (func3)
-                    F3_ADD_SUB: AluOp <= (func7 == F7_SUB) ? ALU_SUB : ALU_ADD;
-                    F3_SLL:     AluOp <= ALU_SLL;
-                    F3_SLT:     AluOp <= ALU_SLT;
-                    F3_SLTU:    AluOp <= ALU_SLTU;
-                    F3_XOR:     AluOp <= ALU_XOR;
-                    F3_SR:      AluOp <= (func7 == F7_SRA) ? ALU_SRA : ALU_SRL;
-                    F3_OR:      AluOp <= ALU_OR;
-                    F3_AND:     AluOp <= ALU_AND;
-                    default:    invalid <= 1'b1;
+                    F3_ADD_SUB: AluOp = (func7 == F7_SUB) ? ALU_SUB : ALU_ADD;
+                    F3_SLL:     AluOp = ALU_SLL;
+                    F3_SLT:     AluOp = ALU_SLT;
+                    F3_SLTU:    AluOp = ALU_SLTU;
+                    F3_XOR:     AluOp = ALU_XOR;
+                    F3_SR:      AluOp = (func7 == F7_SRA) ? ALU_SRA : ALU_SRL;
+                    F3_OR:      AluOp = ALU_OR;
+                    F3_AND:     AluOp = ALU_AND;
+                    default:    invalid = 1'b1;
                 endcase
             end
             
             OP_OP_IMM: begin // I-type指令
-                RegWrite <= 1'b1;
-                ALUSrc   <= 1'b1;
-                imm      <= (func3 == F3_SLL || func3 == F3_SR) ? {27'b0, inst[24:20]} : immI;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                imm      = (func3 == F3_SLL || func3 == F3_SR) ? {27'b0, inst[24:20]} : immI;
                 
                 case (func3)
-                    F3_ADD_SUB: AluOp <= ALU_ADD;
-                    F3_SLL:     AluOp <= ALU_SLL;
-                    F3_SLT:     AluOp <= ALU_SLT;
-                    F3_SLTU:    AluOp <= ALU_SLTU;
-                    F3_XOR:     AluOp <= ALU_XOR;
-                    F3_SR:      AluOp <= (func7 == F7_SRA) ? ALU_SRA : ALU_SRL;
-                    F3_OR:      AluOp <= ALU_OR;
-                    F3_AND:     AluOp <= ALU_AND;
-                    default:    invalid <= 1'b1;
+                    F3_ADD_SUB: AluOp = ALU_ADD;
+                    F3_SLL:     AluOp = ALU_SLL;
+                    F3_SLT:     AluOp = ALU_SLT;
+                    F3_SLTU:    AluOp = ALU_SLTU;
+                    F3_XOR:     AluOp = ALU_XOR;
+                    F3_SR:      AluOp = (func7 == F7_SRA) ? ALU_SRA : ALU_SRL;
+                    F3_OR:      AluOp = ALU_OR;
+                    F3_AND:     AluOp = ALU_AND;
+                    default:    invalid = 1'b1;
                 endcase
             end
             
             OP_LOAD: begin // 加载指令
-                MemRead  <= 1'b1;
-                RegWrite <= 1'b1;
-                ALUSrc   <= 1'b1;
-                MemtoReg <= MTR_MEM;
-                imm      <= immI;
+                MemRead  = 1'b1;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_MEM;
+                imm      = immI;
                 
                 case (func3)
-                    3'b000: MemOp <= MEM_B;
-                    3'b001: MemOp <= MEM_H;
-                    3'b010: MemOp <= MEM_W;
-                    3'b100: MemOp <= MEM_BU;
-                    3'b101: MemOp <= MEM_HU;
-                    default: invalid <= 1'b1;
+                    3'b000: MemOp = MEM_B;
+                    3'b001: MemOp = MEM_H;
+                    3'b010: MemOp = MEM_W;
+                    3'b100: MemOp = MEM_BU;
+                    3'b101: MemOp = MEM_HU;
+                    default: invalid = 1'b1;
                 endcase
             end
             
             OP_STORE: begin // 存储指令
-                MemWrite <= 1'b1;
-                ALUSrc   <= 1'b1;
-                imm      <= immS;
+                MemWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                imm      = immS;
                 
                 case (func3)
-                    3'b000: MemOp <= MEM_B;
-                    3'b001: MemOp <= MEM_H;
-                    3'b010: MemOp <= MEM_W;
-                    default: invalid <= 1'b1;
+                    3'b000: MemOp = MEM_B;
+                    3'b001: MemOp = MEM_H;
+                    3'b010: MemOp = MEM_W;
+                    default: invalid = 1'b1;
                 endcase
             end
             
             OP_BRANCH: begin // 分支指令
-                ALUSrc <= 1'b1;
-                AluOp  <= ALU_PCADD;
-                imm    <= immB;
+                ALUSrc = 1'b1;
+                AluOp  = ALU_PCADD;
+                imm    = immB;
                 
                 case (func3)
-                    3'b000: Branch <= (rs1_data == rs2_data);  // beq
-                    3'b001: Branch <= (rs1_data != rs2_data);  // bne
-                    3'b100: Branch <= $signed(rs1_data) < $signed(rs2_data);  // blt
-                    3'b101: Branch <= $signed(rs1_data) >= $signed(rs2_data); // bge
-                    3'b110: Branch <= rs1_data < rs2_data;   // bltu
-                    3'b111: Branch <= rs1_data >= rs2_data;  // bgeu
-                    default: invalid <= 1'b1;
+                    3'b000: Branch = (rs1_data == rs2_data);  // beq
+                    3'b001: Branch = (rs1_data != rs2_data);  // bne
+                    3'b100: Branch = $signed(rs1_data) < $signed(rs2_data);  // blt
+                    3'b101: Branch = $signed(rs1_data) >= $signed(rs2_data); // bge
+                    3'b110: Branch = rs1_data < rs2_data;   // bltu
+                    3'b111: Branch = rs1_data >= rs2_data;  // bgeu
+                    default: invalid = 1'b1;
                 endcase
             end
             
             OP_JAL: begin // JAL指令
-                Jump     <= JUMP_JAL;
-                RegWrite <= 1'b1;
-                ALUSrc   <= 1'b1;
-                MemtoReg <= MTR_PCP4;
-                imm      <= immJ;
+                Jump     = JUMP_JAL;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_PCP4;
+                imm      = immJ;
             end
             
             OP_JALR: begin // JALR指令
-                Jump     <= JUMP_JALR;
-                RegWrite <= 1'b1;
-                ALUSrc   <= 1'b1;
-                MemtoReg <= MTR_PCP4;
-                imm      <= immI;
+                Jump     = JUMP_JALR;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_PCP4;
+                imm      = immI;
             end
             
             OP_LUI: begin // LUI指令
-                RegWrite <= 1'b1;
-                ALUSrc   <= 1'b1;
-                MemtoReg <= MTR_IMM;
-                imm      <= immU;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                MemtoReg = MTR_IMM;
+                imm      = immU;
             end
             
             OP_AUIPC: begin // AUIPC指令
-                RegWrite <= 1'b1;
-                ALUSrc   <= 1'b1;
-                AluOp    <= ALU_PCADD;
-                imm      <= immU;
+                RegWrite = 1'b1;
+                ALUSrc   = 1'b1;
+                AluOp    = ALU_PCADD;
+                imm      = immU;
             end
             
             OP_SYSTEM: begin // 系统调用指令
-                RegWrite <= (func3 != 3'b000);
-                MemtoReg <= MTR_CSR;
-                imm      <= immI;
+                RegWrite = (func3 != 3'b000);
+                MemtoReg = MTR_CSR;
+                imm      = immI;
                 
                 case (func3)
                     3'b000: begin
                         case (inst[31:20])
-                            EBREAK_CODE: is_ebreak <= 1'b1;
-                            ECALL_CODE:  is_ecall  <= 1'b1;
-                            MRET_CODE:   is_mret   <= 1'b1;
-                            default:     invalid <= 1'b1;
+                            EBREAK_CODE: is_ebreak = 1'b1;
+                            ECALL_CODE:  is_ecall  = 1'b1;
+                            MRET_CODE:   is_mret   = 1'b1;
+                            default:     invalid = 1'b1;
                         endcase
                     end
-                    3'b001: csr_wen <= CSR_WRITE; // csrrw
-                    3'b010: csr_wen <= CSR_SET;   // csrrs
-                    default: invalid <= 1'b1;
+                    3'b001: csr_wen = CSR_WRITE; // csrrw
+                    3'b010: csr_wen = CSR_SET;   // csrrs
+                    default: invalid = 1'b1;
                 endcase
             end
             
-            default: invalid <= 1'b1;
+            default: invalid = 1'b1;
         endcase
     end
 end

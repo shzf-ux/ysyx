@@ -11,19 +11,12 @@ module ysyx_25030085_regfile (
     input reg_wen,
     input [4:0]reg_waddr,
     input [31:0]reg_wdata,
-
-
-    output [31:0]value_a5
+    output [31:0]reg_a5
 );
     reg [4:0]rs1;
     reg [4:0]rs2;
     reg [4:0]rd;
-
-
-
-
-    reg [31:0] register [0:31];
-
+    reg [31:0]register [0:31];
     reg is_info_register;
     reg is_en_display;
 
@@ -44,30 +37,40 @@ module ysyx_25030085_regfile (
         info_register(register[i],is_en_display);
         end
     end
-
-
-    assign register[reg_waddr]=reg_wen?reg_wdata:0;
-    
+    assign register[reg_waddr]=reg_wen?reg_wdata:0;   
     assign rs1_data=(reg_rs1_addr!=0)?register[reg_rs1_addr]:0;//根据rs1寄存器编码找到对于数据
     assign rs2_data=(reg_rs2_addr!=0)?register[reg_rs2_addr]:0;
-    assign value_a5 = register[15];
-
-
+    assign reg_a5 = register[15];
 endmodule
+
+
+
+
+//ecall 1保存pc到mepc，设置mcause异常码 a5寄存器，更新mstatus,【跳转mtvec(在汇编设置过)】
+//csrrw 读取指定 CSR寄存器值由立即数定位地址到目标寄存器 rd，将通用寄存器 rs1 的值写入 CSR
+//csrrs 同上 将 CSR 的值与 rs1 按位或（OR）后写回
+//mret 还原mstatus 恢复pc 为mepc（返回地址）
 
 
 module ysyx_25030085_csr_regfile (
     input clk,
-    input [31:0]pc,
-    input [31:0] value_a5,
+    input rst,
 
-    input [20:0] ctrl,
-    input [11:0] csr_addr,
+    input [31:0] pc,       //保存pc
+    input [31:0] reg_a5, 
 
-    input [31:0] csr_wdata,
-    output reg [31:0] csr_rdata,
-    output [31:0] ecall_mtvec,  // 改为wire输出
-    output [31:0] mret_mepc     // 改为wire输出
+    input        is_ecall,
+    input        is_mret,
+    input [1:0]  csr_wen, //控制信号
+
+    input [11:0] csr_addr, //寻址地址，11位立即数
+    input [31:0] csr_wdata,//rs1数据
+
+
+
+    output [31:0] csr_rdata,    // 读出寄存器的数据
+    output [31:0] mtvec_out,  //异常地址
+    output [31:0] mepc_out  //返回地址
 );
 
 // CSR寄存器
@@ -76,28 +79,26 @@ reg [31:0] mtvec;
 reg [31:0] mepc;
 reg [31:0] mcause;
 
-wire [1:0]csr_wen=ctrl[20:19];
-wire is_ecall=ctrl[17];
-wire is_mret=ctrl[18];
+assign mtvec_out=mtvec;
+assign mepc_out =mepc;
 
-// 直接连接输出
-assign ecall_mtvec = mtvec;
-assign mret_mepc = mepc;
+reg [31:0] rdata_reg;
+assign csr_rdata=rdata_reg;
 
 // 读操作
 always @(*) begin
     case (csr_addr)
-        12'h300: csr_rdata = mstatus;
-        12'h305: csr_rdata = mtvec;
-        12'h341: csr_rdata = mepc;
-        12'h342: csr_rdata = mcause;
-        default: csr_rdata = 32'h0;
+        12'h300: rdata_reg = mstatus;
+        12'h305: rdata_reg = mtvec;
+        12'h341: rdata_reg = mepc;
+        12'h342: rdata_reg = mcause;
+        default: rdata_reg = 32'h0;
     endcase
 end
 
 // 写入操作
 always @(posedge clk) begin
-    if(csr_wen != 2'd0) begin
+    if(csr_wen != 2'd0) begin //01 csrrw 10csrrs
         case(csr_addr)
         12'h300: mstatus <= (csr_wen==2'b01) ? csr_wdata : (csr_wen==2'b10) ? (mstatus|csr_wdata) : mstatus;
         12'h305: mtvec   <= (csr_wen==2'b01) ? csr_wdata : (csr_wen==2'b10) ? (mtvec|csr_wdata) : mtvec;
@@ -116,17 +117,13 @@ localparam MSTATUS_MPIE_BIT = 32'h00000080;
 localparam MSTATUS_MIE_BIT  = 32'h00000008;
 
 always @(posedge clk) begin
-    if(is_ecall) begin
-        $display("ecall a5:%08x", value_a5);
-        $display("mtvec :%08x", mtvec);  // 直接显示mtvec
-        
+    if(is_ecall) begin    
         // 更新状态寄存器
         mstatus <= (mstatus & ~(MSTATUS_MIE_BIT | MSTATUS_MPP_MASK)) |
                   ((mstatus & MSTATUS_MIE_BIT) << 4) |
-                  MSTATUS_MPP_MASK;
-        
+                  MSTATUS_MPP_MASK;      
         mepc <= pc;
-        mcause <= value_a5;
+        mcause <= reg_a5;
     end
     else if(is_mret) begin
         mstatus <= (mstatus & ~MSTATUS_MPP_MASK) |
@@ -134,5 +131,4 @@ always @(posedge clk) begin
                   (mstatus & ~MSTATUS_MPIE_BIT);
     end
 end
-
 endmodule

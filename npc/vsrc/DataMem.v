@@ -11,12 +11,62 @@ module ysyx_25030085_DataMem (//数据存储器
 //加载 把地址为rs1+imm->alu运算结果的数据加载到rd里面
     input clk,
     input rst,
-  
-    input [20:0] ctrl,
-    input [31:0] sram_wdata,//存入的数据
-    input [31:0] sram_addr,//存入或读出的地址
-    output reg [31:0]sram_rdata//读出的数据
+    
+    input in_valid,
+    input [20:0] in_ctrl,
+    input [31:0] in_sram_wdata,//存入的数据 rs1
+    input [31:0] in_sram_addr, //存入或读出的地址 alu
+
+    input [31:0] in_imm,
+    input [31:0] in_pc,
+
+    output in_ready,
+
+    output out_valid,
+    output [31:0]sram_rdata,//读出的数据
+    output [20:0]ctrl_out,
+    output [31:0]imm_out,
+    output [31:0]pc_out,
+    output [31:0]alu_result,
+    input  out_ready
 );
+
+    reg has_data;
+    reg[20:0] ctrl;
+    reg [31:0]sram_wdata,sram_addr,pc,imm;
+    assign in_ready=!has_data;
+    assign out_valid=has_data;
+
+    always @(posedge clk or posedge rst) begin
+        if(rst)begin
+            ctrl<=0;
+            sram_wdata<=0;
+            sram_addr<=0;  
+            has_data<=0 ;
+        end
+        else begin
+             if(in_valid&&in_ready)begin
+                ctrl<=in_ctrl;
+                sram_wdata<=in_sram_wdata;
+                sram_addr <=in_sram_addr;
+                pc<=in_pc;
+                imm<=in_imm;
+                has_data<=1;
+            end
+            else if(out_valid&&out_ready)begin
+                has_data<=0;
+            end
+        end
+   
+    end
+
+assign alu_result=sram_addr ;
+assign ctrl_out=ctrl;
+assign pc_out =pc;
+assign imm_out=imm;
+
+
+
   
   wire MemWrite=ctrl[6];
   wire MemRead =ctrl[5];
@@ -30,7 +80,7 @@ module ysyx_25030085_DataMem (//数据存储器
     reg [31:0] rdata;
 
     wire [1:0]  offset=sram_addr[1:0];//获取偏移量
-    wire [31:0] aligned_addr=sram_addr&32'hFFFFFFFC;;
+    wire [31:0] aligned_addr=sram_addr&32'hFFFFFFFC;
 
     always@(posedge clk or posedge rst)begin//立即赋值，不然能读到数据，但是没有赋值
     if(rst)begin
@@ -96,7 +146,6 @@ module ysyx_25030085_DataMem (//数据存储器
             default:begin               
             end
             endcase
-        sram_rdata<=ReadData;
 
         end
         else if(MemWrite)begin//写
@@ -124,13 +173,12 @@ module ysyx_25030085_DataMem (//数据存储器
                 end
                 default: begin         
                 end
-            endcase
-            
+            endcase    
         end
     end
     end
 
-
+assign sram_rdata=ReadData;
 
 
 
