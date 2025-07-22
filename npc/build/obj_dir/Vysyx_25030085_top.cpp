@@ -16,6 +16,7 @@ Vysyx_25030085_top::Vysyx_25030085_top(VerilatedContext* _vcontextp__, const cha
     , rst{vlSymsp->TOP.rst}
     , top_valid{vlSymsp->TOP.top_valid}
     , top_ready{vlSymsp->TOP.top_ready}
+    , inst_done{vlSymsp->TOP.inst_done}
     , top_pc{vlSymsp->TOP.top_pc}
     , top_inst{vlSymsp->TOP.top_inst}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}

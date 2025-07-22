@@ -1,7 +1,8 @@
 import "DPI-C"  function void info_register  (input int value,input bit en_display); 
 //import "DPI-C" context function void set_scope();
 module ysyx_25030085_regfile ( 
-
+    input clk,
+    input rst,
     //读
     input [4:0]reg_rs1_addr,
     input [4:0]reg_rs2_addr,
@@ -37,7 +38,18 @@ module ysyx_25030085_regfile (
         info_register(register[i],is_en_display);
         end
     end
-    assign register[reg_waddr]=reg_wen?reg_wdata:0;   
+
+   always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        // 复位所有寄存器（x0 除外）
+        for (integer i = 1; i < 32; i++) begin
+            register[i] <= 0;
+        end
+    end else if (reg_wen && (reg_waddr != 0)) begin
+        register[reg_waddr] <= reg_wdata;  
+    end
+end
+
     assign rs1_data=(reg_rs1_addr!=0)?register[reg_rs1_addr]:0;//根据rs1寄存器编码找到对于数据
     assign rs2_data=(reg_rs2_addr!=0)?register[reg_rs2_addr]:0;
     assign reg_a5 = register[15];

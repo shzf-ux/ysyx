@@ -17,7 +17,7 @@
 #ifndef VL_DPIDECL_info_register_en_
 #define VL_DPIDECL_info_register_en_
 void info_register_en(svBit enable, svBit en_display) {
-    // DPI export at /home/zzy/ysyx-workbench/npc/vsrc/regfile.v:30:19
+    // DPI export at /home/zzy/ysyx-workbench/npc/vsrc/regfile.v:31:19
     return Vysyx_25030085_top::info_register_en(enable, en_display);
 }
 #endif

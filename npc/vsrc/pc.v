@@ -20,14 +20,16 @@ module ysyx_25030085_pc (
 
     reg [31:0] current_pc;
     reg [31:0] next_pc_reg;
-    reg [31:0] if_inst ,if_reg;
+    reg [31:0] if_inst ;
     reg fetch_valid;
 
     assign out_valid = (state == OUTPUT) ? 1 : 0;
     
     assign inst = if_inst;
     assign pc = current_pc;
-
+  //  always @(*) begin
+  //      $display("pc:%08x, inst:%08x",ne,inst);  
+  //  end
     always @(posedge clk) begin
         if (rst) begin
             state <= IDLE;
@@ -37,9 +39,8 @@ module ysyx_25030085_pc (
         end else begin
             case (state)
                 IDLE: begin//取指令
-                    if_reg <= pmem_readv(current_pc);
+                    if_inst<= pmem_readv(current_pc);
                     state <= OUTPUT;
-                    if_inst<=if_reg;
                     fetch_valid <= 1;
                 end
                 

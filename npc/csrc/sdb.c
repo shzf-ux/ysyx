@@ -89,14 +89,14 @@ static int cmd_s(char *args)
     char *num = strtok(NULL, " "); // 获取第二个参数
     if (num == NULL)
     {
-        npc_exec(2);
+        npc_exec(16);
         return 0;
     }
     int cnt = 0;
     sscanf(num, "%d", &cnt);
     for (int i = 0; i < cnt; i++)
     {
-       npc_exec(2);
+       npc_exec(16);
     }
     return 0;
 }

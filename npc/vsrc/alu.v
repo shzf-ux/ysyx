@@ -8,6 +8,7 @@ module ysyx_25030085_alu(
     input [31:0] in_rs2_data,
     input [20:0] in_ctrl,
     input [31:0] in_imm,
+    input [4:0] in_rd,
     input [31:0] in_pc,
     output in_ready,
     //0为加法，rs1加立即数或者rs2
@@ -18,7 +19,7 @@ module ysyx_25030085_alu(
     output [31:0] out_rs2_data,
     output [20:0] out_ctrl,
     output [31:0]csr_data,
-
+    output [4:0]rd_out,
     output [31:0]imm_out,
     output [31:0]pc_out,
 
@@ -28,7 +29,7 @@ module ysyx_25030085_alu(
     parameter CACULATE=1;
     parameter OUTPUT=2;
     reg [1:0] state;
-
+    reg [4:0] rd;
     reg [31:0] rs1_data,rs2_data,pc,imm,reg_a5;
     reg [20:0] ctrl;
 
@@ -55,6 +56,7 @@ module ysyx_25030085_alu(
                 rs2_data<=in_rs2_data;
                 pc<=in_pc;
                 reg_a5<=in_a5;
+                rd<=in_rd;
                 imm<=in_imm;
                 state<=CACULATE;
                 end             
@@ -80,6 +82,7 @@ module ysyx_25030085_alu(
     assign out_ctrl =ctrl;
     assign imm_out=imm;
     assign pc_out =pc;
+    assign rd_out=rd;
 
     reg  [31:0] B;
     wire [3:0]  AluOp   =ctrl[4:1];

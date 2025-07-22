@@ -63,15 +63,15 @@ void npc_exec(uint64_t n)
         }
        #endif
         top->eval();
-        if (is_rising_edge)
+        if (is_rising_edge&&top->inst_done)
         {
-// printf("pc:%08x\n", top->top_pc);
-#ifdef CONFIG_DIFFTEST
-            difftest_step(top->top_pc);
-#endif
+
+        #ifdef CONFIG_DIFFTEST
+                    difftest_step(top->top_pc);
+        #endif
         }
         top->eval();
-        vcd->dump(sim_time);
+        //vcd->dump(sim_time);
         sim_time++;
    }
 }

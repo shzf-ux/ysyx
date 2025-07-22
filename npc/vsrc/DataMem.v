@@ -16,8 +16,9 @@ module ysyx_25030085_DataMem (//数据存储器
     input [20:0] in_ctrl,
     input [31:0] in_sram_wdata,//存入的数据 rs1
     input [31:0] in_sram_addr, //存入或读出的地址 alu
-
+    input [4:0]  in_rd,
     input [31:0] in_imm,
+    input [31:0] in_npc,
     input [31:0] in_pc,
 
     output in_ready,
@@ -26,44 +27,63 @@ module ysyx_25030085_DataMem (//数据存储器
     output [31:0]sram_rdata,//读出的数据
     output [20:0]ctrl_out,
     output [31:0]imm_out,
+    output [31:0]npc_out,
     output [31:0]pc_out,
+    output [4:0]rd_out,
     output [31:0]alu_result,
     input  out_ready
 );
+parameter IDLE=0;
+parameter STORE=1;
+parameter OUTPUT=2;
+reg [1:0] state;
 
     reg has_data;
     reg[20:0] ctrl;
-    reg [31:0]sram_wdata,sram_addr,pc,imm;
-    assign in_ready=!has_data;
-    assign out_valid=has_data;
+    reg [4:0]rd;
+    reg [31:0]sram_wdata,sram_addr,pc,imm,npc;
+    assign in_ready=state==IDLE;
+    assign out_valid=state==OUTPUT;
 
     always @(posedge clk or posedge rst) begin
         if(rst)begin
             ctrl<=0;
             sram_wdata<=0;
             sram_addr<=0;  
-            has_data<=0 ;
+            has_data<=0;
+            state<=IDLE;
         end
-        else begin
-             if(in_valid&&in_ready)begin
+        else
+        case(state)
+        IDLE:begin
+         if(in_valid&&in_ready)begin
                 ctrl<=in_ctrl;
                 sram_wdata<=in_sram_wdata;
                 sram_addr <=in_sram_addr;
                 pc<=in_pc;
+                npc<=in_npc;
                 imm<=in_imm;
-                has_data<=1;
-            end
-            else if(out_valid&&out_ready)begin
-                has_data<=0;
-            end
+                rd<=in_rd;
+                state<=STORE;
+            end    
         end
-   
+        STORE:begin
+            state<=OUTPUT;
+        end
+        OUTPUT:begin
+            if(out_ready)begin
+                state<=IDLE;
+            end          
+        end
+        endcase
     end
 
 assign alu_result=sram_addr ;
 assign ctrl_out=ctrl;
 assign pc_out =pc;
+assign npc_out=npc;
 assign imm_out=imm;
+assign rd_out=rd;
 
 
 
@@ -73,10 +93,7 @@ assign imm_out=imm;
   wire [2:0] MemOp =ctrl[9:7];
   reg [31:0]ReadData;
 
-    reg [7:0]read_byte;
-    reg [7:0] read_byteu;
-    reg [15:0]read_half_word;
-    reg [15:0]read_half_wordu;
+   
     reg [31:0] rdata;
 
     wire [1:0]  offset=sram_addr[1:0];//获取偏移量
@@ -84,100 +101,78 @@ assign imm_out=imm;
 
     always@(posedge clk or posedge rst)begin//立即赋值，不然能读到数据，但是没有赋值
     if(rst)begin
-        read_byte<=0;
-        read_byteu<=0;
-        read_half_word<=0;
-        read_half_wordu<=0;
+       ReadData<=0;  
     end
     else begin
-        if(MemRead)begin//读数据
-        // $display("地址：%08x offset%d",addr,addr[1:0]);
-        // $display("offset: %d",offset);
-            rdata = pmem_readv(aligned_addr);//进行选择相关位,设置n低两位为0，地址对齐
-        // $display("lw hou data %08x",rdata);
-            case(MemOp)
-            3'b000:begin//lb 需要符号扩展
-          
-            case(offset)
-            2'b00:read_byte<=rdata[7:0];//读低字节
-            2'b01:read_byte<=rdata[15:8];
-            2'b10:read_byte<=rdata[23:16];
-            2'b11:read_byte<=rdata[31:24];
-            endcase
-            ReadData<={{24{read_byte[7]}},read_byte};
-   
-            end
-            3'b001:begin//lh
-           
-            case(offset)
-            2'b00:read_half_word<=rdata[15:0];
-            2'b10:read_half_word<=rdata[31:16];
-            default:begin              
-            end 
-            endcase
-            ReadData<={{16{read_half_word[15]}},read_half_word};
-            end
-            3'b010:begin//lw
-            //$display("lw is %08x",rdata);
-            ReadData<=rdata;  
-            //$display("read is %08x",ReadData);  
-            end
-            3'b100:begin//lbu
-           
-            case(offset)
-            2'b00:read_byteu<=rdata[7:0];//读低字节
-            2'b01:read_byteu<=rdata[15:8];
-            2'b10:read_byteu<=rdata[23:16];
-            2'b11:read_byteu<=rdata[31:24];
-            endcase
-            // $display("offset read %08x",rdata)  ; 
-            ReadData<={{24{1'b0}},read_byteu};//零扩展 
-            //$display("lbu %08x",ReadData)  ;             
-            end
-            3'b101:begin//lhu
-            case(offset)
-            2'b00:read_half_wordu<=rdata[15:0];
-            2'b10:read_half_wordu<=rdata[31:16];
-            default:begin              
-            end 
-            endcase
-            ReadData<={{16{1'b0}},read_half_wordu};                
-            end
-            default:begin               
-            end
-            endcase
-
-        end
-        else if(MemWrite)begin//写
-            case (MemOp)
-                3'b000:begin//sb,写入一个字节
+    if(MemRead && state==STORE) begin // 读数据
+    rdata = pmem_readv(aligned_addr); // 进行选择相关位,设置n低两位为0，地址对齐
+        case(MemOp)
+            3'b000: begin // lb 需要符号扩展
                 case(offset)
-                2'b00:pmem_write(aligned_addr,sram_wdata,8'b0001);//只改变最低位
-                2'b01:pmem_write(aligned_addr,sram_wdata,8'b0010);
-                2'b10:pmem_write(aligned_addr,sram_wdata,8'b0100);
-                2'b11:pmem_write(aligned_addr,sram_wdata,8'b1000);//只改变最高位
+                    2'b00: ReadData <= {{24{rdata[7]}}, rdata[7:0]};    // 读低字节
+                    2'b01: ReadData <= {{24{rdata[15]}}, rdata[15:8]};
+                    2'b10: ReadData <= {{24{rdata[23]}}, rdata[23:16]};
+                    2'b11: ReadData <= {{24{rdata[31]}}, rdata[31:24]};// 不引入中间变量
+                endcase
+            end
+            3'b001: begin // lh
+                case(offset)
+                    2'b00: ReadData <= {{16{rdata[15]}}, rdata[15:0]};
+                    2'b10: ReadData <= {{16{rdata[31]}}, rdata[31:16]};
+                    default: begin              
+                    end 
+                endcase
+            end
+            3'b010: begin // lw
+                ReadData <= rdata;  
+            end
+            3'b100: begin // lbu
+                case(offset)
+                    2'b00: ReadData <= {24'b0, rdata[7:0]};    // 读低字节
+                    2'b01: ReadData <= {24'b0, rdata[15:8]};
+                    2'b10: ReadData <= {24'b0, rdata[23:16]};
+                    2'b11: ReadData <= {24'b0, rdata[31:24]};
+                endcase
+            end
+            3'b101: begin // lhu
+                case(offset)
+                    2'b00: ReadData <= {16'b0, rdata[15:0]};
+                    2'b10: ReadData <= {16'b0, rdata[31:16]};
+                    default: begin              
+                    end 
+                endcase
+            end
+            default: begin               
+            end
+        endcase
+    end
+    else if(MemWrite && state==STORE) begin // 写
+        case (MemOp)
+            3'b000: begin // sb,写入一个字节
+                case(offset)
+                    2'b00: pmem_write(aligned_addr, sram_wdata, 8'b0001); // 只改变最低位
+                    2'b01: pmem_write(aligned_addr, sram_wdata, 8'b0010);
+                    2'b10: pmem_write(aligned_addr, sram_wdata, 8'b0100);
+                    2'b11: pmem_write(aligned_addr, sram_wdata, 8'b1000); // 只改变最高位
                 endcase   
-                end 
-                3'b001:begin//sh
-               //$display("data: %0x",sram_wdata);
+            end 
+            3'b001: begin // sh
                 case(offset)
-                2'b00: pmem_write(aligned_addr,sram_wdata,8'b0011);
-                2'b10: pmem_write(aligned_addr,sram_wdata,8'b1100);
-                default:begin
-                    
-                end
+                    2'b00: pmem_write(aligned_addr, sram_wdata, 8'b0011);
+                    2'b10: pmem_write(aligned_addr, sram_wdata, 8'b1100);
+                    default: begin
+                    end
                 endcase       
-                end
-                3'b010:begin//sw
-                pmem_write(aligned_addr,sram_wdata,8'b1111);          
-                end
-                default: begin         
-                end
-            endcase    
-        end
+            end
+            3'b010: begin // sw
+                pmem_write(aligned_addr, sram_wdata, 8'b1111);          
+            end
+            default: begin         
+            end
+        endcase    
+    end    
     end
     end
-
 assign sram_rdata=ReadData;
 
 

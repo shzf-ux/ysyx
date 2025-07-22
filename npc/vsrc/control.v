@@ -26,6 +26,7 @@ module ysyx_25030085_control (
     output [20:0]ctrl_out , // 21位控制总线
     output [31:0]imm_out,
     output [31:0]reg_a5_out,
+    output [4:0] rd_out,
     input out_ready
 
 );
@@ -96,6 +97,9 @@ reg [20:0] ctrl_reg;
     reg [31:0] immU;
     reg [31:0] immS;
     reg [31:0] immB;
+    wire [4:0] rd_addr=inst[11:7];
+    assign rd_out=rd_addr;
+
 
     assign immJ= {{12{inst[31]}}, inst[19:12],inst[20],inst[30:21],1'b0};
     assign immI={{20{inst[31]}}, inst[31:20]};
@@ -127,8 +131,8 @@ wire [20:0] ctrl_bus = {csr_wen,is_mret,is_ecall,RegWrite,Jump,Branch,MemtoReg,M
 
 //最低位补0
 // 操作码常量
-localparam OP_LOAD     = 7'b0000011;
-localparam OP_STORE    = 7'b0100011;
+localparam OP_LOAD     = 7'b0000011;//lb lh,lw,lbu,lhu
+localparam OP_STORE    = 7'b0100011;//sb sh sw
 localparam OP_BRANCH   = 7'b1100011;
 localparam OP_JAL      = 7'b1101111;
 localparam OP_JALR     = 7'b1100111;
@@ -202,17 +206,17 @@ always @(*) begin
 
   MemWrite=0;
   MemOp=0;
+  MemRead=0;
   MemtoReg=MTR_ALU;
 
   RegWrite=0;
-  RegWrite=0;
-
   csr_wen=CSR_NONE;
 
   Branch=0;
   Jump=JUMP_NONE;
 
   is_ecall=0;
+  is_mret =0;
   is_ebreak=0;
     if (state==DECODE) begin
         case (opcode)
@@ -257,11 +261,11 @@ always @(*) begin
                 imm      = immI;
                 
                 case (func3)
-                    3'b000: MemOp = MEM_B;
-                    3'b001: MemOp = MEM_H;
-                    3'b010: MemOp = MEM_W;
-                    3'b100: MemOp = MEM_BU;
-                    3'b101: MemOp = MEM_HU;
+                    3'b000: MemOp = MEM_B; //lb
+                    3'b001: MemOp = MEM_H; //lh
+                    3'b010: MemOp = MEM_W; //lw
+                    3'b100: MemOp = MEM_BU;//lbu
+                    3'b101: MemOp = MEM_HU;//lhu
                     default: invalid = 1'b1;
                 endcase
             end
@@ -272,9 +276,9 @@ always @(*) begin
                 imm      = immS;
                 
                 case (func3)
-                    3'b000: MemOp = MEM_B;
-                    3'b001: MemOp = MEM_H;
-                    3'b010: MemOp = MEM_W;
+                    3'b000: MemOp = MEM_B;  //sb
+                    3'b001: MemOp = MEM_H;  //sh
+                    3'b010: MemOp = MEM_W;  //sw
                     default: invalid = 1'b1;
                 endcase
             end
@@ -345,7 +349,7 @@ always @(*) begin
                 endcase
             end
             
-            default: invalid = 1'b0;
+            default: invalid = 1'b1;
         endcase
     end
 end
