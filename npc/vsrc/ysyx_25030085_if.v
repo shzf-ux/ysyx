@@ -1,7 +1,7 @@
 import "DPI-C" function void display_call_func (input int pc, input int dnpc);
 import "DPI-C" function void display_ret_func (input int pc, input int dnpc);
 
-module ysyx_25030085_pc (
+module ysyx_25030085_if (
     input clk,
     input rst,
 

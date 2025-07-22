@@ -35,7 +35,7 @@ class Vysyx_25030085_top__Syms final : public VerilatedSyms {
     Vysyx_25030085_top___024unit   TOP____024unit;
 
     // SCOPE NAMES
-    VerilatedScope __Vscope_ysyx_25030085_top__regfile_init;
+    VerilatedScope __Vscope_ysyx_25030085_top__regfile;
 
     // CONSTRUCTORS
     Vysyx_25030085_top__Syms(VerilatedContext* contextp, const char* namep, Vysyx_25030085_top* modelp);

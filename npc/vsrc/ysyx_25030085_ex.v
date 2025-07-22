@@ -1,4 +1,4 @@
-module ysyx_25030085_alu(
+module ysyx_25030085_ex(
     input clk,
     input rst,
 
@@ -18,8 +18,8 @@ module ysyx_25030085_alu(
     output reg [31:0] out_Alu_Result,
     output [31:0] out_rs2_data,
     output [20:0] out_ctrl,
-    output [31:0]csr_data,
-    output [4:0]rd_out,
+    output [31:0] csr_data,
+    output [4:0]  rd_out,
     output [31:0]imm_out,
     output [31:0]pc_out,
 

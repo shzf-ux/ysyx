@@ -14,7 +14,7 @@ extern "C"
 void set_scope()
 {
 
-    svScope scope = svGetScopeFromName("TOP.ysyx_25030085_top.regfile_init");
+    svScope scope = svGetScopeFromName("TOP.ysyx_25030085_top.regfile");
     if (!scope)
     {
         fprintf(stderr, "Error: Regfile scope not found!\n");
@@ -72,7 +72,7 @@ void display_register(int en)//打印寄存器
     top->eval();
 }
 static int cmd_info(char *args)
-{ // 参数为r时，打印寄存器状态，参数为w打印监视点状态
+{
 
     display_register(1);//开启打印状态
     

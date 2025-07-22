@@ -1,6 +1,6 @@
 import "DPI-C" function void ebreak_instruction (input int inst) ;
 import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
-module ysyx_25030085_control (
+module ysyx_25030085_id (
     input clk,
     input rst,
 

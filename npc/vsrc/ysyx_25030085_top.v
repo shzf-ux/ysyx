@@ -16,41 +16,60 @@ module ysyx_25030085_top (
     assign top_pc  =next_pc;
     assign inst_done=wb_done;
 
-    wire [31:0]if_id_inst,if_id_pc;
-    wire [31:0] ex_me_alu;
-    wire [31:0] rs1_data;
-    wire [31:0] rs2_data;
+    //if与wb信号
+    wire [31:0] next_pc;
+    wire wb_done;
 
+    //if与id信号
+    wire [31:0] if_id_inst,if_id_pc;    //数据
+    wire id_if_ready,if_id_valid;       //握手信号
+
+    //id与reg读取数据
+    wire [4:0] rs1_addr,rs2_addr;
+    wire [31:0] rs1_data,rs2_data,reg_a5;
+
+    //id与ex信号
+    wire [4:0] id_ex_rd;
+    wire [31:0] id_ex_rs1,id_ex_rs2,id_ex_pc,id_ex_imm,id_ex_a5;
+    wire [20:0] id_ex_ctrl;             //数据
+    wire id_ex_valid,ex_id_ready;       //握手信号
+
+    //ex与me信号
+    wire [4:0]ex_me_rd;
+    wire [31:0] csr_data;
+    wire [20:0] ex_me_ctrl;
+    wire [31:0] ex_me_pc,ex_me_imm,ex_me_npc,ex_me_rs2,ex_me_alu;
+    wire ex_me_valid,me_ex_ready;       //握手信号
+
+    //me与wb信号
+    wire [4:0]  me_wb_rd;
+    wire [20:0] me_wb_ctrl;
+    wire [31:0] sram_rdata,me_wb_pc,me_wb_imm,me_wb_alu,me_wb_npc;
+    wire me_wb_valid,wb_me_ready;       //握手信号
  
+    //wb写回reg
+    reg reg_wen;//写使能
+    reg [31:0]reg_wdata;
+    reg [4:0] reg_waddr;
 
-  
-ysyx_25030085_pc pc_init(
-
+ysyx_25030085_if ifu(
     .clk(clk),
     .rst(rst),
 
+    //wb输入
+    .wb_done(wb_done),  //来自wb的out_valid
+    .next_pc(next_pc),  
 
-    //输入
-    .wb_done(wb_done),
-    .next_pc(next_pc),
-
-     //输出
+     //输出给if
     .out_valid(if_id_valid),
     .pc(if_id_pc),
     .inst(if_id_inst),
     .out_ready(id_if_ready)
-
-
- 
 );
+    
 
-    wire[1:0]csr_wen;
-    reg is_ecall;
-    reg is_mret;
-    wire id_if_ready,if_id_valid;
 
-wire [4:0] rs1_addr,rs2_addr;
-ysyx_25030085_control control_init(
+ysyx_25030085_id idu(
     .clk(clk),
     .rst(rst),
 
@@ -59,14 +78,14 @@ ysyx_25030085_control control_init(
     .in_inst(if_id_inst),
     .in_ready(id_if_ready),
 
-
+    //与寄存器堆交互
     .rs1_addr(rs1_addr),
     .rs2_addr(rs2_addr),
     .rs1_data(rs1_data),
     .rs2_data(rs2_data),
     .in_reg_a5(reg_a5),
     
-    //ex
+    
     .out_valid(id_ex_valid),
 
     .imm_out(id_ex_imm),
@@ -78,13 +97,9 @@ ysyx_25030085_control control_init(
     .rd_out(id_ex_rd),
     .out_ready(ex_id_ready) 
 );
-wire id_ex_valid,ex_id_ready;
-wire [4:0]id_ex_rd;
-    wire [20:0] ctrl;
-    wire [31:0] reg_a5,id_ex_a5;
 
 
-ysyx_25030085_regfile regfile_init(  
+ysyx_25030085_regfile regfile(  
     .clk(clk),
     .rst(rst), 
     
@@ -96,13 +111,10 @@ ysyx_25030085_regfile regfile_init(
     .reg_rs2_addr(rs2_addr),
     .rs1_data(rs1_data),
     .rs2_data(rs2_data),
-    .reg_a5(reg_a5)
-    
+    .reg_a5(reg_a5)   
 );
    
-wire [31:0] id_ex_rs1,id_ex_rs2,id_ex_pc,id_ex_imm;
-wire [20:0] id_ex_ctrl;
-ysyx_25030085_alu alu_init(
+ysyx_25030085_ex exu(
     .clk(clk),
     .rst(rst),
 
@@ -128,13 +140,7 @@ ysyx_25030085_alu alu_init(
     .out_ready(me_ex_ready)
     
 ); 
-wire [4:0]ex_me_rd;
-wire [31:0] csr_data;
-wire ex_me_valid,me_ex_ready;
-wire [31:0]ex_me_npc,ex_me_rs2;
-wire [20:0] ex_me_ctrl;
-wire [31:0] ex_me_pc,ex_me_imm;
-ysyx_25030085_DataMem DataMem(
+ysyx_25030085_DataMem mem(
     .clk(clk),
     .rst(rst),
     
@@ -161,12 +167,9 @@ ysyx_25030085_DataMem DataMem(
     .out_ready(wb_me_ready)
 
 );
-wire [4:0]me_wb_rd;
-wire me_wb_valid,wb_me_ready;
-wire[20:0] me_wb_ctrl;
-wire [31:0] sram_rdata,me_wb_pc,me_wb_imm,me_wb_alu,me_wb_npc;
- 
-ysyx_25030085_wb wb_init(
+
+
+ysyx_25030085_wb wbu(
     .clk(clk),
     .rst(rst), 
 
@@ -188,10 +191,4 @@ ysyx_25030085_wb wb_init(
     .reg_wdata(reg_wdata)
 
 );
-wire wb_done;
-reg reg_wen;
-reg [31:0]reg_wdata ,next_pc;
-reg [4:0]reg_waddr;
-
-
 endmodule
