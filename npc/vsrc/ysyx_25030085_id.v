@@ -354,13 +354,11 @@ always @(*) begin
     end
 end
 //系统类别的指令ebreak call
-  
     always@(is_ebreak,invalid)begin
         if(is_ebreak)begin
       ebreak_instruction(inst);   
         end
         else if(invalid)
-      invalid_inst(pc,inst);
-      
+      invalid_inst(pc,inst);   
     end   
 endmodule

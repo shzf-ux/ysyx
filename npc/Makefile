@@ -7,7 +7,7 @@ TOP_MODULE := ysyx_25030085_top
 
 
 
-SOURCES    := $(abspath $(wildcard $(VSRC_DIR)/*.v))
+SOURCES    := $(abspath $(wildcard $(VSRC_DIR)/*.v) )
 TESTBENCH := $(abspath $(wildcard $(CSRC_DIR)/*.cpp $(CSRC_DIR)/*.c $(CSRC_DIR)/*.))
 TESTBENCH += $(abspath $(wildcard $(CSRC_DIR)/*/*.cpp $(CSRC_DIR)/*/*.c ))
 
