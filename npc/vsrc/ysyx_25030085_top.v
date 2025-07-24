@@ -85,9 +85,8 @@ ysyx_25030085_id idu(
     .rs2_data(rs2_data),
     .in_reg_a5(reg_a5),
     
-    
+    //送到ex模块
     .out_valid(id_ex_valid),
-
     .imm_out(id_ex_imm),
     .ctrl_out(id_ex_ctrl),
     .out_rs1_data(id_ex_rs1),
@@ -165,7 +164,6 @@ ysyx_25030085_DataMem mem(
     .rd_out(me_wb_rd),
     .alu_result(me_wb_alu),
     .out_ready(wb_me_ready)
-
 );
 
 
@@ -184,8 +182,11 @@ ysyx_25030085_wb wbu(
     .rd_addr(me_wb_rd),
     .in_ready(wb_me_ready),
 
+    //送回ifu
     .out_valid(wb_done),
     .next_pc(next_pc),
+
+    //写回寄存器堆
     .reg_wen(reg_wen),
     .reg_waddr(reg_waddr),
     .reg_wdata(reg_wdata)

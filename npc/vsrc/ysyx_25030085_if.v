@@ -23,13 +23,9 @@ module ysyx_25030085_if (
     reg [31:0] if_inst ;
     reg fetch_valid;
 
-    assign out_valid = (state == OUTPUT) ? 1 : 0;
-    
+    assign out_valid = (state == OUTPUT) ? 1 : 0;  
     assign inst = if_inst;
     assign pc = current_pc;
-  //  always @(*) begin
-  //      $display("pc:%08x, inst:%08x",ne,inst);  
-  //  end
     always @(posedge clk) begin
         if (rst) begin
             state <= IDLE;
