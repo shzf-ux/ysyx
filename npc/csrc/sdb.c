@@ -79,6 +79,7 @@ static int cmd_info(char *args)
 
     return 0;
 }
+
 static int cmd_s(char *args)
 {                     // 单步执行,参数为执行的步数
     if (flag_stop == 1)
@@ -139,9 +140,9 @@ static struct
     /* TODO: Add more commands */
 
 };
-
-#define NR_CMD ARRLEN(cmd_table)
 #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
+#define NR_CMD ARRLEN(cmd_table)
+
 
 static int cmd_help(char *args)
 {

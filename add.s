@@ -1,0 +1,123 @@
+	.file	"add.c"
+	.option pic
+	.text
+	.align	1
+	.globl	add
+	.type	add, @function
+add:
+	addi	sp,sp,-48
+	sd	s0,40(sp)
+	addi	s0,sp,48
+	mv	t4,a0
+	mv	t3,a1
+	mv	t1,a2
+	mv	a0,a3
+	mv	a1,a4
+	mv	a2,a5
+	mv	a3,a6
+	mv	a4,a7
+	mv	a5,t4
+	sw	a5,-20(s0)
+	mv	a5,t3
+	sw	a5,-24(s0)
+	mv	a5,t1
+	sw	a5,-28(s0)
+	mv	a5,a0
+	sw	a5,-32(s0)
+	mv	a5,a1
+	sw	a5,-36(s0)
+	mv	a5,a2
+	sw	a5,-40(s0)
+	mv	a5,a3
+	sw	a5,-44(s0)
+	mv	a5,a4
+	sw	a5,-48(s0)
+	lw	a5,-20(s0)
+	mv	a4,a5
+	lw	a5,-24(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	lw	a4,-28(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	lw	a4,-32(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	lw	a4,-36(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	lw	a4,-40(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	lw	a4,-44(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	lw	a4,-48(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	lw	a4,0(s0)
+	addw	a5,a4,a5
+	sext.w	a5,a5
+	mv	a0,a5
+	ld	s0,40(sp)
+	addi	sp,sp,48
+	jr	ra
+	.size	add, .-add
+	.section	.rodata
+	.align	3
+.LC0:
+	.string	"Sum: %d\n"
+	.text
+	.align	1
+	.globl	main
+	.type	main, @function
+main:
+	addi	sp,sp,-80
+	sd	 )
+	sd	s0,64(sp)
+	addi	s0,sp,80
+	li	a5,1
+	sw	a5,-56(s0)
+	li	a5,2
+	sw	a5,-52(s0)
+	li	a5,3
+	sw	a5,-48(s0)
+	li	a5,4
+	sw	a5,-44(s0)
+	li	a5,5
+	sw	a5,-40(s0)
+	li	a5,6
+	sw	a5,-36(s0)
+	li	a5,7
+	sw	a5,-32(s0)
+	li	a5,8
+	sw	a5,-28(s0)
+	li	a5,9
+	sw	a5,-24(s0)
+	lw	a7,-28(s0)
+	lw	a6,-32(s0)
+	lw	t1,-36(s0)
+	lw	a4,-40(s0)
+	lw	a3,-44(s0)
+	lw	a2,-48(s0)
+	lw	a1,-52(s0)
+	lw	a0,-56(s0)
+	lw	a5,-24(s0)
+	sd	a5,0(sp)
+	mv	a5,t1
+	call	add
+	mv	a5,a0
+	sw	a5,-20(s0)
+	lw	a5,-20(s0)
+	mv	a1,a5
+	lla	a0,.LC0
+	call	printf@plt
+	li	a5,0
+	mv	a0,a5
+	ld	ra,72(sp)
+	ld	s0,64(sp)
+	addi	sp,sp,80
+	jr	ra
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0"
+	.section	.note.GNU-stack,"",@progbits
