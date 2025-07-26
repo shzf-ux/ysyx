@@ -52,13 +52,13 @@ static void init_keymap() {
 static int key_queue[KEY_QUEUE_LEN] = {};
 static int key_f = 0, key_r = 0;
 
-static void key_enqueue(uint32_t am_scancode) {
+static void key_enqueue(uint32_t am_scancode) {//队列，入队操作
   key_queue[key_r] = am_scancode;
   key_r = (key_r + 1) % KEY_QUEUE_LEN;
   Assert(key_r != key_f, "key queue overflow!");
 }
 
-static uint32_t key_dequeue() {
+static uint32_t key_dequeue() {//出队操作
   uint32_t key = NEMU_KEY_NONE;
   if (key_f != key_r) {
     key = key_queue[key_f];
@@ -90,7 +90,7 @@ static uint32_t *i8042_data_port_base = NULL;
 static void i8042_data_io_handler(uint32_t offset, int len, bool is_write) {
   assert(!is_write);
   assert(offset == 0);
-  i8042_data_port_base[0] = key_dequeue();
+  i8042_data_port_base[0] = key_dequeue();//送入寄存器
 }
 
 void init_i8042() {
