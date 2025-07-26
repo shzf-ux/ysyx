@@ -945,9 +945,6 @@ VL_ATTR_COLD void Vysyx_25030085_top___024root___ctor_var_reset(Vysyx_25030085_t
     vlSelf->ysyx_25030085_top__DOT__exu__DOT__B = 0;
     vlSelf->ysyx_25030085_top__DOT__exu__DOT__Alu_Result = 0;
     vlSelf->ysyx_25030085_top__DOT__exu__DOT__next_pc = 0;
-    vlSelf->ysyx_25030085_top__DOT__exu__DOT__is_jar_call = 0;
-    vlSelf->ysyx_25030085_top__DOT__exu__DOT__is_jalr_call = 0;
-    vlSelf->ysyx_25030085_top__DOT__exu__DOT__is_jalr_ret = 0;
     vlSelf->ysyx_25030085_top__DOT__exu__DOT__csr_regfile_init__DOT__mstatus = 0;
     vlSelf->ysyx_25030085_top__DOT__exu__DOT__csr_regfile_init__DOT__mtvec = 0;
     vlSelf->ysyx_25030085_top__DOT__exu__DOT__csr_regfile_init__DOT__mepc = 0;

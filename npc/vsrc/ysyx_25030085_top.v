@@ -192,4 +192,21 @@ ysyx_25030085_wb wbu(
     .reg_wdata(reg_wdata)
 
 );
+//ftrace
+    wire is_jar_call;
+    wire is_jalr_call;
+    wire is_jalr_ret;
+
+    assign is_jar_call = (if_id_inst[11:7] == 5'd1) && (id_ex_ctrl[15:14] == 2'b01);  // JAL调用
+    assign is_jalr_call = (if_id_inst[11:7] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR调用
+    assign is_jalr_ret = (if_id_inst[11:7] == 5'd0) && (if_id_inst[19:15] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR返回
+
+    always @(posedge clk) begin
+        if ((is_jar_call || is_jalr_call)&&wb_done) begin
+            display_call_func(if_id_pc, next_pc);  // 函数调用追踪
+        end
+        if (is_jalr_ret&&wb_done) begin
+            display_ret_func(if_id_pc, next_pc);  // 函数返回追踪
+        end
+    end
 endmodule

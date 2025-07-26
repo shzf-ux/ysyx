@@ -167,6 +167,8 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__0(Vysyx_2503
     vlSelf->ysyx_25030085_top__DOT__regfile__DOT__i = 0x20U;
 }
 
+void Vysyx_25030085_top___024unit____Vdpiimwrap_display_call_func_TOP____024unit(IData/*31:0*/ pc, IData/*31:0*/ dnpc);
+void Vysyx_25030085_top___024unit____Vdpiimwrap_display_ret_func_TOP____024unit(IData/*31:0*/ pc, IData/*31:0*/ dnpc);
 void Vysyx_25030085_top___024unit____Vdpiimwrap_pmem_readv_TOP____024unit(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_readv__Vfuncrtn);
 
 VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__1(Vysyx_25030085_top___024root* vlSelf) {
@@ -174,8 +176,8 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__1(Vysyx_2503
     Vysyx_25030085_top__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25030085_top___024root___nba_sequent__TOP__1\n"); );
     // Init
-    IData/*31:0*/ __Vfunc_pmem_readv__0__Vfuncout;
-    __Vfunc_pmem_readv__0__Vfuncout = 0;
+    IData/*31:0*/ __Vfunc_pmem_readv__2__Vfuncout;
+    __Vfunc_pmem_readv__2__Vfuncout = 0;
     CData/*1:0*/ __Vdly__ysyx_25030085_top__DOT__ifu__DOT__state;
     __Vdly__ysyx_25030085_top__DOT__ifu__DOT__state = 0;
     CData/*0:0*/ __Vdly__ysyx_25030085_top__DOT__ifu__DOT__fetch_valid;
@@ -187,6 +189,18 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__1(Vysyx_2503
         = vlSelf->ysyx_25030085_top__DOT__ifu__DOT__current_pc;
     __Vdly__ysyx_25030085_top__DOT__ifu__DOT__state 
         = vlSelf->ysyx_25030085_top__DOT__ifu__DOT__state;
+    if ((((IData)(((0x80U == (0xf80U & vlSelf->ysyx_25030085_top__DOT__ifu__DOT__if_inst)) 
+                   & (0x4000U == (0xc000U & vlSelf->ysyx_25030085_top__DOT__idu__DOT__ctrl_reg)))) 
+          | (IData)(((0x80U == (0xf80U & vlSelf->ysyx_25030085_top__DOT__ifu__DOT__if_inst)) 
+                     & (0x8000U == (0xc000U & vlSelf->ysyx_25030085_top__DOT__idu__DOT__ctrl_reg))))) 
+         & (IData)(vlSelf->inst_done))) {
+        Vysyx_25030085_top___024unit____Vdpiimwrap_display_call_func_TOP____024unit(vlSelf->ysyx_25030085_top__DOT__ifu__DOT__current_pc, vlSelf->top_pc);
+    }
+    if (((IData)(((0x8000U == (0xf8f80U & vlSelf->ysyx_25030085_top__DOT__ifu__DOT__if_inst)) 
+                  & (0x8000U == (0xc000U & vlSelf->ysyx_25030085_top__DOT__idu__DOT__ctrl_reg)))) 
+         & (IData)(vlSelf->inst_done))) {
+        Vysyx_25030085_top___024unit____Vdpiimwrap_display_ret_func_TOP____024unit(vlSelf->ysyx_25030085_top__DOT__ifu__DOT__current_pc, vlSelf->top_pc);
+    }
     vlSelf->__Vdly__ysyx_25030085_top__DOT__exu__DOT__csr_regfile_init__DOT__mtvec 
         = vlSelf->ysyx_25030085_top__DOT__exu__DOT__csr_regfile_init__DOT__mtvec;
     vlSelf->__Vdly__ysyx_25030085_top__DOT__exu__DOT__csr_regfile_init__DOT__mstatus 
@@ -267,9 +281,9 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__1(Vysyx_2503
         __Vdly__ysyx_25030085_top__DOT__ifu__DOT__fetch_valid = 0U;
         vlSelf->ysyx_25030085_top__DOT__ifu__DOT__next_pc_reg = 0U;
     } else if ((0U == (IData)(vlSelf->ysyx_25030085_top__DOT__ifu__DOT__state))) {
-        Vysyx_25030085_top___024unit____Vdpiimwrap_pmem_readv_TOP____024unit(vlSelf->ysyx_25030085_top__DOT__ifu__DOT__current_pc, __Vfunc_pmem_readv__0__Vfuncout);
+        Vysyx_25030085_top___024unit____Vdpiimwrap_pmem_readv_TOP____024unit(vlSelf->ysyx_25030085_top__DOT__ifu__DOT__current_pc, __Vfunc_pmem_readv__2__Vfuncout);
         vlSelf->ysyx_25030085_top__DOT__ifu__DOT__if_inst 
-            = __Vfunc_pmem_readv__0__Vfuncout;
+            = __Vfunc_pmem_readv__2__Vfuncout;
         __Vdly__ysyx_25030085_top__DOT__ifu__DOT__state = 1U;
         __Vdly__ysyx_25030085_top__DOT__ifu__DOT__fetch_valid = 1U;
     } else if ((1U == (IData)(vlSelf->ysyx_25030085_top__DOT__ifu__DOT__state))) {
@@ -296,8 +310,8 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__2(Vysyx_2503
     Vysyx_25030085_top__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25030085_top___024root___nba_sequent__TOP__2\n"); );
     // Init
-    IData/*31:0*/ __Vfunc_pmem_readv__4__Vfuncout;
-    __Vfunc_pmem_readv__4__Vfuncout = 0;
+    IData/*31:0*/ __Vfunc_pmem_readv__6__Vfuncout;
+    __Vfunc_pmem_readv__6__Vfuncout = 0;
     CData/*0:0*/ __Vdlyvset__ysyx_25030085_top__DOT__regfile__DOT__register__v0;
     __Vdlyvset__ysyx_25030085_top__DOT__regfile__DOT__register__v0 = 0;
     CData/*4:0*/ __Vdlyvdim0__ysyx_25030085_top__DOT__regfile__DOT__register__v31;
@@ -399,9 +413,9 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__2(Vysyx_2503
                  >> 5U) & (1U == (IData)(vlSelf->ysyx_25030085_top__DOT__mem__DOT__state)))) {
         Vysyx_25030085_top___024unit____Vdpiimwrap_pmem_readv_TOP____024unit(
                                                                              (0xfffffffcU 
-                                                                              & vlSelf->ysyx_25030085_top__DOT__mem__DOT__sram_addr), __Vfunc_pmem_readv__4__Vfuncout);
+                                                                              & vlSelf->ysyx_25030085_top__DOT__mem__DOT__sram_addr), __Vfunc_pmem_readv__6__Vfuncout);
         vlSelf->ysyx_25030085_top__DOT__mem__DOT__rdata 
-            = __Vfunc_pmem_readv__4__Vfuncout;
+            = __Vfunc_pmem_readv__6__Vfuncout;
         if ((0x200U & vlSelf->ysyx_25030085_top__DOT__mem__DOT__ctrl)) {
             if ((1U & (~ (vlSelf->ysyx_25030085_top__DOT__mem__DOT__ctrl 
                           >> 8U)))) {

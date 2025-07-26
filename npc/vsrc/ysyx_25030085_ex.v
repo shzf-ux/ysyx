@@ -190,24 +190,6 @@ end
 
 
 
-    wire is_jar_call;
-    wire is_jalr_call;
-    wire is_jalr_ret;
-
-   /* assign is_jar_call = (inst[11:7] == 5'd1) && (Jump == 2'b01);  // JAL调用
-    assign is_jalr_call = (inst[11:7] == 5'd1) && (Jump == 2'b10);  // JALR调用
-    assign is_jalr_ret = (inst[11:7] == 5'd0) && (inst[19:15] == 5'd1) && (Jump == 2'b10);  // JALR返回
-
-    always @(posedge clk) begin
-        if (is_jar_call || is_jalr_call) begin
-            display_call_func(pc, next_pc);  // 函数调用追踪
-        end
-        if (is_jalr_ret) begin
-            display_ret_func(pc, next_pc);  // 函数返回追踪
-        end
-    end*/
-
-
 
 
 
