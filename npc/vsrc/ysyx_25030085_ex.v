@@ -8,7 +8,7 @@ module ysyx_25030085_ex(
     input [31:0] in_rs2_data,
     input [20:0] in_ctrl,
     input [31:0] in_imm,
-    input [4:0] in_rd,
+    input [4:0]  in_rd,
     input [31:0] in_pc,
     output in_ready,
     //0为加法，rs1加立即数或者rs2
@@ -76,6 +76,7 @@ module ysyx_25030085_ex(
             endcase
         end   
     end
+    
     assign out_Alu_Result=alu_reg;
     assign out_next_pc=pc_reg;
     assign out_rs2_data=rs2_data;
@@ -161,9 +162,10 @@ ysyx_25030085_csr_regfile csr_regfile_init(
 
     //输出的数据
     .csr_rdata(csr_data),//读到的数据送回rd
-    .mtvec_out(mtvec),//跳转地址送到pc
+    .mtvec_out(mtvec),   //跳转地址送到pc
     .mepc_out(mepc)
 );
+
 reg [31:0] next_pc;
 reg  [31:0]mtvec,mepc;
 
@@ -182,11 +184,6 @@ always @(*) begin
         next_pc = pc + 4;            // 默认顺序执行
     end
 end
-
-
-
-
-
 
 
 

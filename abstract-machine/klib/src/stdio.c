@@ -14,6 +14,7 @@ int printf(const char *fmt, ...) {
   putstr(sprint_buf);//不断调用putch
   return len; //  返回值是写入的字符个数
 }
+
 static void num_to_str(char *buf, int *index, int num)
 {
   if (num < 0)

@@ -65,7 +65,9 @@ void difftest_step(uint32_t pc)
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
 
     checkregs(&ref_r, pc);
+    
 }
+
 extern int flag_stop;
 static int checkregs(CPU *ref, uint32_t pc)
 {
