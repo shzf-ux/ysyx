@@ -97,7 +97,7 @@ static int cmd_s(char *args)
     sscanf(num, "%d", &cnt);
     for (int i = 0; i < cnt; i++)
     {
-       npc_exec(16);
+       npc_exec(14);
     }
     return 0;
 }

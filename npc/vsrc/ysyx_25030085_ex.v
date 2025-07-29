@@ -26,15 +26,13 @@ module ysyx_25030085_ex(
     input out_ready
 );
     parameter IDLE=0;
-    parameter CACULATE=1;
-    parameter OUTPUT=2;
+    parameter OUTPUT=1;
+    parameter WAIT=2;
     reg [1:0] state;
     reg [4:0] rd;
     reg [31:0] rs1_data,rs2_data,pc,imm,reg_a5;
     reg [20:0] ctrl;
-
-    reg [31:0]pc_reg,alu_reg;
-    
+ 
     assign in_ready=(state==IDLE);
     assign out_valid=(state==OUTPUT);
     always @(posedge clk or posedge rst) begin
@@ -58,15 +56,13 @@ module ysyx_25030085_ex(
                 reg_a5<=in_a5;
                 rd<=in_rd;
                 imm<=in_imm;
-                state<=CACULATE;
+                state<=OUTPUT;
                 end             
             end
-            CACULATE:begin  //锁存要输出的数据   
-            pc_reg<=next_pc;
-            alu_reg<=Alu_Result;
-            state<=OUTPUT;
+            OUTPUT:begin  //锁存要输出的数据   
+            state<=WAIT;
             end
-            OUTPUT:begin
+            WAIT:begin
                 if(out_ready)begin
                     state<=IDLE;
                 end
@@ -77,8 +73,8 @@ module ysyx_25030085_ex(
         end   
     end
     
-    assign out_Alu_Result=alu_reg;
-    assign out_next_pc=pc_reg;
+    assign out_Alu_Result=Alu_Result;
+    assign out_next_pc=next_pc;
     assign out_rs2_data=rs2_data;
     assign out_ctrl =ctrl;
     assign imm_out=imm;
@@ -99,7 +95,7 @@ module ysyx_25030085_ex(
 //计算延迟需要最小化（通常在一个时钟周期内完成）
       // 组合逻辑计算
     always @(*) begin
-        if(state==CACULATE)begin
+        if(state==OUTPUT)begin
         case (AluOp)
             4'b0000: begin
                 Alu_Result = rs1_data + B;  // ADD

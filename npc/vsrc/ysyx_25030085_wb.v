@@ -36,12 +36,12 @@ reg [1:0]state;
 
 reg has_data;
 reg [20:0]ctrl;
-reg [4:0] rd,addr_reg;
+reg [4:0] rd;
 reg [31:0]npc,pc,imm,csr_rdata,mem_rdata,alu_result;
 
 //输出数据
 reg wen;
-reg[31:0]data_reg,wb_data;
+reg[31:0]wb_data;
 
 assign in_ready=state==IDLE;
 assign out_valid=(state==DONE)?1:0;
@@ -68,17 +68,11 @@ always @(posedge clk or posedge rst) begin
     npc<=in_npc;
     imm<=in_imm;
     rd<=rd_addr;
-    state<=CHOOSE;   
+    state<=OUTPUT;   
     end   
-    end
-    CHOOSE:begin
-        addr_reg<=rd;
-        data_reg<=wb_data;
-        wen<=RegWrite;
-        state<=OUTPUT;  
-    end
+    end 
     OUTPUT:begin
-        state<=DONE;//数据写回还要一个周期；
+        state<=DONE;
     end
     DONE:begin
         state<=IDLE;    
@@ -86,32 +80,32 @@ always @(posedge clk or posedge rst) begin
     endcase
     end
 end
-    //always @(*) begin
-   //     $display("pc:%08x, wb:%d",next_pc,out_valid);      
-  //  end
+
 
 wire [2:0] MemtoReg=ctrl[12:10];
 wire       RegWrite=ctrl[16];
 
-assign reg_wen=wen;
-assign reg_waddr=addr_reg;
+assign reg_wen=RegWrite;
+assign reg_waddr=rd;
 assign next_pc=npc;
-assign reg_wdata=data_reg;
+assign reg_wdata=wb_data;
 
 
-always @(*) begin
-    if(state==CHOOSE)begin
-    case (MemtoReg)
-        3'b000: wb_data = alu_result;  // ALU结果
-        3'b001: wb_data = mem_rdata;   // 存储器数据
-        3'b010: wb_data = pc+4;         // JAL指令
-        3'b011: wb_data = imm;         // LUI指令
-        3'b100: wb_data = csr_rdata;   // CSR数据
-        default: wb_data = 32'h0;
-    endcase
+
+
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        wb_data <= 32'h0; // 复位时清零
     end
-    else begin
-          wb_data = 32'h0;  
+    else if (state==OUTPUT) begin
+        case (MemtoReg)
+            3'b000: wb_data <= alu_result;  // ALU结果
+            3'b001: wb_data <= mem_rdata;   // 存储器数据
+            3'b010: wb_data <= pc + 4;      // JAL指令
+            3'b011: wb_data <= imm;         // LUI指令
+            3'b100: wb_data <= csr_rdata;   // CSR数据
+            default: wb_data <= 32'h0;
+        endcase
     end
 end
 

@@ -8,13 +8,22 @@ module ysyx_25030085_top (
 
     output top_valid,
     output top_ready,
-    output inst_done
+    output reg  inst_done
 );
     assign top_valid=if_id_valid;
     assign top_ready =id_if_ready;
     assign top_inst =if_id_inst;
     assign top_pc  =next_pc;
-    assign inst_done=wb_done;
+   
+    always @(posedge clk ,posedge rst) begin
+        if(rst)begin
+            inst_done<=0;         
+        end
+        else begin
+            inst_done<=wb_done;
+        end
+        
+    end
 
     //if与wb信号
     wire [31:0] next_pc;

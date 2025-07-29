@@ -31,8 +31,8 @@ module ysyx_25030085_id (
 
 );
   parameter IDLE = 0;
-  parameter DECODE = 1;
-  parameter OUTPUT = 2;
+  parameter OUTPUT = 1;
+  parameter WAIT = 2;
    reg [1:0] state;
    reg [31:0]inst,pc;
 
@@ -40,8 +40,7 @@ module ysyx_25030085_id (
    assign in_ready=(state==IDLE);
    assign out_valid=(state==OUTPUT);
 
-reg [31:0] imm_reg,rs1_reg,rs2_reg;
-reg [20:0] ctrl_reg;
+
 
     always @(posedge clk or posedge rst) begin
       if(rst)begin
@@ -55,17 +54,13 @@ reg [20:0] ctrl_reg;
         if(in_valid&&in_ready)begin//接收数据
         inst<=in_inst;
         pc<=in_pc;  
-        state<=DECODE;    
+        state<=OUTPUT;    
         end
       end
-      DECODE:begin//锁存要输出的数据
-        imm_reg<=imm;
-        rs1_reg<=rs1_data;
-        rs2_reg<=rs2_data;
-        ctrl_reg<=ctrl_bus;
-        state<=OUTPUT;
+      OUTPUT:begin//锁存要输出的数据
+        state<=WAIT;
       end
-      OUTPUT:begin //输出数据
+      WAIT:begin //输出数据
       if(out_ready)//*****
         state<=IDLE;
       end
@@ -73,13 +68,11 @@ reg [20:0] ctrl_reg;
       end     
     end
     assign pc_out=pc;
-    assign imm_out=imm_reg;
-    assign out_rs1_data=rs1_reg;
-    assign out_rs2_data=rs2_reg;
-    assign ctrl_out=ctrl_reg;
+    assign imm_out=imm;
+    assign out_rs1_data=rs1_data;
+    assign out_rs2_data=rs2_data;
+    assign ctrl_out=ctrl_bus;
     assign reg_a5_out=in_reg_a5;
-
-
 
   assign rs1_addr=inst[19:15];
   assign rs2_addr=inst[24:20];
@@ -218,7 +211,7 @@ always @(*) begin
   is_ecall=0;
   is_mret =0;
   is_ebreak=0;
-    if (state==DECODE) begin
+    if (state==OUTPUT) begin
         case (opcode)
             OP_OP: begin // R-type指令
                 RegWrite = 1'b1;
