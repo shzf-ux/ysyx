@@ -23,7 +23,7 @@ module ysyx_25030085_top (
             inst_done<=0;
         end
         else begin
-            inst_done<=reg_wresp;   
+            inst_done<=wb_valid;   
         end
         
     end

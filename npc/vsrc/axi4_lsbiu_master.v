@@ -83,12 +83,13 @@ always @(posedge clk or negedge rst) begin
     else if(M_AXI_RVALID&!M_AXI_RREADY) begin
         M_AXI_RREADY <= 1'b1;  // 始终准备好接收读数据      
         biu_rdata <= M_AXI_RDATA;
-        biu_rresp    <= M_AXI_RRESP;
+        biu_rresp <= M_AXI_RRESP;
         biu_valid <= 1          ;
     end
     else begin
         M_AXI_RREADY <= 1'b0;
         biu_valid    <= 0   ; 
+        biu_rresp    <=0;
     end
 end
 
@@ -138,7 +139,7 @@ always @(posedge clk or negedge rst) begin
     end
     else begin
        M_AXI_BREADY <= 1'b0; 
-       biu_valid    <= 0   ;
+       biu_wresp    <=0;
     end
 end
 

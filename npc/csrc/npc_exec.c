@@ -65,7 +65,8 @@ void npc_exec(uint64_t n)
         top->eval();
         if (is_rising_edge&&top->inst_done)
         {
-            printf("simtime:%d\n", sim_time);
+           // printf("simtime:%d\n", sim_time);
+           // printf("pc:%08x\n", top->top_pc);
             #ifdef CONFIG_DIFFTEST
             difftest_step(top->top_pc);
             #endif

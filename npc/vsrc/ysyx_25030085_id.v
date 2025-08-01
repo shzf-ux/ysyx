@@ -176,11 +176,16 @@ localparam MTR_IMM     = 3'b011;
 localparam MTR_CSR     = 3'b100;
 
 // 内存操作类型常量
-localparam MEM_B       = 3'b000;
-localparam MEM_H       = 3'b001;
-localparam MEM_W       = 3'b010;
-localparam MEM_BU      = 3'b100;
-localparam MEM_HU      = 3'b101;
+
+localparam OP_LW  = 3'b000;  // 加载字(32位，有符号)
+localparam OP_LH  = 3'b001;  // 加载半字(16位，有符号)
+localparam OP_LB  = 3'b010;  // 加载字节(8位，有符号)
+localparam OP_LHU = 3'b011;  // 加载半字(16位，无符号)
+localparam OP_LBU = 3'b100;  // 加载字节(8位，无符号)
+localparam OP_SW  = 3'b101;  // 存储字(32位)
+localparam OP_SH  = 3'b110;  // 存储半字(16位)
+localparam OP_SB  = 3'b111;  // 存储字节(8位)
+
 
 // CSR操作类型
 localparam CSR_NONE    = 2'b00;
@@ -254,11 +259,11 @@ always @(*) begin
                 imm      = immI;
                 
                 case (func3)
-                    3'b000: MemOp = MEM_B; //lb
-                    3'b001: MemOp = MEM_H; //lh
-                    3'b010: MemOp = MEM_W; //lw
-                    3'b100: MemOp = MEM_BU;//lbu
-                    3'b101: MemOp = MEM_HU;//lhu
+                    3'b000: MemOp = OP_LB; //lb
+                    3'b001: MemOp = OP_LH; //lh
+                    3'b010: MemOp = OP_LW; //lw
+                    3'b100: MemOp = OP_LBU;//lbu
+                    3'b101: MemOp = OP_LHU;//lhu
                     default: invalid = 1'b1;
                 endcase
             end
@@ -269,9 +274,9 @@ always @(*) begin
                 imm      = immS;
                 
                 case (func3)
-                    3'b000: MemOp = MEM_B;  //sb
-                    3'b001: MemOp = MEM_H;  //sh
-                    3'b010: MemOp = MEM_W;  //sw
+                    3'b000: MemOp = OP_SB;  //sb
+                    3'b001: MemOp = OP_SH;  //sh
+                    3'b010: MemOp = OP_SW;  //sw
                     default: invalid = 1'b1;
                 endcase
             end

@@ -19,7 +19,7 @@ module ysyx_25030085_lsu (//数据存储器
     output                      in_ready,
 
     output                      out_valid,
-    output [31:0]               mem_rdata,
+    output reg [31:0]           mem_rdata,
     output [20:0]               ctrl_out,
     output [31:0]               imm_out,
     output [31:0]               npc_out,
@@ -68,6 +68,8 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
 
     wire        MemWrite=ctrl[6];
     wire        MemRead =ctrl[5];
+    
+
     wire [2:0]  MemOp   =ctrl[9:7];
 
 
@@ -97,11 +99,28 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
                 npc<=in_npc;
                 imm<=in_imm;
                 rd<=in_rd;
+                lsu_req<=1;         // 发起请求
                 state<=STORE;
             end    
         end
         STORE:begin
-            state<=OUTPUT;
+            lsu_req<=0;
+            if(MemRead)begin//  加载lw
+            if(biu_rresp==2'b01)begin
+                
+                mem_rdata<=lsu_rdata ;
+                state<=OUTPUT;
+            end                       
+            end
+            else if(MemWrite)begin//写
+            if(biu_wresp==2'b01)begin
+                state<=OUTPUT;
+            end             
+            end  
+            else begin
+              
+                state<=OUTPUT;
+            end    
         end
         OUTPUT:begin
             if(out_ready)begin
@@ -125,14 +144,14 @@ assign lsu_addr    =  aligned_addr  ;
 assign lsu_wdata   =  wdata         ;
 assign lsu_wwe     =  MemWrite      ;
 assign lsu_rwe     =  MemRead       ;
-assign lsu_req     =  state==STORE  ;
-assign mem_rdata   =  lsu_rdata     ;
+
+
   
 //读数据，对来自biu的数据进行操作
 always @(*) begin
     lsu_rdata = 32'h00000000;
-    if(biu_valid)begin
-        if(biu_rresp==2'b0)begin
+    if(biu_valid&&state==STORE)begin
+        if(biu_rresp==2'b01)begin
         case (MemOp)
             OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展
             
@@ -177,7 +196,7 @@ always @(*) begin
         endcase
         end
         else begin
-            $display("read error!");
+          //  $display("read error!");
         end
     end
 end
@@ -188,37 +207,28 @@ always @(*) begin
     lsu_strb = 4'b0000;
     lsu_wdata = wdata;
     
-    if (lsu_req && lsu_wwe) begin
+    if (lsu_req && lsu_wwe&&state==STORE) begin
         case (MemOp)
             OP_SW: lsu_strb = 4'b1111;  // 字操作，所有字节有效
             
             OP_SH: begin
                 // 半字操作，根据地址选择高低半字
                 lsu_strb = offset[1] ? 4'b1100 : 4'b0011;
-                lsu_wdata = offset[1] ? {wdata[15:0], 16'h0000} : {16'h0000, wdata[15:0]};
             end
             
             OP_SB: begin
                 // 字节操作，根据地址选择具体字节
                 case (offset)
-                    2'b00: begin lsu_strb = 4'b0001; lsu_wdata = {24'h000000, wdata[7:0]}; end
-                    2'b01: begin lsu_strb = 4'b0010; lsu_wdata = {16'h0000, wdata[7:0], 8'h00}; end
-                    2'b10: begin lsu_strb = 4'b0100; lsu_wdata = {8'h00, wdata[7:0], 16'h0000}; end
-                    2'b11: begin lsu_strb = 4'b1000; lsu_wdata = {wdata[7:0], 24'h000000}; end
+                    2'b00: begin lsu_strb = 4'b0001; end
+                    2'b01: begin lsu_strb = 4'b0010; end
+                    2'b10: begin lsu_strb = 4'b0100; end
+                    2'b11: begin lsu_strb = 4'b1000; end
                 endcase
             end
             default:begin
                 lsu_strb=4'b0000;
             end
         endcase
-    end
-    else if(biu_valid)begin//写i响应
-    if(biu_wresp==2'b0)begin
-        //h写成功
-    end
-    else begin
-        $display("write error!");
-    end      
     end
 end
 

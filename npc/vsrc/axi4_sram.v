@@ -78,12 +78,12 @@ always @(posedge clk or negedge rst) begin
     else if(AR_active)begin                     //地址握手成功
         if(check_address_range(S_AXI_ARADDR))begin
         S_AXI_RDATA<=pmem_readv(S_AXI_ARADDR);  //发送数据
-        S_AXI_RRESP<=2'b0;                      //发送响应
+        S_AXI_RRESP<=2'b01;                      //发送响应
         S_AXI_RVALID<=1;                        //数据邮箱
         end
         else begin
         S_AXI_RDATA  <= 32'h0;  // 错误时数据无效
-        S_AXI_RRESP  <= 2'b10;  // 标准SLVERR响应
+        S_AXI_RRESP  <= 2'b00;  // 标准SLVERR响应
         S_AXI_RVALID <= 1'b1;   // 错误响应也需置位RVALID
         end
     end
@@ -93,7 +93,7 @@ always @(posedge clk or negedge rst) begin
     else begin
         S_AXI_RVALID <= S_AXI_RVALID;
         S_AXI_RDATA  <= S_AXI_RDATA;
-        S_AXI_RRESP  <= S_AXI_RRESP;
+        S_AXI_RRESP  <= 2'b00;
     end
 end
 
@@ -137,17 +137,20 @@ always @(posedge clk or negedge rst) begin
         S_AXI_BRESP  <= 2'b00;
     end 
     else if(S_AXI_WREADY&S_AXI_AWREADY) begin   //两个都握手成功   写入数据   
-        if(check_address_range(write_addr_reg))begin
+       // if(check_address_range(write_addr_reg))begin
             pmem_write(write_addr_reg,write_data_reg,{4'b0,S_AXI_WSTRB});
-            S_AXI_BRESP<=2'b0; 
-        end  
-        else begin 
-            S_AXI_BRESP<=2'b1; 
-        end   
+            S_AXI_BRESP<=2'b01; 
+       // end  
+       // else begin 
+        //    S_AXI_BRESP<=2'b00; 
+       // end   
         S_AXI_BVALID<=1;            //写响应有效
     end
     else if(B_active) begin       
         S_AXI_BVALID<=0;
+    end
+    else begin
+        S_AXI_BRESP<=2'b00; 
     end
 end
 
