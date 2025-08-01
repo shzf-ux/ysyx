@@ -16,7 +16,7 @@ extern "C" {
 
 
     // DPI EXPORTS
-    // DPI export at /home/zzy/ysyx-workbench/npc/vsrc/ysyx_25030085_regfile.v:31:19
+    // DPI export at /home/zzy/ysyx-workbench/npc/vsrc/ysyx_25030085_regfile.v:34:19
     extern void info_register_en(svBit enable, svBit en_display);
 
     // DPI IMPORTS
@@ -30,9 +30,9 @@ extern "C" {
     extern void info_register(int value, svBit en_display);
     // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/ysyx_25030085_id.v:2:30
     extern void invalid_inst(int pc, int inst);
-    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/ysyx_25030085_mem.v:1:29
+    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/axi4_sram.v:1:29
     extern int pmem_readv(int raddr);
-    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/ysyx_25030085_mem.v:5:30
+    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/axi4_sram.v:2:30
     extern void pmem_write(int waddr, int wdata, char wmask);
 
 #ifdef __cplusplus

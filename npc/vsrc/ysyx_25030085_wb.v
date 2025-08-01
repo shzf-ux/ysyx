@@ -16,8 +16,7 @@ module  ysyx_25030085_wb (
 
     
     // 输出到寄存器堆
-    output out_valid, 
-
+    output reg out_valid, 
     output [31:0]next_pc,
     output reg_wen,
     output [4:0]  reg_waddr,
@@ -44,7 +43,6 @@ reg wen;
 reg[31:0]wb_data;
 
 assign in_ready=state==IDLE;
-assign out_valid=(state==DONE)?1:0;
 
 always @(posedge clk or posedge rst) begin
     if(rst)begin
@@ -98,6 +96,7 @@ always @(posedge clk or posedge rst) begin
         wb_data <= 32'h0; // 复位时清零
     end
     else if (state==OUTPUT) begin
+        out_valid<=1;
         case (MemtoReg)
             3'b000: wb_data <= alu_result;  // ALU结果
             3'b001: wb_data <= mem_rdata;   // 存储器数据
@@ -106,6 +105,9 @@ always @(posedge clk or posedge rst) begin
             3'b100: wb_data <= csr_rdata;   // CSR数据
             default: wb_data <= 32'h0;
         endcase
+    end
+    else begin
+        out_valid<=0;
     end
 end
 

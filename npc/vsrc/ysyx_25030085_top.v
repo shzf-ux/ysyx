@@ -8,26 +8,31 @@ module ysyx_25030085_top (
 
     output top_valid,
     output top_ready,
-    output reg  inst_done
+    output reg inst_done
 );
     assign top_valid=if_id_valid;
     assign top_ready =id_if_ready;
     assign top_inst =if_id_inst;
     assign top_pc  =next_pc;
-   
-    always @(posedge clk ,posedge rst) begin
+
+
+    
+
+    always @(posedge clk or posedge rst) begin
         if(rst)begin
-            inst_done<=0;         
+            inst_done<=0;
         end
         else begin
-            inst_done<=wb_done;
+            inst_done<=reg_wresp;   
         end
         
     end
 
+
+
     //if与wb信号
     wire [31:0] next_pc;
-    wire wb_done;
+    wire wb_done,reg_wresp,wb_valid;
 
     //if与id信号
     wire [31:0] if_id_inst,if_id_pc;    //数据
@@ -53,7 +58,7 @@ module ysyx_25030085_top (
     //me与wb信号
     wire [4:0]  me_wb_rd;
     wire [20:0] me_wb_ctrl;
-    wire [31:0] sram_rdata,me_wb_pc,me_wb_imm,me_wb_alu,me_wb_npc;
+    wire [31:0] me_wb_rdata,me_wb_pc,me_wb_imm,me_wb_alu,me_wb_npc;
     wire me_wb_valid,wb_me_ready;       //握手信号
  
     //wb写回reg
@@ -61,146 +66,396 @@ module ysyx_25030085_top (
     reg [31:0]reg_wdata;
     reg [4:0] reg_waddr;
 
+    //******************总线信号*******************//
+    // IF模块AXI4读信号（经仲裁器）
+    // ------------------------------
+    wire        if_axi4_arvalid;    // IF读地址有效
+    wire        if_axi4_arready;    // 仲裁器返回IF的读地址就绪
+    wire [31:0] if_axi4_araddr;     // IF读地址
+    wire        if_axi4_rvalid;     // 仲裁器返回IF的读数据有效
+    wire        if_axi4_rready;     // IF读数据就绪
+    wire [31:0] if_axi4_rdata;      // 仲裁器返回IF的读数据
+    wire [1:0]  if_axi4_rresp;      // 仲裁器返回IF的读响应
+
+
+    // ------------------------------
+    // LS模块AXI4读信号（经仲裁器）
+    // ------------------------------
+    wire        ls_axi4_arvalid;    // LS读地址有效
+    wire        ls_axi4_arready;    // 仲裁器返回LS的读地址就绪
+    wire [31:0] ls_axi4_araddr;     // LS读地址
+    wire        ls_axi4_rvalid;     // 仲裁器返回LS的读数据有效
+    wire        ls_axi4_rready;     // LS读数据就绪
+    wire [31:0] ls_axi4_rdata;      // 仲裁器返回LS的读数据
+    wire [1:0]  ls_axi4_rresp;      // 仲裁器返回LS的读响应
+
+    // ------------------------------
+    // 仲裁器与存储器之间的AXI4读信号
+    // ------------------------------
+    wire        arb_mem_axi4_arvalid;  // 仲裁器到存储器的读地址有效
+    wire        arb_mem_axi4_arready;  // 存储器到仲裁器的读地址就绪
+    wire [31:0] arb_mem_axi4_araddr;   // 仲裁器到存储器的读地址
+    wire        arb_mem_axi4_rvalid;   // 存储器到仲裁器的读数据有效
+    wire        arb_mem_axi4_rready;   // 仲裁器到存储器的读数据就绪
+    wire [31:0] arb_mem_axi4_rdata;    // 存储器到仲裁器的读数据
+    wire [1:0]  arb_mem_axi4_rresp;    // 存储器到仲裁器的读响应
+
+    // ------------------------------
+    // LS模块AXI4写信号（直连，不经过仲裁器）
+    // ------------------------------
+    wire        ls_axi4_awvalid;    // LS写地址有效
+    wire        ls_axi4_awready;    // 存储器返回LS的写地址就绪
+    wire [31:0] ls_axi4_awaddr;     // LS写地址
+    wire        ls_axi4_wvalid;     // LS写数据有效
+    wire        ls_axi4_wready;     // 存储器返回LS的写数据就绪
+    wire [31:0] ls_axi4_wdata;      // LS写数据
+    wire [3:0]  ls_axi4_wstrb;      // LS写字节选通
+    wire        ls_axi4_bvalid;     // 存储器返回LS的写响应有效
+    wire        ls_axi4_bready;     // LS写响应就绪
+    wire [1:0]  ls_axi4_bresp;      // 存储器返回LS的写响应
+
+
+    // ------------------------------
+    // IF模块与IFBIU之间的交互信号（IF->IFBIU方向）
+    // ------------------------------
+    wire               if_req;       // IF模块向IFBIU发起的请求信号（输入到IFBIU）
+    wire       [31:0]  if_addr;      // IF模块发送到IFBIU的地址信号（输入到IFBIU）
+    wire       [31:0]  biu_rdata_if; // IFBIU返回给IF模块的读数据（输出到IF模块）
+    wire       [1:0]   biu_rresp_if;
+    wire               biu_ready_if; // IFBIU返回给IF模块的就绪信号（输出到IF模块）
+
+
+    // ------------------------------
+    // LS模块与BIU之间的交互信号
+    // ------------------------------
+    // LS模块输出到BIU的信号
+    wire               lsu_req;      // LS模块向BIU发起的请求信号
+    wire               lsu_wwe;      // LS模块向BIU发起的写使能信号
+    wire               lsu_rwe;      // LS模块向BIU发起的读使能信号
+    wire       [31:0]  lsu_addr;     // LS模块发送到BIU的地址信号
+    wire       [31:0]  lsu_wdata;    // LS模块发送到BIU的写数据
+    wire       [3:0]   lsu_strb;     // LS模块发送到BIU的字节选通信号
+
+    // BIU返回给LS模块的信号
+    wire               biu_valid_ls; // BIU返回给LS模块的数据有效信号
+    wire       [1:0]   biu_rresp_ls  ;
+    wire       [1:0]   biu_wresp_ls  ;
+    wire       [31:0]  biu_rdata_ls; // BIU返回给LS模块的读数据
+
+
+
+
+
+// 指令取指模块（IFU）
 ysyx_25030085_if ifu(
-    .clk(clk),
-    .rst(rst),
+    .clk             ( clk            ) ,
+    .rst             ( rst            ) ,
 
-    //wb输入
-    .wb_done(wb_done),  //来自wb的out_valid
-    .next_pc(next_pc),  
+    // wb输入（来自写回阶段的跳转信号）
+    .wb_done         ( wb_valid        ) , 
+    .next_pc         ( next_pc        ) ,
 
-     //输出给if
-    .out_valid(if_id_valid),
-    .pc(if_id_pc),
-    .inst(if_id_inst),
-    .out_ready(id_if_ready)
+    // BIU输入信号（来自IFBIU的读数据和就绪信号）
+    .biu_ready       ( biu_ready_if   ) , 
+    .biu_rdata       ( biu_rdata_if   ) , 
+
+    // 输出信号（发送到IFBIU的请求和地址
+    .if_addr         ( if_addr        ) , 
+    .if_req          ( if_req         ) , 
+
+    // 输出给ID阶段
+    .out_valid       ( if_id_valid    ) , 
+    .pc              ( if_id_pc       ) , 
+    .inst            ( if_id_inst     ) , 
+    .out_ready       ( id_if_ready    )   
 );
+
+// IF阶段与AXI总线的桥接模块（IFBIU）
+ysyx_25030085_ifbiu_axi4_lite_master ifbiu(
+    // 时钟与复位
+    .clk             ( clk            ) ,
+    .rst             ( rst            ) ,
     
+    // 与IF阶段交互接口（接收IFU的请求，返回数据）
+    .if_req          ( if_req         ) ,
+    .if_addr         ( if_addr        ) ,
+    .biu_rdata       ( biu_rdata_if   ) ,
+    .biu_rresp       ( biu_rresp_if   ) ,
+    .biu_ready       ( biu_ready_if   ) ,
+    
+    // AXI4-Lite读地址通道（经仲裁器到存储器）
+    .M_AXI_ARADDR    ( if_axi4_araddr ) , 
+    .M_AXI_ARVALID   ( if_axi4_arvalid) , 
+    .M_AXI_ARREADY   ( if_axi4_arready) , 
+    
+    // AXI4-Lite读数据通道（经仲裁器从存储器接收数据）
+    .M_AXI_RDATA     ( if_axi4_rdata  ) ,  
+    .M_AXI_RRESP     ( if_axi4_rresp  ) ,  
+    .M_AXI_RVALID    ( if_axi4_rvalid ) ,  
+    .M_AXI_RREADY    ( if_axi4_rready )    
+);
+
 
 
 ysyx_25030085_id idu(
-    .clk(clk),
-    .rst(rst),
+    .clk             ( clk            ) ,
+    .rst             ( rst            ) ,
 
-    .in_valid(if_id_valid),
-    .in_pc(if_id_pc),
-    .in_inst(if_id_inst),
-    .in_ready(id_if_ready),
+    .in_valid        ( if_id_valid    ) ,
+    .in_pc           ( if_id_pc       ) ,
+    .in_inst         ( if_id_inst     ) ,
+    .in_ready        ( id_if_ready    ) ,
 
-    //与寄存器堆交互
-    .rs1_addr(rs1_addr),
-    .rs2_addr(rs2_addr),
-    .rs1_data(rs1_data),
-    .rs2_data(rs2_data),
-    .in_reg_a5(reg_a5),
-    
-    //送到ex模块
-    .out_valid(id_ex_valid),
-    .imm_out(id_ex_imm),
-    .ctrl_out(id_ex_ctrl),
-    .out_rs1_data(id_ex_rs1),
-    .out_rs2_data(id_ex_rs2),
-    .pc_out(id_ex_pc),
-    .reg_a5_out(id_ex_a5),
-    .rd_out(id_ex_rd),
-    .out_ready(ex_id_ready) 
+    // 与寄存器堆交互
+    .rs1_addr        ( rs1_addr       ) ,
+    .rs2_addr        ( rs2_addr       ) ,
+    .rs1_data        ( rs1_data       ) ,
+    .rs2_data        ( rs2_data       ) ,
+    .in_reg_a5       ( reg_a5         ) ,
+
+    // 送到ex模块
+    .out_valid       ( id_ex_valid    ) ,
+    .imm_out         ( id_ex_imm      ) ,
+    .ctrl_out        ( id_ex_ctrl     ) ,
+    .out_rs1_data    ( id_ex_rs1      ) ,
+    .out_rs2_data    ( id_ex_rs2      ) ,
+    .pc_out          ( id_ex_pc       ) ,
+    .reg_a5_out      ( id_ex_a5       ) ,
+    .rd_out          ( id_ex_rd       ) ,
+    .out_ready       ( ex_id_ready    )
 );
 
 
 ysyx_25030085_regfile regfile(  
-    .clk(clk),
-    .rst(rst), 
-    
-    .reg_wen( reg_wen),
-    .reg_waddr(reg_waddr),
-    .reg_wdata(reg_wdata),
+    .clk             ( clk            ) ,
+    .rst             ( rst            ) ,
 
-    .reg_rs1_addr(rs1_addr),
-    .reg_rs2_addr(rs2_addr),
-    .rs1_data(rs1_data),
-    .rs2_data(rs2_data),
-    .reg_a5(reg_a5)   
+    .reg_wen         ( reg_wen        ) ,
+    .reg_waddr       ( reg_waddr      ) ,
+    .reg_wdata       ( reg_wdata      ) ,
+
+    .reg_rs1_addr    ( rs1_addr       ) ,
+    .reg_rs2_addr    ( rs2_addr       ) ,
+    .in_valid        ( wb_valid       ) ,
+    .w_resp          ( reg_wresp      ) ,
+    .rs1_data        ( rs1_data       ) ,
+    .rs2_data        ( rs2_data       ) ,
+    .reg_a5          ( reg_a5         ) 
 );
    
 ysyx_25030085_ex exu(
-    .clk(clk),
-    .rst(rst),
+    .clk             (   clk          ) ,
+    .rst             (   rst          ) ,
 
-    .in_valid(id_ex_valid),
-    .in_a5(id_ex_a5),
-    .in_rs1_data(id_ex_rs1),
-    .in_rs2_data(id_ex_rs2),
-    .in_pc(id_ex_pc),
-    .in_rd(id_ex_rd),
-    .in_imm(id_ex_imm),
-    .in_ctrl(id_ex_ctrl),
-    .in_ready(ex_id_ready),
+    .in_valid        ( id_ex_valid    ) ,
+    .in_a5           ( id_ex_a5       ) ,
+    .in_rs1_data     ( id_ex_rs1      ) ,
+    .in_rs2_data     ( id_ex_rs2      ) ,
+    .in_pc           ( id_ex_pc       ) ,
+    .in_rd           ( id_ex_rd       ) ,
+    .in_imm          ( id_ex_imm      ) ,
+    .in_ctrl         ( id_ex_ctrl     ) ,
+    .in_ready        ( ex_id_ready    ) ,
 
-    .out_valid(ex_me_valid),
-    .out_Alu_Result(ex_me_alu),
-    .out_next_pc(ex_me_npc),
-    .out_rs2_data(ex_me_rs2),
-    .out_ctrl(ex_me_ctrl),
-    .csr_data(csr_data),
-    .imm_out(ex_me_imm),
-    .pc_out(ex_me_pc),
-    .rd_out(ex_me_rd),
-    .out_ready(me_ex_ready)
+    .out_valid       ( ex_me_valid    ) ,
+    .out_Alu_Result  ( ex_me_alu      ) ,
+    .out_next_pc     ( ex_me_npc      ) ,
+    .out_rs2_data    ( ex_me_rs2      ) ,
+    .out_ctrl        ( ex_me_ctrl     ) ,
+    .csr_data        ( csr_data       ) ,
+    .imm_out         ( ex_me_imm      ) ,
+    .pc_out          ( ex_me_pc       ) ,
+    .rd_out          ( ex_me_rd       ) ,
+    .out_ready       ( me_ex_ready    )
     
 ); 
-ysyx_25030085_DataMem mem(
-    .clk(clk),
-    .rst(rst),
+
+ysyx_25030085_lsbiu_axi4_lite_master lsbiu(
+    .clk            (   clk   )     ,
+    .rst            (   rst   )     ,
+
+    // LSU接口信号
+    .lsu_addr    (      lsu_addr        ) , 
+    .lsu_wwe     (      lsu_wwe         ) , 
+    .lsu_rwe     (      lsu_rwe         ) , 
+    .lsu_wdata   (      lsu_wdata       ) , 
+    .lsu_strb    (      lsu_strb        ) , 
+    .lsu_req     (      lsu_req         ) , 
+            
+    .biu_rdata   (      biu_rdata_ls    ) , 
+    .biu_rresp   (      biu_rresp_ls    ) ,
+    .biu_wresp   (      biu_wresp_ls    ) ,
+    .biu_valid   (      biu_valid_ls    ) ,
+
+    // AXI4-Lite Master接口信号
+    // 读地址通道
+
+    .M_AXI_ARADDR   (   ls_axi4_araddr  )   ,  
+    .M_AXI_ARVALID  (   ls_axi4_arvalid )   , 
+    .M_AXI_ARREADY  (   ls_axi4_arready )   , 
+
+    // 读数据通道       
+    .M_AXI_RDATA    (   ls_axi4_rdata   )   ,   
+    .M_AXI_RRESP    (   ls_axi4_rresp   )   ,   
+    .M_AXI_RVALID   (   ls_axi4_rvalid  )   ,  
+    .M_AXI_RREADY   (   ls_axi4_rready  )   ,  
     
-    .in_valid(ex_me_valid),
-    .in_imm(ex_me_imm),
-    .in_npc(ex_me_npc),
-    .in_pc(ex_me_pc),
-    .in_rd(ex_me_rd),
-    .in_ctrl(ex_me_ctrl),
-    .in_sram_wdata(ex_me_rs2),//作存储时输入数据
-    .in_sram_addr(ex_me_alu),//作储存时输入地址，作加载时，加载地址
-    .in_ready(me_ex_ready),
+    // 写地址通道
+    .M_AXI_AWADDR   (   ls_axi4_awaddr  )   , 
+    .M_AXI_AWVALID  (   ls_axi4_awvalid )   ,
+    .M_AXI_AWREADY  (   ls_axi4_awready )   ,
+
+    // 写数据通道       
+    .M_AXI_WDATA    (   ls_axi4_wdata   )   ,  
+    .M_AXI_WSTRB    (   ls_axi4_wstrb   )   ,  
+    .M_AXI_WVALID   (   ls_axi4_wvalid  )   , 
+    .M_AXI_WREADY   (   ls_axi4_wready  )   , 
+
+    // 写响应通道       
+    .M_AXI_BRESP    (   ls_axi4_bresp   )   ,  
+    .M_AXI_BVALID   (   ls_axi4_bvalid  )   , 
+    .M_AXI_BREADY   (   ls_axi4_bready  )     
+);
+
+ysyx_25030085_arbiter arbiter(
+     // 时钟与复位
+    .clk            (   clk  )   ,
+    .rst            (   rst  )   ,
+    
+    // 主设备1读信号（IF接口）
+    .m1_arvalid     (   if_axi4_arvalid )   ,
+    .m1_arready     (   if_axi4_arready )   ,
+    .m1_araddr      (   if_axi4_araddr  )   ,
+    .m1_rvalid      (   if_axi4_rvalid  )   ,
+    .m1_rready      (   if_axi4_rready  )   ,
+    .m1_rdata       (   if_axi4_rdata   )   ,
+    .m1_rresp       (   if_axi4_rresp   )   ,
+    
+    // 主设备2读信号
+    .m2_arvalid     (   ls_axi4_arvalid )   ,
+    .m2_arready     (   ls_axi4_arready )   ,
+    .m2_araddr      (   ls_axi4_araddr  )   ,
+    .m2_rvalid      (   ls_axi4_rvalid  )   ,
+    .m2_rready      (   ls_axi4_rready  )   ,
+    .m2_rdata       (   ls_axi4_rdata   )   ,
+    .m2_rresp       (   ls_axi4_rresp   )   ,
+    
+    // 到从设备的读信号（连接仲裁器与存储器的中间信号）
+    .s_arvalid      (   arb_mem_axi4_arvalid    )   ,  
+    .s_arready      (   arb_mem_axi4_arready    )   ,  
+    .s_araddr       (   arb_mem_axi4_araddr     )   ,   
+    .s_rvalid       (   arb_mem_axi4_rvalid     )   ,   
+    .s_rready       (   arb_mem_axi4_rready     )   ,   
+    .s_rdata        (   arb_mem_axi4_rdata      )   ,    
+    .s_rresp        (   arb_mem_axi4_rresp      )        
+);
+
+ysyx_25030085_axi4_lite_sram sram (
+    // 时钟与复位
+    .clk                (   clk   ) ,
+    .rst                (   rst   ) ,
+    
+    // 读地址通道（连接仲裁器与存储器的读信号）
+    .S_AXI_ARADDR       (   arb_mem_axi4_araddr     )   ,  
+    .S_AXI_ARVALID      (   arb_mem_axi4_arvalid    )   , 
+    .S_AXI_ARREADY      (   arb_mem_axi4_arready    )   , 
+
+    // 读数据通道（连接存储器到仲裁器的读信号）
+    .S_AXI_RDATA        (   arb_mem_axi4_rdata  )   ,   
+    .S_AXI_RRESP        (   arb_mem_axi4_rresp  )   ,   
+    .S_AXI_RVALID       (   arb_mem_axi4_rvalid )   ,  
+    .S_AXI_RREADY       (   arb_mem_axi4_rready )   ,  
+
+    // 写地址通道（连接LS模块的写信号）
+    .S_AXI_AWADDR       (   ls_axi4_awaddr  )   ,       
+    .S_AXI_AWVALID      (   ls_axi4_awvalid )   ,      
+    .S_AXI_AWREADY      (   ls_axi4_awready )   ,      
+
+    // 写数据通道（连接LS模块的写信号）
+    .S_AXI_WDATA        (   ls_axi4_wdata   )   ,        
+    .S_AXI_WSTRB        (   ls_axi4_wstrb   )   ,        
+    .S_AXI_WVALID       (   ls_axi4_wvalid  )   ,       
+    .S_AXI_WREADY       (   ls_axi4_wready  )   ,       
+
+    // 写响应通道（连接LS模块的写信号）
+    .S_AXI_BRESP        (   ls_axi4_bresp   )   ,        
+    .S_AXI_BVALID       (   ls_axi4_bvalid  )   ,       
+    .S_AXI_BREADY       (   ls_axi4_bready  )        
+);
+
+ysyx_25030085_lsu lsu(
+    .clk             ( clk            ) ,
+    .rst             ( rst            ) ,
+
+    .in_valid        ( ex_me_valid    ) ,
+    .in_imm          ( ex_me_imm      ) ,
+    .in_npc          ( ex_me_npc      ) ,
+    .in_pc           ( ex_me_pc       ) ,
+    .in_rd           ( ex_me_rd       ) ,
+    .in_ctrl         ( ex_me_ctrl     ) ,
+    .in_lsu_wdata    ( ex_me_rs2      ) ,  // 作存储时输入数据
+    .in_lsu_addr     ( ex_me_alu      ) ,  // 作储存时输入地址，作加载时，加载地址
+    .in_ready        ( me_ex_ready    ) ,
 
 
+    .out_valid       ( me_wb_valid    ) ,
+    .mem_rdata       ( me_wb_rdata    ) ,
+    .ctrl_out        ( me_wb_ctrl     ) ,
+    .npc_out         ( me_wb_npc      ) ,
+    .pc_out          ( me_wb_pc       ) ,
+    .imm_out         ( me_wb_imm      ) ,
+    .rd_out          ( me_wb_rd       ) ,
+    .alu_result      ( me_wb_alu      ) ,
+    .out_ready       ( wb_me_ready    ) ,
+     
+    //与biu交互
+ // 输出到biu模块
+    .lsu_req        (   lsu_req     ) ,  // LS模块向BIU发起的请求信号
+    .lsu_wwe        (   lsu_wwe     ) ,  // LS模块向BIU发起的写使能信号
+    .lsu_rwe        (   lsu_rwe     ) ,  // LS模块向BIU发起的读使能信号
+    .lsu_addr       (   lsu_addr    ) ,  // LS模块发送到BIU的地址信号
+    .lsu_wdata      (   lsu_wdata   ) ,  // LS模块发送到BIU的写数据
+    .lsu_strb       (   lsu_strb    ) ,  // LS模块发送到BIU的字节选通信号
+    
+    // 来自BIU的信号    
+    .biu_valid      (   biu_valid_ls) ,  // BIU返回给LS模块的数据有效信号
+    .biu_rresp      (   biu_rresp_ls) ,
+    .biu_wresp      (   biu_wresp_ls) ,
+    .biu_rdata      (   biu_rdata_ls)    // BIU返回给LS模块的读数据
 
-    .out_valid(me_wb_valid),
-    .sram_rdata(sram_rdata),
-    .ctrl_out(me_wb_ctrl),
-    .npc_out(me_wb_npc),
-    .pc_out(me_wb_pc),
-    .imm_out(me_wb_imm),
-    .rd_out(me_wb_rd),
-    .alu_result(me_wb_alu),
-    .out_ready(wb_me_ready)
 );
 
 
 ysyx_25030085_wb wbu(
-    .clk(clk),
-    .rst(rst), 
+    .clk             ( clk            ) ,
+    .rst             ( rst            ) ,
 
-    .in_valid(me_wb_valid),
-    .in_alu_result(me_wb_alu),
-    .in_mem_rdata(sram_rdata),
-    .in_npc(me_wb_npc),
-    .in_pc(me_wb_pc),
-    .in_imm(me_wb_imm),
-    .in_csr_rdata(csr_data),
-    .in_ctrl(me_wb_ctrl),
-    .rd_addr(me_wb_rd),
-    .in_ready(wb_me_ready),
+    .in_valid        ( me_wb_valid    ) ,
+    .in_alu_result   ( me_wb_alu      ) ,
+    .in_mem_rdata    ( me_wb_rdata    ) ,
+    .in_npc          ( me_wb_npc      ) ,
+    .in_pc           ( me_wb_pc       ) ,
+    .in_imm          ( me_wb_imm      ) ,
+    .in_csr_rdata    ( csr_data       ) ,
+    .in_ctrl         ( me_wb_ctrl     ) ,
+    .rd_addr         ( me_wb_rd       ) ,
+    .in_ready        ( wb_me_ready    ) ,
 
-    //送回ifu
-    .out_valid(wb_done),
-    .next_pc(next_pc),
+    // 送回ifu
+    .out_valid       ( wb_valid       ) ,
+    .next_pc         ( next_pc        ) ,
 
-    //写回寄存器堆
-    .reg_wen(reg_wen),
-    .reg_waddr(reg_waddr),
-    .reg_wdata(reg_wdata)
+    // 写回寄存器堆
+    .reg_wen         ( reg_wen        ) ,
+    .reg_waddr       ( reg_waddr      ) ,
+    .reg_wdata       ( reg_wdata      )
 
 );
+
+
+
+
+
 //ftrace
     wire is_jar_call;
     wire is_jalr_call;
@@ -218,4 +473,7 @@ ysyx_25030085_wb wbu(
             display_ret_func(if_id_pc, next_pc);  // 函数返回追踪
         end
     end
+
+
+
 endmodule

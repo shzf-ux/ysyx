@@ -2,43 +2,88 @@ import "DPI-C" function void display_call_func (input int pc, input int dnpc);
 import "DPI-C" function void display_ret_func (input int pc, input int dnpc);
 
 module ysyx_25030085_if (
-    input clk,
-    input rst,
+    input               clk         ,
+    input               rst         ,
 
-    input wb_done,          // 写回完成信号
-    input [31:0] next_pc,   // 下一个 PC 值
+    input               wb_done     ,          // 写回完成信号
+    input [31:0]        next_pc     ,          // 下一个 PC 值
 
-    output out_valid,       // 输出数据有效
-    output [31:0] inst,     // 指令输出
-    output [31:0] pc,       // PC 值输出
-    input out_ready         // 下游准备接收
+    //biu
+    input               biu_ready   ,
+    input  [31:0]       biu_rdata   ,
+    output reg [31:0]   if_addr     ,
+    output reg          if_req      ,
+
+    output              out_valid   ,       // 输出数据有效
+    output  reg    [31:0]   inst        ,     // 指令输出
+    output  reg    [31:0]   pc          ,       // PC 值输出
+    input               out_ready         // 下游准备接收
 );
 
-    reg [31:0] current_pc;  // 当前 PC
-    reg [31:0] if_inst;     // 当前指令
-    reg inst_valid;         // 指令是否有效
+    reg [31:0]        current_pc;
+    reg [31:0]        inst_reg;      // 用于暂存当前PC值
+    // 定义状态机状态
+    typedef enum reg [2:0] {
+        IDLE,       // 空闲状态
+        REQUEST,    // 请求状态
+        OUTPUT,       // 等待响应状态
+        WAIT      
+    } state_t;
 
-    // 输出逻辑
-    assign out_valid = inst_valid && out_ready; 
-    assign inst = if_inst;
-    assign pc = current_pc;
+    state_t state;
 
-    // 主逻辑：复位后立即取第一条指令，之后由 wb_done 触发
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            current_pc <= 32'h8000_0000; // 复位 PC
-            if_inst <= pmem_readv(32'h8000_0000); // 立即取第一条指令
-            inst_valid <= 1;             // 标记指令有效
-        end else begin
-            if (wb_done) begin
-                // 收到 wb_done 后更新 PC 并取新指令
-                current_pc <= next_pc;
-                if_inst <= pmem_readv(next_pc);
-                inst_valid <= 1;
-            end else if (out_ready) begin
-                // 下游已接收指令，清除有效标志
-                inst_valid <= 0;
-            end
-        end
+// 取指令逻辑
+always @(posedge clk or posedge rst) begin
+    if(rst) begin
+        if_req    <= 0;
+        current_pc<= 32'h80000000; 
+        state<=IDLE;
     end
+    else begin
+        case (state)
+            IDLE:begin
+            if_req    <= 1;                  // 发起取指请求
+            if_addr   <= current_pc;         // 发送当前PC作为取指地址  
+            state<=REQUEST; 
+            end 
+            REQUEST:begin
+                if_req<=0;
+                if(biu_ready)begin
+                inst_reg  <= biu_rdata;       // 锁存取到的指令
+                if(out_ready)begin
+                state<=OUTPUT;
+                end
+                end
+            end
+            OUTPUT:begin
+                state<=WAIT;
+            end
+            WAIT:begin
+                if(wb_done)begin
+                    current_pc<=next_pc;
+                    state<=IDLE;
+                end
+            end
+            default:begin
+                
+            end 
+        endcase
+    end 
+end
+always @(*) begin
+    out_valid=0;
+    case (state)
+        OUTPUT:begin
+            out_valid=1;
+            inst=inst_reg;
+            pc=current_pc;
+        end 
+        default: begin
+            
+        end
+    endcase
+    
+end
+
 endmodule
+    

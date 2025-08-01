@@ -10,9 +10,11 @@ module ysyx_25030085_regfile (
     output [31:0]rs2_data,
 
     input reg_wen,
+    input in_valid,
     input [4:0]reg_waddr,
     input [31:0]reg_wdata,
-    output [31:0]reg_a5
+    output [31:0]reg_a5,
+    output reg w_resp
 );
     reg [4:0]rs1;
     reg [4:0]rs2;
@@ -20,6 +22,7 @@ module ysyx_25030085_regfile (
     reg [31:0]register [0:31];
     reg is_info_register;
     reg is_en_display;
+
 
     integer i; 
     initial begin
@@ -45,9 +48,14 @@ module ysyx_25030085_regfile (
         for (integer i = 1; i < 32; i++) begin
             register[i] <= 0;
         end
-    end else if (reg_wen && (reg_waddr != 0)) begin
+    end else if (reg_wen && (reg_waddr != 0)&&in_valid) begin
         register[reg_waddr] <= reg_wdata;  
+        w_resp<=1;
     end
+    else begin
+        w_resp<=0;
+    end
+
 end
 
     assign rs1_data=(reg_rs1_addr!=0)?register[reg_rs1_addr]:0;//根据rs1寄存器编码找到对于数据
