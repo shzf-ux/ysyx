@@ -1,29 +1,29 @@
 module ysyx_25030085_ex(
-    input clk,
-    input rst,
+    input               clk                 ,
+    input               rst                 ,
 
-    input in_valid,
-    input [31:0] in_a5,
-    input [31:0] in_rs1_data,
-    input [31:0] in_rs2_data,
-    input [20:0] in_ctrl,
-    input [31:0] in_imm,
-    input [4:0]  in_rd,
-    input [31:0] in_pc,
-    output in_ready,
+    input               in_valid            ,
+    input [31:0]        in_a5               ,
+    input [31:0]        in_rs1_data         ,
+    input [31:0]        in_rs2_data         ,
+    input [20:0]        in_ctrl             ,
+    input [31:0]        in_imm              ,
+    input [4:0]         in_rd               ,
+    input [31:0]        in_pc               ,
+    output              in_ready            ,
     //0为加法，rs1加立即数或者rs2
 
-    output out_valid,
-    output [31:0]     out_next_pc,
-    output reg [31:0] out_Alu_Result,
-    output [31:0] out_rs2_data,
-    output [20:0] out_ctrl,
-    output [31:0] csr_data,
-    output [4:0]  rd_out,
-    output [31:0]imm_out,
-    output [31:0]pc_out,
+    output              out_valid           ,
+    output [31:0]       out_next_pc         ,
+    output reg [31:0]   out_Alu_Result      ,
+    output [31:0]       out_rs2_data        ,
+    output [20:0]       out_ctrl            ,
+    output [31:0]       csr_data            ,
+    output [4:0]        rd_out              ,
+    output [31:0]       imm_out             ,
+    output [31:0]       pc_out              ,
 
-    input out_ready
+    input               out_ready
 );
     parameter IDLE=0;
     parameter OUTPUT=1;

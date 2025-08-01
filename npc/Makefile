@@ -38,9 +38,13 @@ all: compile run
 compile:
 	@$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
 
+wave:
+	@gtkwave waveform.vcd
+
 # 运行仿真
 run: compile
-	$(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
+	@$(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
+
 
 # 清理
 clean:

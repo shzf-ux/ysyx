@@ -10,13 +10,13 @@ module ysyx_25030085_if (
 
     //biu
     input               biu_ready   ,
-    input  [31:0]       biu_rdata   ,
+    input      [31:0]   biu_rdata   ,
     output reg [31:0]   if_addr     ,
     output reg          if_req      ,
 
     output              out_valid   ,       // 输出数据有效
-    output  reg    [31:0]   inst        ,     // 指令输出
-    output  reg    [31:0]   pc          ,       // PC 值输出
+    output  reg [31:0]  inst        ,     // 指令输出
+    output  reg [31:0]  pc          ,       // PC 值输出
     input               out_ready         // 下游准备接收
 );
 

@@ -1,26 +1,23 @@
 module  ysyx_25030085_wb (
-    input clk,
-    input rst,
+    input               clk         ,
+    input               rst         ,
 
-   // 来自执行阶段的数据
-    input in_valid,
-    input [31:0] in_alu_result,   // ALU计算结果
-    input [31:0] in_mem_rdata,    // 存储器读取数据
-    input [31:0] in_npc,
-    input [31:0] in_pc,     // PC+4（用于JAL）
-    input [31:0] in_imm,          // 立即数（用于LUI）
-    input [20:0] in_ctrl,   
-    input [31:0] in_csr_rdata,    // CSR读取数据
-    input [4:0]  rd_addr,      // 目标寄存器地址
-    output in_ready,
+    input               in_valid    ,
+    input       [31:0]  in_alu_result,
+    input       [31:0]  in_mem_rdata,
+    input       [31:0]  in_npc      ,
+    input       [31:0]  in_pc       ,
+    input       [31:0]  in_imm      ,
+    input       [20:0]  in_ctrl     ,
+    input       [31:0]  in_csr_rdata,
+    input       [4:0]   rd_addr     ,
+    output              in_ready    ,
 
-    
-    // 输出到寄存器堆
-    output reg out_valid, 
-    output [31:0]next_pc,
-    output reg_wen,
-    output [4:0]  reg_waddr,
-    output [31:0] reg_wdata
+    output reg          out_valid   ,
+    output      [31:0]  next_pc     ,
+    output              reg_wen     ,
+    output      [4:0]   reg_waddr   ,
+    output      [31:0]  reg_wdata   
 
 );
 

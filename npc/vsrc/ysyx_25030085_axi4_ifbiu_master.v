@@ -1,4 +1,8 @@
-module ysyx_25030085_ifbiu_axi4_lite_master (
+module ysyx_25030085_ifbiu_axi4_lite_master #(
+      parameter READ_DELAY = 1,  // 固定读延迟（5/10/20等）
+      parameter MAX_DELAY  =2 , // 随机延迟最大值
+      parameter LFSR_WIDTH =8
+)(
     input               clk         ,
     input               rst         ,
     
@@ -59,20 +63,56 @@ module ysyx_25030085_ifbiu_axi4_lite_master (
     assign       M_AXI_BREADY = 0 ;
     assign       M_AXI_AWADDR = 0 ;
     assign       M_AXI_AWVALI = 0 ;*/
-           
+
+    // 读延迟计数器
+    reg [LFSR_WIDTH-1:0] read_cnt;
+    reg                 read_pending;  // 读请求挂起标志   
+
+
+    //LFSR模块（生成伪随机数）
+    reg [LFSR_WIDTH-1:0] lfsr;         //最大为8位
+    wire      lfsr_feedback;
+
+// 反馈多项式：x^8 + x^6 + x^5 + x^4 + 1（
+assign lfsr_feedback = lfsr[7] ^ lfsr[5] ^ lfsr[4] ^ lfsr[3];
+// LFSR更新逻辑
+always @(posedge clk or negedge rst) begin
+    if (rst) begin
+        lfsr <= 8'b1;  // 初始值不能为全0，否则会锁定
+    end else begin
+        lfsr <= {lfsr[6:0], lfsr_feedback};  // 左移一位，补反馈位
+    end
+end
+wire [LFSR_WIDTH-1:0] rand_delay = lfsr % MAX_DELAY;  // 取低5位并限制范围
+
+
+
 
 // 读地址通道
 always @(posedge clk or negedge rst) begin
     if (rst) begin
         M_AXI_ARADDR <= 32'h0;
         M_AXI_ARVALID <= 1'b0;
-    end else if (if_req&&!M_AXI_ARVALID ) begin
+    end else if (if_req&&!M_AXI_ARVALID&&!read_pending) begin//没有挂起时
+        read_pending<=1;
+        read_cnt    <=0;
+    end
+    else if(read_pending&&read_cnt<rand_delay)begin     //延迟计数
+        read_cnt<=read_cnt+1;       
+    end
+    else if(read_pending&&read_cnt==rand_delay)begin
+        read_pending<=0;
+        read_cnt    <=0;
         M_AXI_ARADDR <= if_addr;
         M_AXI_ARVALID <= 1'b1;
-    end else if (AR_active) begin//地址握手成功置零
+    end
+    else if (AR_active) begin//地址握手成功置零
         M_AXI_ARVALID <= 1'b0;
     end
 end
+
+
+
 
 // 读数据通道
 always @(posedge clk or negedge rst) begin

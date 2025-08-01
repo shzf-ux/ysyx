@@ -1,27 +1,27 @@
 import "DPI-C"  function void info_register  (input int value,input bit en_display); 
 //import "DPI-C" context function void set_scope();
 module ysyx_25030085_regfile ( 
-    input clk,
-    input rst,
+    input               clk          ,
+    input               rst          ,
     //读
-    input [4:0]reg_rs1_addr,
-    input [4:0]reg_rs2_addr,
-    output [31:0]rs1_data,
-    output [31:0]rs2_data,
+    input       [4:0]   reg_rs1_addr ,
+    input       [4:0]   reg_rs2_addr ,
+    output      [31:0]  rs1_data     ,
+    output      [31:0]  rs2_data     ,
 
-    input reg_wen,
-    input in_valid,
-    input [4:0]reg_waddr,
-    input [31:0]reg_wdata,
-    output [31:0]reg_a5,
-    output reg w_resp
+    input               reg_wen      ,
+    input               in_valid     ,
+    input       [4:0]   reg_waddr    ,
+    input       [31:0]  reg_wdata    ,
+    output      [31:0]  reg_a5       ,
+    output reg          w_resp       
 );
-    reg [4:0]rs1;
-    reg [4:0]rs2;
-    reg [4:0]rd;
-    reg [31:0]register [0:31];
-    reg is_info_register;
-    reg is_en_display;
+    reg [4:0]       rs1             ;
+    reg [4:0]       rs2             ;
+    reg [4:0]       rd              ;
+    reg [31:0]      register [0:31] ;
+    reg             is_info_register;
+    reg             is_en_display   ;
 
 
     integer i; 

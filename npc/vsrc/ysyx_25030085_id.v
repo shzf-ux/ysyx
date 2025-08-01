@@ -1,33 +1,29 @@
 import "DPI-C" function void ebreak_instruction (input int inst) ;
 import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
 module ysyx_25030085_id (
-    input clk,
-    input rst,
+    input               clk         ,
+    input               rst         ,
 
-    //接收上游数据
-    input in_valid,
-    input  [31:0] in_inst,
-    input  [31:0] in_pc,
-    output in_ready,
+    input               in_valid    ,
+    input       [31:0]  in_inst     ,
+    input       [31:0]  in_pc       ,
+    output              in_ready    ,
 
-    //读寄存器
-    output [4:0]rs1_addr,
-    output [4:0]rs2_addr,
-    input  [31:0]rs1_data,
-    input  [31:0]rs2_data,
-    input  [31:0]in_reg_a5,
+    output      [4:0]   rs1_addr    ,
+    output      [4:0]   rs2_addr    ,
+    input       [31:0]  rs1_data    ,
+    input       [31:0]  rs2_data    ,
+    input       [31:0]  in_reg_a5   ,
 
-
-    //发送数据
-    output out_valid,
-    output [31:0]pc_out,
-    output [31:0]out_rs1_data,
-    output [31:0]out_rs2_data,
-    output [20:0]ctrl_out , // 21位控制总线
-    output [31:0]imm_out,
-    output [31:0]reg_a5_out,
-    output [4:0] rd_out,
-    input out_ready
+    output              out_valid   ,
+    output      [31:0]  pc_out      ,
+    output      [31:0]  out_rs1_data,
+    output      [31:0]  out_rs2_data,
+    output      [20:0]  ctrl_out    ,
+    output      [31:0]  imm_out     ,
+    output      [31:0]  reg_a5_out  ,
+    output      [4:0]   rd_out      ,
+    input               out_ready   
 
 );
   parameter IDLE = 0;

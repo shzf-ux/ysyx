@@ -4,44 +4,44 @@ module ysyx_25030085_lsu (//数据存储器
 //存储 把rs2存入地址为rs1+imm->为alu运算结果
 
 //加载 把地址为rs1+imm->alu运算结果的数据加载到rd里面
-    input clk,
-    input rst,
+    input                       clk         ,
+    input                       rst         ,
     
-    input                       in_valid,
-    input [20:0]                in_ctrl,
-    input [4:0]                 in_rd,
-    input [31:0]                in_imm,
-    input [31:0]                in_npc,
-    input [31:0]                in_pc,
+    input                       in_valid    ,
+    input [20:0]                in_ctrl     ,
+    input [4:0]                 in_rd       ,
+    input [31:0]                in_imm      ,
+    input [31:0]                in_npc      ,
+    input [31:0]                in_pc       ,
 
     input [31:0]                in_lsu_wdata,//存入的数据 rs1
-    input [31:0]                in_lsu_addr, //存入或读出的地址 alu
-    output                      in_ready,
+    input [31:0]                in_lsu_addr , //存入或读出的地址 alu
+    output                      in_ready    ,
 
-    output                      out_valid,
-    output reg [31:0]           mem_rdata,
-    output [20:0]               ctrl_out,
-    output [31:0]               imm_out,
-    output [31:0]               npc_out,
-    output [31:0]               pc_out,
-    output [4:0]                rd_out,
-    output [31:0]               alu_result,
-    input                       out_ready,
+    output                      out_valid   ,
+    output reg [31:0]           mem_rdata   ,
+    output [20:0]               ctrl_out    ,
+    output [31:0]               imm_out     ,
+    output [31:0]               npc_out     ,
+    output [31:0]               pc_out      ,
+    output [4:0]                rd_out      ,
+    output [31:0]               alu_result  ,
+    input                       out_ready   ,
 
     //与biu交互信号
 
     //输出到biu模块
-    output reg                  lsu_req,        // 请求信号
-    output reg                  lsu_wwe,        // 写使能
-    output reg                  lsu_rwe,        // 读使能
-    output reg [31:0]           lsu_addr,       // 地址输出
-    output reg [31:0]           lsu_wdata,      // 写数据输出
-    output reg [3:0]            lsu_strb,       // 字节选通信号
+    output reg                  lsu_req     ,        // 请求信号
+    output reg                  lsu_wwe     ,        // 写使能
+    output reg                  lsu_rwe     ,        // 读使能
+    output reg [31:0]           lsu_addr    ,       // 地址输出
+    output reg [31:0]           lsu_wdata   ,      // 写数据输出
+    output reg [3:0]            lsu_strb    ,       // 字节选通信号
 
     // 来自BIU的信号
-    input                       biu_valid,      // BIU准备好
-    input   [1:0]               biu_rresp,      
-    input   [1:0]               biu_wresp,
+    input                       biu_valid   ,      // BIU准备好
+    input   [1:0]               biu_rresp   ,      
+    input   [1:0]               biu_wresp   ,
     input  [31:0]               biu_rdata       // 读取的数据
 
 
@@ -79,6 +79,18 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
 
     assign in_ready=state==IDLE;
     assign out_valid=state==OUTPUT;
+
+    assign alu_result   =   addr ;
+    assign ctrl_out     =   ctrl ;
+    assign pc_out       =   pc   ;
+    assign npc_out      =   npc  ;
+    assign imm_out      =   imm  ;
+    assign rd_out       =   rd   ;
+    //biu数据
+    assign lsu_addr    =  aligned_addr  ;
+    assign lsu_wdata   =  wdata         ;
+    assign lsu_wwe     =  MemWrite      ;
+    assign lsu_rwe     =  MemRead       ;
 
     always @(posedge clk or posedge rst) begin
         if(rst)begin
@@ -130,20 +142,6 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
         endcase
     end
 
-assign alu_result   =   addr ;
-assign ctrl_out     =   ctrl ;
-assign pc_out       =   pc   ;
-assign npc_out      =   npc  ;
-assign imm_out      =   imm  ;
-assign rd_out       =   rd   ;
-
-
-
-//biu数据
-assign lsu_addr    =  aligned_addr  ;
-assign lsu_wdata   =  wdata         ;
-assign lsu_wwe     =  MemWrite      ;
-assign lsu_rwe     =  MemRead       ;
 
 
   
