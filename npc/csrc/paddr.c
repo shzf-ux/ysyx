@@ -61,9 +61,9 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
     {
        // fflush(stdout);
         //printf("%d", wmask);
-        putc(wdata, stdout);
+        //putc(wdata, stdout);
         // putc(wdata, stdout);
-        fflush(stdout); // 确保立即刷新输出缓冲区,可以使msh显示出来
+        //fflush(stdout); // 确保立即刷新输出缓冲区,可以使msh显示出来
 
         return;
     }

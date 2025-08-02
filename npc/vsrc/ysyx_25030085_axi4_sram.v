@@ -148,6 +148,7 @@ assign data_wr_en = S_AXI_WVALID && !data_full;
 
 
 
+
 // 写地址通道握手
 /*always @(posedge clk or negedge rst) begin
     if (rst) begin
@@ -162,7 +163,7 @@ assign data_wr_en = S_AXI_WVALID && !data_full;
     end
     
 end*/
-always @(posedge clk or posedge rst) begin  // 注意原代码是negedge rst，这里保持一致
+always @(posedge clk or posedge rst) begin 
     if (rst) begin
         S_AXI_AWREADY <= 1'b0;
     end else begin
