@@ -1,7 +1,7 @@
+`define DISABLE_DELAY  // 定义此宏则延迟为0，注释则启用延迟
 module ysyx_25030085_ifbiu_axi4_lite_master #(
-      parameter READ_DELAY = 1,  // 固定读延迟（5/10/20等）
-      parameter MAX_DELAY  =2 , // 随机延迟最大值
-      parameter LFSR_WIDTH =8
+    parameter MAX_DELAY  = 20,        // 随机延迟最大值
+    parameter LFSR_WIDTH = 8
 )(
     input               clk         ,
     input               rst         ,
@@ -83,8 +83,14 @@ always @(posedge clk or negedge rst) begin
         lfsr <= {lfsr[6:0], lfsr_feedback};  // 左移一位，补反馈位
     end
 end
-wire [LFSR_WIDTH-1:0] rand_delay = lfsr % MAX_DELAY;  // 取低5位并限制范围
 
+
+// 宏决定延迟值
+wire [LFSR_WIDTH-1:0] rand_delay = `ifdef DISABLE_DELAY 
+                                      0  // 延迟为0
+                                   `else 
+                                      (lfsr % MAX_DELAY)  // 正常随机延迟
+                                   `endif;
 
 
 
@@ -97,9 +103,14 @@ always @(posedge clk or negedge rst) begin
         read_pending<=1;
         read_cnt    <=0;
     end
-    else if(read_pending&&read_cnt<rand_delay)begin     //延迟计数
-        read_cnt<=read_cnt+1;       
-    end
+
+    // 根据disable_delay参数决定是否启用延迟计数
+    `ifndef DISABLE_DELAY  // 当需要延迟时，保留计数逻辑
+        else if (read_pending && read_cnt < rand_delay) begin     
+            read_cnt <= read_cnt + 1;       
+        end
+    `endif  // 当延迟为0时，直接跳过这个分支
+
     else if(read_pending&&read_cnt==rand_delay)begin
         read_pending<=0;
         read_cnt    <=0;

@@ -39,7 +39,7 @@ compile:
 	@$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
 
 wave:
-	@gtkwave waveform.vcd
+	@gtkwave waveform.vcd &
 
 # 运行仿真
 run: compile

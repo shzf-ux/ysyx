@@ -137,7 +137,6 @@ module ysyx_25030085_top (
     wire       [3:0]   lsu_strb;     // LS模块发送到BIU的字节选通信号
 
     // BIU返回给LS模块的信号
-    wire               biu_valid_ls; // BIU返回给LS模块的数据有效信号
     wire       [1:0]   biu_rresp_ls  ;
     wire       [1:0]   biu_wresp_ls  ;
     wire       [31:0]  biu_rdata_ls; // BIU返回给LS模块的读数据
@@ -285,7 +284,6 @@ ysyx_25030085_lsbiu_axi4_lite_master lsbiu(
     .biu_rdata   (      biu_rdata_ls    ) , 
     .biu_rresp   (      biu_rresp_ls    ) ,
     .biu_wresp   (      biu_wresp_ls    ) ,
-    .biu_valid   (      biu_valid_ls    ) ,
 
     // AXI4-Lite Master接口信号
     // 读地址通道
@@ -418,7 +416,6 @@ ysyx_25030085_lsu lsu(
     .lsu_strb       (   lsu_strb    ) ,  // LS模块发送到BIU的字节选通信号
     
     // 来自BIU的信号    
-    .biu_valid      (   biu_valid_ls) ,  // BIU返回给LS模块的数据有效信号
     .biu_rresp      (   biu_rresp_ls) ,
     .biu_wresp      (   biu_wresp_ls) ,
     .biu_rdata      (   biu_rdata_ls)    // BIU返回给LS模块的读数据

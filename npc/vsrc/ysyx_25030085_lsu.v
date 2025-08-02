@@ -39,7 +39,6 @@ module ysyx_25030085_lsu (//数据存储器
     output reg [3:0]            lsu_strb    ,       // 字节选通信号
 
     // 来自BIU的信号
-    input                       biu_valid   ,      // BIU准备好
     input   [1:0]               biu_rresp   ,      
     input   [1:0]               biu_wresp   ,
     input  [31:0]               biu_rdata       // 读取的数据
@@ -148,8 +147,7 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
 //读数据，对来自biu的数据进行操作
 always @(*) begin
     lsu_rdata = 32'h00000000;
-    if(biu_valid&&state==STORE)begin
-        if(biu_rresp==2'b01)begin
+    if(state==STORE&&biu_rresp==2'b01)begin
         case (MemOp)
             OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展
             
@@ -192,10 +190,6 @@ always @(*) begin
                 lsu_rdata =0;
             end
         endcase
-        end
-        else begin
-          //  $display("read error!");
-        end
     end
 end
 

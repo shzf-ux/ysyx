@@ -1,6 +1,8 @@
+`define DISABLE_DELAY       // 禁用读地址延迟
+
 module ysyx_25030085_lsbiu_axi4_lite_master #(
-    parameter READ_MAX_DELAY  = 20,  // 随机延迟最大值
-    parameter WRITE_MAX_DELAY = 40 , // 随机延迟最大值
+    parameter READ_MAX_DELAY  = 200,  // 随机延迟最大值
+    parameter WRITE_MAX_DELAY = 200 , // 随机延迟最大值
     parameter LFSR_WIDTH =8
 )(
     input               clk         ,
@@ -16,8 +18,8 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
 
     output reg  [31:0]  biu_rdata   ,
     output reg  [1:0]   biu_wresp   ,
-    output reg  [1:0]   biu_rresp   ,   
-    output reg          biu_valid   ,       //数据有效
+    output reg  [1:0]   biu_rresp   , 
+
 
     
     // AXI4-Lite Master接口信号
@@ -62,7 +64,9 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     assign       B_active  = M_AXI_BREADY  & M_AXI_BVALID;
 
     assign       AR_active = M_AXI_ARVALID & M_AXI_ARREADY;     //读
-    assign       R_active  = M_AXI_RVALID  & M_AXI_RREADY ;       
+    assign       R_active  = M_AXI_RVALID  & M_AXI_RREADY ;  
+
+    reg [3:0]strb_reg;//无延迟可以不加  //锁存strb，这个只持续1周期   
 
     // 读延迟计数器
     reg [LFSR_WIDTH-1:0] read_cnt;
@@ -94,8 +98,23 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
             lfsr_data <= {lfsr_data[6:0], lfsrw_feedback};
         end
     end
-    wire [LFSR_WIDTH-1:0] read_rand_delay  = lfsr_addr % READ_MAX_DELAY;  // 取低5位并限制范围
-    wire [LFSR_WIDTH-1:0] write_rand_delay = lfsr_data % WRITE_MAX_DELAY;  // 取低5位并限制范围
+
+
+// LFSR生成的随机延迟（根据宏控制是否为0）
+wire [LFSR_WIDTH-1:0] read_rand_delay  = 
+    `ifdef DISABLE_DELAY 
+        0  // 宏定义时，读延迟强制为0
+    `else 
+        lfsr_addr % READ_MAX_DELAY  // 宏未定义时，使用随机延迟
+    `endif;
+
+wire [LFSR_WIDTH-1:0] write_rand_delay = 
+    `ifdef DISABLE_DELAY 
+        0  // 宏定义时，写延迟强制为0
+    `else 
+        lfsr_data % WRITE_MAX_DELAY  // 宏未定义时，使用随机延迟
+    `endif;
+
 
 
 
@@ -108,9 +127,13 @@ always @(posedge clk or negedge rst) begin
         read_pending<=1;
         read_cnt    <=0;
     end
-    else if(read_pending&&read_cnt<read_rand_delay)begin
-        read_cnt<=read_cnt+1;       
-    end 
+
+    `ifndef DISABLE_DELAY
+        else if(read_pending&&read_cnt<read_rand_delay)begin
+            read_cnt<=read_cnt+1;       
+        end 
+    `endif 
+
     else if(read_pending&&read_cnt==read_rand_delay)begin
         M_AXI_ARVALID<=1;
         M_AXI_ARADDR<=lsu_addr;
@@ -134,11 +157,9 @@ always @(posedge clk or negedge rst) begin
         M_AXI_RREADY <= 1'b1;  // 始终准备好接收读数据      
         biu_rdata <= M_AXI_RDATA;
         biu_rresp <= M_AXI_RRESP;
-        biu_valid <= 1          ;
     end
     else begin
         M_AXI_RREADY <= 1'b0;
-        biu_valid    <= 0   ; 
         biu_rresp    <=0;
     end
 end
@@ -151,16 +172,20 @@ always @(posedge clk or negedge rst) begin
         M_AXI_AWVALID <= 1'b0;
     end else if (lsu_req && lsu_wwe && !M_AXI_AWVALID && !M_AXI_ARVALID&&!write_addr_pending) begin
         write_addr_pending<=1;
-        write_data_cnt <=0;
+        write_addr_cnt    <=0;
     end
-    else if(write_addr_pending&&write_data_cnt<write_rand_delay)begin
-        write_data_cnt <=write_data_cnt+1;
-    end 
-    else if(write_addr_pending&&write_data_cnt==write_rand_delay)begin
+
+    `ifndef DISABLE_DELAY
+        else if(write_addr_pending&&write_addr_cnt<read_rand_delay)begin
+            write_addr_cnt <=write_addr_cnt+1;
+        end 
+    `endif 
+
+    else if(write_addr_pending&&write_addr_cnt==read_rand_delay)begin
         write_addr_pending<=0;
-        write_data_cnt    <=0;
+        write_addr_cnt    <=0;
         M_AXI_AWADDR      <= lsu_addr;
-        M_AXI_AWVALID <= 1'b1;  
+        M_AXI_AWVALID     <= 1'b1;  
     end
     else if (AW_active) begin
         M_AXI_AWVALID <= 1'b0;
@@ -175,25 +200,40 @@ always @(posedge clk or negedge rst) begin
         M_AXI_WDATA <= 32'h0;
         M_AXI_WSTRB <= 4'h0;
         M_AXI_WVALID <= 1'b0;
-    end else if (lsu_req && lsu_wwe && !M_AXI_WVALID) begin
+    end else if (lsu_req && lsu_wwe && !M_AXI_WVALID&&!write_data_pending) begin
+        strb_reg<=lsu_strb ;          //锁存strb，这个只持续1周期
+        write_data_pending<=1;
+        write_data_cnt<=0;
+    end
+
+    `ifndef DISABLE_DELAY
+        else if(write_data_pending&&write_data_cnt<write_data_cnt)begin
+            write_data_cnt<=write_data_cnt+1;
+        end
+    `endif 
+
+    else if(write_data_pending&&write_data_cnt==write_data_cnt)begin
+        write_data_pending<=0;
+        write_data_cnt<=0;
         M_AXI_WDATA <= lsu_wdata;
-        M_AXI_WSTRB <= lsu_strb;
+        M_AXI_WSTRB <= strb_reg;
         M_AXI_WVALID <= 1'b1;
-    end else if (W_active) begin
+    end
+    else if (W_active) begin
         M_AXI_WVALID <= 1'b0;
     end
 end
 
+
+
 // 写响应通道
 always @(posedge clk or negedge rst) begin
     if (rst) begin
-        M_AXI_BREADY <= 1'b0;
-        biu_valid    <= 0   ;
+        M_AXI_BREADY <= 1'b0;      
     end 
     else if(M_AXI_BVALID&!M_AXI_BREADY)begin
         M_AXI_BREADY <= 1'b1;
         biu_wresp<=M_AXI_BRESP ;
-        biu_valid <= 1      ;
     end
     else begin
        M_AXI_BREADY <= 1'b0; 
