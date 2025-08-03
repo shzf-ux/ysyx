@@ -62,7 +62,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  //if (addr == 0xa00003f8) return ;
+  if (addr == 0xa00003f8) return ;
 #ifdef CONFIG_MTRACE
   display_memory_write(addr, data);
 #endif
