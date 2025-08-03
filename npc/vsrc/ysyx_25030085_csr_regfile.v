@@ -4,8 +4,8 @@
 //csrrs 同上 将 CSR 的值与 rs1 按位或（OR）后写回
 //mret 还原mstatus 恢复pc 为mepc（返回地址）
 module ysyx_25030085_csr_regfile (
-    input clk,
-    input rst,
+    input clock,
+    input reset,
 
     input [31:0] pc,       //保存pc
     input [31:0] reg_a5, 
@@ -48,7 +48,7 @@ always @(*) begin
 end
 
 // 写入操作
-always @(posedge clk) begin
+always @(posedge clock) begin
     if(csr_wen != 2'd0) begin //01 csrrw 10csrrs
         case(csr_addr)
         12'h300: mstatus <= (csr_wen==2'b01) ? csr_wdata : (csr_wen==2'b10) ? (mstatus|csr_wdata) : mstatus;
@@ -67,7 +67,7 @@ localparam MSTATUS_MPP_MASK = 32'h00001800;
 localparam MSTATUS_MPIE_BIT = 32'h00000080;
 localparam MSTATUS_MIE_BIT  = 32'h00000008;
 
-always @(posedge clk) begin
+always @(posedge clock) begin
     if(is_ecall) begin    
         // 更新状态寄存器
         mstatus <= (mstatus & ~(MSTATUS_MIE_BIT | MSTATUS_MPP_MASK)) |

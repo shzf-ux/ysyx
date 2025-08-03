@@ -1,6 +1,6 @@
 module ysyx_25030085_axi4_clint(
-    input               clk                 ,
-    input               rst                 ,
+    input               clock                 ,
+    input               reset                 ,
     
     // 读地址通道
     input       [31:0]  S_AXI_ARADDR        ,
@@ -23,8 +23,8 @@ module ysyx_25030085_axi4_clint(
 
 
     //维护mtime时间
-always @(posedge clk or posedge rst) begin
-    if(rst)begin
+always @(posedge clock or posedge reset) begin
+    if(reset)begin
         mtime<=0;
     end
     else begin
@@ -34,8 +34,8 @@ end
 
 
 // 读地址通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         S_AXI_ARREADY<=0;
     end
     else if (S_AXI_ARVALID&!S_AXI_ARREADY)begin
@@ -47,8 +47,8 @@ always @(posedge clk or negedge rst) begin
 end
 
 // 读数据通道握手
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         S_AXI_RDATA  <= 32'h0;
         S_AXI_RRESP  <= 2'b00;  // 初始化响应信号
     end

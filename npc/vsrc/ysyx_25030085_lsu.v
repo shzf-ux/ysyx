@@ -4,8 +4,8 @@ module ysyx_25030085_lsu (//数据存储器
 //存储 把rs2存入地址为rs1+imm->为alu运算结果
 
 //加载 把地址为rs1+imm->alu运算结果的数据加载到rd里面
-    input                       clk         ,
-    input                       rst         ,
+    input                       clock         ,
+    input                       reset         ,
     
     input                       in_valid    ,
     input [20:0]                in_ctrl     ,
@@ -91,8 +91,8 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
     assign lsu_wwe     =  MemWrite      ;
     assign lsu_rwe     =  MemRead       ;
 
-    always @(posedge clk or posedge rst) begin
-        if(rst)begin
+    always @(posedge clock or posedge reset) begin
+        if(reset)begin
             ctrl<=0;
             wdata<=0;
             addr<=0;  

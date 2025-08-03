@@ -1,0 +1,86 @@
+{
+  "scalaVersion": {
+    "zincAuxiliaryClassFileExtensions": {},
+    "scalaLibraryMvnDeps": {},
+    "scalaOrganization": {},
+    "enablePluginScalacOptions": {},
+    "scalacPluginClasspath": {},
+    "scalaCompilerClasspath": {}
+  },
+  "mandatoryMvnDeps": {},
+  "mill.javalib.JvmWorkerModule.repositories": {},
+  "cliImports": {
+    "runMvnDeps": {}
+  },
+  "zincReportCachedProblems": {
+    "compile": {
+      "codeSignatures": {}
+    }
+  },
+  "javacOptions": {},
+  "sources.super.javalib.JavaModule": {
+    "sources": {
+      "allSources": {}
+    }
+  },
+  "runClasspath.super.RunModule": {
+    "runClasspath": {
+      "millBuildRootModuleResult": {}
+    }
+  },
+  "jvmId": {},
+  "jvmIndexVersion": {
+    "javaHome": {}
+  },
+  "scalacOptions.super.scalalib.ScalaModule": {
+    "scalacOptions": {}
+  },
+  "transitiveCompileClasspath": {
+    "compileClasspath": {}
+  },
+  "repositories": {},
+  "millVersion": {},
+  "mvnDeps": {},
+  "bomMvnDeps": {},
+  "platformSuffix": {},
+  "mandatoryJavacOptions": {},
+  "scriptSources": {
+    "allSourceFiles": {},
+    "parseBuildFiles": {
+      "generatedScriptSources": {
+        "generatedSources": {}
+      }
+    }
+  },
+  "mill.javalib.JvmWorkerModule.checkGradleModules": {
+    "mill.javalib.JvmWorkerModule.classpath": {},
+    "mill.javalib.JvmWorkerModule.worker": {}
+  },
+  "zincAuxiliaryClassFileExtensions.super.javalib.JavaModule": {},
+  "resources": {},
+  "depManagement": {},
+  "compileResources": {
+    "localCompileClasspath": {}
+  },
+  "artifactTypes": {},
+  "scalacPluginMvnDeps": {},
+  "localRunClasspath.super.RunModule": {
+    "localRunClasspath": {
+      "localClasspath": {}
+    }
+  },
+  "checkGradleModules": {},
+  "mandatoryScalacOptions": {
+    "allScalacOptions": {}
+  },
+  "compileMvnDeps": {
+    "resolvedRunMvnDeps": {},
+    "resolvedMvnDeps": {}
+  },
+  "zincIncrementalCompilation": {},
+  "upstreamCompileOutput": {},
+  "transitiveLocalClasspath": {},
+  "transitiveCoursierProjects": {},
+  "mill.javalib.JvmWorkerModule.zincLogDebug": {},
+  "unmanagedClasspath": {}
+}

@@ -6,8 +6,8 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     parameter WRITE_MAX_DELAY = 20 , // 随机延迟最大值
     parameter LFSR_WIDTH =8
 )(
-    input               clk         ,
-    input               rst         ,  
+    input               clock         ,
+    input               reset         ,  
     
     // 与LSU交互的信号
     input       [31:0]  lsu_addr    ,
@@ -90,8 +90,8 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     assign lfsrr_feedback = lfsr_addr[7] ^ lfsr_addr[5] ^ lfsr_addr[4] ^ lfsr_addr[3];
     assign lfsrw_feedback = lfsr_data[7] ^ lfsr_data[4] ^ lfsr_data[3] ^ lfsr_data[2];
     // LFSR更新逻辑
-    always @(posedge clk or negedge rst) begin
-        if (rst) begin
+    always @(posedge clock or negedge reset) begin
+        if (reset) begin
             lfsr_addr <= 8'h01;  // 初始值不能为全0，否则会锁定
             lfsr_data <= 8'h02;
         end else begin
@@ -120,8 +120,8 @@ wire [LFSR_WIDTH-1:0] write_rand_delay =
 
 
 // 读地址通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         M_AXI_ARADDR <= 32'h0;
         M_AXI_ARVALID <= 1'b0;
     end else if (lsu_req &&lsu_rwe&&!M_AXI_ARVALID && !M_AXI_AWVALID&&!read_pending) begin
@@ -149,8 +149,8 @@ end
 
 
 // 读数据通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         M_AXI_RREADY <= 1'b0;
         biu_rdata <= 32'h0;
     end
@@ -167,8 +167,8 @@ end
 
 
 // 写地址通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         M_AXI_AWADDR <= 32'h0;
         M_AXI_AWVALID <= 1'b0;
     end else if (lsu_req && lsu_wwe && !M_AXI_AWVALID && !M_AXI_ARVALID&&!write_addr_pending) begin
@@ -196,8 +196,8 @@ end
 
 
 // 写数据通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         M_AXI_WDATA <= 32'h0;
         M_AXI_WSTRB <= 4'h0;
         M_AXI_WVALID <= 1'b0;
@@ -228,8 +228,8 @@ end
 
 
 // 写响应通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         M_AXI_BREADY <= 1'b0;      
     end 
     else if(M_AXI_BVALID&!M_AXI_BREADY)begin

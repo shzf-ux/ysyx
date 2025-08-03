@@ -1,6 +1,6 @@
 module ysyx_25030085_ex(
-    input               clk                 ,
-    input               rst                 ,
+    input               clock                 ,
+    input               reset                 ,
 
     input               in_valid            ,
     input [31:0]        in_a5               ,
@@ -35,8 +35,8 @@ module ysyx_25030085_ex(
  
     assign in_ready=(state==IDLE);
     assign out_valid=(state==OUTPUT);
-    always @(posedge clk or posedge rst) begin
-        if(rst)begin
+    always @(posedge clock or posedge reset) begin
+        if(reset)begin
             ctrl<=0;
             rs1_data<=0;
             rs2_data<=0;
@@ -144,8 +144,8 @@ module ysyx_25030085_ex(
         end
     end
 ysyx_25030085_csr_regfile csr_regfile_init(
-    .clk(clk),
-    .rst(rst),
+    .clock(clock),
+    .reset(reset),
      //输入
     .pc(pc),
     .reg_a5(reg_a5),

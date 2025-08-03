@@ -2,8 +2,8 @@ module ysyx_25030085_sync_fifo #(
     parameter DATA_WIDTH = 32,    // 数据宽度
     parameter FIFO_DEPTH = 128     // FIFO深度
 )(
-    input                   clk             ,     
-    input                   rst             ,    
+    input                   clock             ,     
+    input                   reset             ,    
     
     // 写端口
     input       [DATA_WIDTH-1:0]    din     ,    // 写入数据
@@ -40,8 +40,8 @@ always @(*) begin
 end
 
 //写入数据
-always @(posedge clk or posedge rst) begin
-    if(rst)begin
+always @(posedge clock or posedge reset) begin
+    if(reset)begin
         wr_ptr<=0;  
     end
     else begin
@@ -52,8 +52,8 @@ always @(posedge clk or posedge rst) begin
     end
 end
 
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         rd_ptr <= 0;
         dout <= 0;
     end else begin

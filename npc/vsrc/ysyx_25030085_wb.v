@@ -1,6 +1,6 @@
 module  ysyx_25030085_wb (
-    input               clk         ,
-    input               rst         ,
+    input               clock         ,
+    input               reset         ,
 
     input               in_valid    ,
     input       [31:0]  in_alu_result,
@@ -41,8 +41,8 @@ reg[31:0]wb_data;
 
 assign in_ready=state==IDLE;
 
-always @(posedge clk or posedge rst) begin
-    if(rst)begin
+always @(posedge clock or posedge reset) begin
+    if(reset)begin
         pc<=0;
         imm<=0;
         csr_rdata<=0;
@@ -88,8 +88,8 @@ assign reg_wdata=wb_data;
 
 
 
-always @(posedge clk or posedge rst) begin
-    if (rst) begin
+always @(posedge clock or posedge reset) begin
+    if (reset) begin
         wb_data <= 32'h0; // 复位时清零
     end
     else if (state==OUTPUT) begin

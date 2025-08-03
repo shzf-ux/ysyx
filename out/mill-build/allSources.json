@@ -1,0 +1,9 @@
+{
+    "value": [
+        "ref:v0:716f5818:/home/zzy/ysyx-workbench/build.mill",
+        "ref:v0:c984eca8:/home/zzy/ysyx-workbench/mill-build/src",
+        "ref:v0:1c539b7f:/home/zzy/ysyx-workbench/out/mill-build/generatedScriptSources.dest/support"
+    ],
+    "valueHash": 1764329578,
+    "inputsHash": 1585073126
+}

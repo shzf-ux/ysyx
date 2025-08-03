@@ -1,8 +1,8 @@
 import "DPI-C"  function void info_register  (input int value,input bit en_display); 
 //import "DPI-C" context function void set_scope();
 module ysyx_25030085_regfile ( 
-    input               clk          ,
-    input               rst          ,
+    input               clock          ,
+    input               reset          ,
     //读
     input       [4:0]   reg_rs1_addr ,
     input       [4:0]   reg_rs2_addr ,
@@ -42,8 +42,8 @@ module ysyx_25030085_regfile (
         end
     end
 
-   always @(posedge clk or posedge rst) begin
-    if (rst) begin
+   always @(posedge clock or posedge reset) begin
+    if (reset) begin
         // 复位所有寄存器（x0 除外）
         for (integer i = 1; i < 32; i++) begin
             register[i] <= 0;

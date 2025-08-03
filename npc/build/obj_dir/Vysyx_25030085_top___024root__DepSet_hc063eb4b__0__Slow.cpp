@@ -21,8 +21,8 @@ VL_ATTR_COLD void Vysyx_25030085_top___024root___eval_initial(Vysyx_25030085_top
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25030085_top___024root___eval_initial\n"); );
     // Body
     Vysyx_25030085_top___024root___eval_initial__TOP(vlSelf);
-    vlSelf->__Vtrigrprev__TOP__clk = vlSelf->clk;
-    vlSelf->__Vtrigrprev__TOP__rst = vlSelf->rst;
+    vlSelf->__Vtrigrprev__TOP__clock = vlSelf->clock;
+    vlSelf->__Vtrigrprev__TOP__reset = vlSelf->reset;
     vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__invalid 
         = vlSelf->ysyx_25030085_top__DOT__idu__DOT__invalid;
     vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__is_ebreak 
@@ -1304,13 +1304,13 @@ VL_ATTR_COLD void Vysyx_25030085_top___024root___dump_triggers__act(Vysyx_250300
         VL_DBG_MSGF("         'act' region trigger index 0 is active: Internal 'act' trigger - DPI export trigger\n");
     }
     if (vlSelf->__VactTriggered.at(1U)) {
-        VL_DBG_MSGF("         'act' region trigger index 1 is active: @(posedge clk or posedge rst)\n");
+        VL_DBG_MSGF("         'act' region trigger index 1 is active: @(posedge clock or posedge reset)\n");
     }
     if (vlSelf->__VactTriggered.at(2U)) {
-        VL_DBG_MSGF("         'act' region trigger index 2 is active: @(posedge clk)\n");
+        VL_DBG_MSGF("         'act' region trigger index 2 is active: @(posedge clock)\n");
     }
     if (vlSelf->__VactTriggered.at(3U)) {
-        VL_DBG_MSGF("         'act' region trigger index 3 is active: @(posedge clk or negedge rst)\n");
+        VL_DBG_MSGF("         'act' region trigger index 3 is active: @(posedge clock or negedge reset)\n");
     }
     if (vlSelf->__VactTriggered.at(4U)) {
         VL_DBG_MSGF("         'act' region trigger index 4 is active: @([changed] ysyx_25030085_top.idu.invalid or [changed] ysyx_25030085_top.idu.is_ebreak)\n");
@@ -1334,13 +1334,13 @@ VL_ATTR_COLD void Vysyx_25030085_top___024root___dump_triggers__nba(Vysyx_250300
         VL_DBG_MSGF("         'nba' region trigger index 0 is active: Internal 'nba' trigger - DPI export trigger\n");
     }
     if (vlSelf->__VnbaTriggered.at(1U)) {
-        VL_DBG_MSGF("         'nba' region trigger index 1 is active: @(posedge clk or posedge rst)\n");
+        VL_DBG_MSGF("         'nba' region trigger index 1 is active: @(posedge clock or posedge reset)\n");
     }
     if (vlSelf->__VnbaTriggered.at(2U)) {
-        VL_DBG_MSGF("         'nba' region trigger index 2 is active: @(posedge clk)\n");
+        VL_DBG_MSGF("         'nba' region trigger index 2 is active: @(posedge clock)\n");
     }
     if (vlSelf->__VnbaTriggered.at(3U)) {
-        VL_DBG_MSGF("         'nba' region trigger index 3 is active: @(posedge clk or negedge rst)\n");
+        VL_DBG_MSGF("         'nba' region trigger index 3 is active: @(posedge clock or negedge reset)\n");
     }
     if (vlSelf->__VnbaTriggered.at(4U)) {
         VL_DBG_MSGF("         'nba' region trigger index 4 is active: @([changed] ysyx_25030085_top.idu.invalid or [changed] ysyx_25030085_top.idu.is_ebreak)\n");
@@ -1356,8 +1356,8 @@ VL_ATTR_COLD void Vysyx_25030085_top___024root___ctor_var_reset(Vysyx_25030085_t
     Vysyx_25030085_top__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25030085_top___024root___ctor_var_reset\n"); );
     // Body
-    vlSelf->clk = 0;
-    vlSelf->rst = 0;
+    vlSelf->clock = 0;
+    vlSelf->reset = 0;
     vlSelf->top_pc = 0;
     vlSelf->top_inst = 0;
     vlSelf->top_valid = 0;
@@ -1619,8 +1619,8 @@ VL_ATTR_COLD void Vysyx_25030085_top___024root___ctor_var_reset(Vysyx_25030085_t
     vlSelf->__Vdly__ysyx_25030085_top__DOT__biu_rdata_if = 0;
     vlSelf->__Vdly__ysyx_25030085_top__DOT__ls_axi4_rready = 0;
     vlSelf->__Vdly__ysyx_25030085_top__DOT__ls_axi4_bready = 0;
-    vlSelf->__Vtrigrprev__TOP__clk = 0;
-    vlSelf->__Vtrigrprev__TOP__rst = 0;
+    vlSelf->__Vtrigrprev__TOP__clock = 0;
+    vlSelf->__Vtrigrprev__TOP__reset = 0;
     vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__invalid = 0;
     vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__is_ebreak = 0;
     vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__regfile__DOT__is_info_register = 0;

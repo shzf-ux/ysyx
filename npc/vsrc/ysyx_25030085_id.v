@@ -1,8 +1,8 @@
 import "DPI-C" function void ebreak_instruction (input int inst) ;
 import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
 module ysyx_25030085_id (
-    input               clk         ,
-    input               rst         ,
+    input               clock         ,
+    input               reset         ,
 
     input               in_valid    ,
     input       [31:0]  in_inst     ,
@@ -38,8 +38,8 @@ module ysyx_25030085_id (
 
 
 
-    always @(posedge clk or posedge rst) begin
-      if(rst)begin
+    always @(posedge clock or posedge reset) begin
+      if(reset)begin
         inst<=0;
         pc<=32'h8000_0000;
         state<=IDLE;

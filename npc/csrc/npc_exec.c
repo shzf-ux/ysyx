@@ -21,8 +21,8 @@ void npc_exec(uint64_t n)
     int batch_mode = (int)n == -1;
     while (flag_stop == 0 && (n--) > 0)
     {
-        top->clk = !top->clk;
-        int is_rising_edge = (top->clk == 1);//记录上升沿
+        top->clock = !top->clock;
+        int is_rising_edge = (top->clock == 1);//记录上升沿
         //握手
         int valid = top->top_valid;
         int ready = top->top_ready;

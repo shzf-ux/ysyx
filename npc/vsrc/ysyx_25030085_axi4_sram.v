@@ -2,8 +2,8 @@ import "DPI-C" function int pmem_readv(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
 
 module ysyx_25030085_axi4_lite_sram (
-    input               clk                 ,
-    input               rst                 ,
+    input               clock                 ,
+    input               reset                 ,
     
     // 读地址通道
     input       [31:0]  S_AXI_ARADDR        ,
@@ -57,8 +57,8 @@ module ysyx_25030085_axi4_lite_sram (
 
 
 // 读地址通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         S_AXI_ARREADY<=0;
     end
     else if (S_AXI_ARVALID&!S_AXI_ARREADY)begin
@@ -70,8 +70,8 @@ always @(posedge clk or negedge rst) begin
 end
 
 // 读数据通道握手
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         S_AXI_RDATA  <= 32'h0;
         S_AXI_RRESP  <= 2'b00;  // 初始化响应信号
     end
@@ -103,8 +103,8 @@ ysyx_25030085_sync_fifo #(
     .DATA_WIDTH(32),
     .FIFO_DEPTH(8)  
 ) addr_fifo (
-    .clk      (clk),
-    .rst      (rst),  
+    .clock      (clock),
+    .reset      (reset),  
     .din      (S_AXI_AWADDR),
     .wr_en    (addr_wr_en),
     .full     (addr_full),
@@ -117,8 +117,8 @@ ysyx_25030085_sync_fifo #(
     .DATA_WIDTH(36),  // 32位数据 + 4位WSTRB
     .FIFO_DEPTH(8)
 ) data_fifo (
-    .clk      (clk),
-    .rst      (rst),
+    .clock      (clock),
+    .reset      (reset),
     .din      ({S_AXI_WSTRB, S_AXI_WDATA}),  // 高4位是选通，低32位是数据
     .wr_en    (data_wr_en),
     .full     (data_full),
@@ -150,8 +150,8 @@ assign data_wr_en = S_AXI_WVALID && !data_full;
 
 
 // 写地址通道握手
-/*always @(posedge clk or negedge rst) begin
-    if (rst) begin
+/*always @(posedge clock or negedge reset) begin
+    if (reset) begin
         S_AXI_AWREADY <= 1'b0;
     end 
     else if(S_AXI_AWVALID&!S_AXI_AWREADY)begin
@@ -163,8 +163,8 @@ assign data_wr_en = S_AXI_WVALID && !data_full;
     end
     
 end*/
-always @(posedge clk or posedge rst) begin 
-    if (rst) begin
+always @(posedge clock or posedge reset) begin 
+    if (reset) begin
         S_AXI_AWREADY <= 1'b0;
     end else begin
         // 当地址有效且FIFO未满时，产生就绪信号（完成握手）
@@ -174,8 +174,8 @@ end
 
 
 // 写数据通道握手
-/*always @(posedge clk or negedge rst) begin
-    if (rst) begin
+/*always @(posedge clock or negedge reset) begin
+    if (reset) begin
         S_AXI_WREADY <= 1'b0;
     end 
     else if(S_AXI_WVALID&!S_AXI_WREADY )begin
@@ -186,8 +186,8 @@ end
         S_AXI_WREADY<=0; 
     end
 end*/
-always @(posedge clk or posedge rst) begin
-    if (rst) begin
+always @(posedge clock or posedge reset) begin
+    if (reset) begin
         S_AXI_WREADY <= 1'b0;
     end else begin
         S_AXI_WREADY <= data_wr_en;     //替代信号
@@ -200,8 +200,8 @@ reg data_process;           //处理数据，防止数据写两遍
 
 
 
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         S_AXI_BVALID <= 1'b0;
         S_AXI_BRESP  <= 2'b00;
         data_process<=0;

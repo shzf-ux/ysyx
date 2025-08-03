@@ -1,0 +1,15 @@
+{
+    "value": {
+        "seenScripts": [
+            [
+                "/home/zzy/ysyx-workbench/build.mill",
+                ""
+            ]
+        ],
+        "errors": [],
+        "buildFile": "build.mill",
+        "headerData": "mill-version: 1.0.2"
+    },
+    "valueHash": -1394237941,
+    "inputsHash": 1339295304
+}

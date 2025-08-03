@@ -1,6 +1,6 @@
 module ysyx_25030085_top (
-    input clk,
-    input rst,
+    input clock,
+    input reset,
 
     //itrace difftest;
     output [31:0] top_pc,
@@ -18,8 +18,8 @@ module ysyx_25030085_top (
 
     
 
-    always @(posedge clk or posedge rst) begin
-        if(rst)begin
+    always @(posedge clock or posedge reset) begin
+        if(reset)begin
             inst_done<=0;
         end
         else begin
@@ -185,11 +185,11 @@ module ysyx_25030085_top (
 
 // 指令取指模块（IFU）
 ysyx_25030085_if ifu(
-    .clk             ( clk            ) ,
-    .rst             ( rst            ) ,
+    .clock           ( clock            ) ,
+    .reset           ( reset            ) ,
 
     // wb输入（来自写回阶段的跳转信号）
-    .wb_done         ( wb_valid        ) , 
+    .wb_done         ( wb_valid       ) , 
     .next_pc         ( next_pc        ) ,
 
     // BIU输入信号（来自IFBIU的读数据和就绪信号）
@@ -210,8 +210,8 @@ ysyx_25030085_if ifu(
 // IF阶段与AXI总线的桥接模块（IFBIU）
 ysyx_25030085_ifbiu_axi4_lite_master ifbiu(
     // 时钟与复位
-    .clk             ( clk            ) ,
-    .rst             ( rst            ) ,
+    .clock             ( clock            ) ,
+    .reset             ( reset            ) ,
     
     // 与IF阶段交互接口（接收IFU的请求，返回数据）
     .if_req          ( if_req         ) ,
@@ -235,8 +235,8 @@ ysyx_25030085_ifbiu_axi4_lite_master ifbiu(
 
 
 ysyx_25030085_id idu(
-    .clk             ( clk            ) ,
-    .rst             ( rst            ) ,
+    .clock             ( clock            ) ,
+    .reset             ( reset            ) ,
 
     .in_valid        ( if_id_valid    ) ,
     .in_pc           ( if_id_pc       ) ,
@@ -264,8 +264,8 @@ ysyx_25030085_id idu(
 
 
 ysyx_25030085_regfile regfile(  
-    .clk             ( clk            ) ,
-    .rst             ( rst            ) ,
+    .clock             ( clock            ) ,
+    .reset             ( reset            ) ,
 
     .reg_wen         ( reg_wen        ) ,
     .reg_waddr       ( reg_waddr      ) ,
@@ -281,8 +281,8 @@ ysyx_25030085_regfile regfile(
 );
    
 ysyx_25030085_ex exu(
-    .clk             (   clk          ) ,
-    .rst             (   rst          ) ,
+    .clock             (   clock          ) ,
+    .reset             (   reset          ) ,
 
     .in_valid        ( id_ex_valid    ) ,
     .in_a5           ( id_ex_a5       ) ,
@@ -308,8 +308,8 @@ ysyx_25030085_ex exu(
 ); 
 
 ysyx_25030085_lsbiu_axi4_lite_master lsbiu(
-    .clk            (   clk   )     ,
-    .rst            (   rst   )     ,
+    .clock            (   clock   )     ,
+    .reset            (   reset   )     ,
 
     // LSU接口信号
     .lsu_addr    (      lsu_addr        ) , 
@@ -352,7 +352,7 @@ ysyx_25030085_lsbiu_axi4_lite_master lsbiu(
     .M_AXI_BVALID   (   ls_axi4_bvalid  )   , 
     .M_AXI_BREADY   (   ls_axi4_bready  )     
 );
-// output declaration of module ysyx_25030085_xbar
+
 
 
 
@@ -361,8 +361,8 @@ ysyx_25030085_xbar #(
     .SRAM_ADDR_START 	(32'h80000000  ),
     .SRAM_ADDR_END   	(32'h87ffffff  ))
 xbar(
-    .clk          	(clk           ),
-    .rst          	(rst           ),
+    .clock          	(clock           ),
+    .reset          	(reset           ),
     //写地址通道
     .m_awaddr     	( ls_axi4_awaddr    ),
     .m_awvalid    	( ls_axi4_awvalid   ),
@@ -409,8 +409,8 @@ xbar(
 
 ysyx_25030085_arbiter arbiter(
      // 时钟与复位
-    .clk            (   clk  )   ,
-    .rst            (   rst  )   ,
+    .clock            (   clock  )   ,
+    .reset            (   reset  )   ,
     
     // 主设备1读信号（IF接口）
     .if_arvalid     (   if_axi4_arvalid )   ,
@@ -452,8 +452,8 @@ ysyx_25030085_arbiter arbiter(
 
 
 ysyx_25030085_axi4_clint clint(
-    .clk           	(clk            ),
-    .rst           	(rst            ),
+    .clock           	(clock            ),
+    .reset           	(reset            ),
 
     .S_AXI_ARADDR   (arb_rtc_axi4_araddr    ),  
     .S_AXI_ARVALID  (arb_rtc_axi4_arvalid   ),  
@@ -467,8 +467,8 @@ ysyx_25030085_axi4_clint clint(
 
 
 ysyx_25030085_axi4_lite_uart uart(
-    .clk                (   clk           ),
-    .rst                (   rst           ),
+    .clock                (   clock           ),
+    .reset                (   reset           ),
     // 写地址通道 连接xbar
     .S_AXI_AWADDR       (   uart_awaddr   ),  
     .S_AXI_AWVALID      (   uart_awvalid  ),  
@@ -490,8 +490,8 @@ ysyx_25030085_axi4_lite_uart uart(
 
 ysyx_25030085_axi4_lite_sram sram (
     // 时钟与复位
-    .clk                (   clk   ) ,
-    .rst                (   rst   ) ,
+    .clock                (   clock   ) ,
+    .reset                (   reset   ) ,
     
     // 读地址通道（连接仲裁器与SRAM的读信号）
     .S_AXI_ARADDR       (   arb_sram_axi4_araddr     )   ,  
@@ -522,8 +522,8 @@ ysyx_25030085_axi4_lite_sram sram (
 );
 
 ysyx_25030085_lsu lsu(
-    .clk             ( clk            ) ,
-    .rst             ( rst            ) ,
+    .clock             ( clock            ) ,
+    .reset             ( reset            ) ,
 
     .in_valid        ( ex_me_valid    ) ,
     .in_imm          ( ex_me_imm      ) ,
@@ -564,8 +564,8 @@ ysyx_25030085_lsu lsu(
 
 
 ysyx_25030085_wb wbu(
-    .clk             ( clk            ) ,
-    .rst             ( rst            ) ,
+    .clock             ( clock            ) ,
+    .reset             ( reset            ) ,
 
     .in_valid        ( me_wb_valid    ) ,
     .in_alu_result   ( me_wb_alu      ) ,
@@ -602,7 +602,7 @@ ysyx_25030085_wb wbu(
     assign is_jalr_call = (if_id_inst[11:7] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR调用
     assign is_jalr_ret = (if_id_inst[11:7] == 5'd0) && (if_id_inst[19:15] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR返回
 
-    always @(posedge clk) begin
+    always @(posedge clock) begin
         if ((is_jar_call || is_jalr_call)&&wb_done) begin
             display_call_func(if_id_pc, next_pc);  // 函数调用追踪
         end

@@ -30,24 +30,24 @@ void Vysyx_25030085_top___024root___eval_triggers__act(Vysyx_25030085_top___024r
     // Body
     vlSelf->__VactTriggered.at(0U) = vlSelf->__Vdpi_export_trigger;
     vlSelf->__Vdpi_export_trigger = 0U;
-    vlSelf->__VactTriggered.at(1U) = (((IData)(vlSelf->clk) 
-                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clk))) 
-                                      | ((IData)(vlSelf->rst) 
-                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__rst))));
-    vlSelf->__VactTriggered.at(2U) = ((IData)(vlSelf->clk) 
-                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clk)));
-    vlSelf->__VactTriggered.at(3U) = (((IData)(vlSelf->clk) 
-                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clk))) 
-                                      | ((~ (IData)(vlSelf->rst)) 
-                                         & (IData)(vlSelf->__Vtrigrprev__TOP__rst)));
+    vlSelf->__VactTriggered.at(1U) = (((IData)(vlSelf->clock) 
+                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
+                                      | ((IData)(vlSelf->reset) 
+                                         & (~ (IData)(vlSelf->__Vtrigrprev__TOP__reset))));
+    vlSelf->__VactTriggered.at(2U) = ((IData)(vlSelf->clock) 
+                                      & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock)));
+    vlSelf->__VactTriggered.at(3U) = (((IData)(vlSelf->clock) 
+                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__clock))) 
+                                      | ((~ (IData)(vlSelf->reset)) 
+                                         & (IData)(vlSelf->__Vtrigrprev__TOP__reset)));
     vlSelf->__VactTriggered.at(4U) = (((IData)(vlSelf->ysyx_25030085_top__DOT__idu__DOT__invalid) 
                                        != (IData)(vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__invalid)) 
                                       | ((IData)(vlSelf->ysyx_25030085_top__DOT__idu__DOT__is_ebreak) 
                                          != (IData)(vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__is_ebreak)));
     vlSelf->__VactTriggered.at(5U) = ((IData)(vlSelf->ysyx_25030085_top__DOT__regfile__DOT__is_info_register) 
                                       & (~ (IData)(vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__regfile__DOT__is_info_register)));
-    vlSelf->__Vtrigrprev__TOP__clk = vlSelf->clk;
-    vlSelf->__Vtrigrprev__TOP__rst = vlSelf->rst;
+    vlSelf->__Vtrigrprev__TOP__clock = vlSelf->clock;
+    vlSelf->__Vtrigrprev__TOP__reset = vlSelf->reset;
     vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__invalid 
         = vlSelf->ysyx_25030085_top__DOT__idu__DOT__invalid;
     vlSelf->__Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__is_ebreak 
@@ -383,18 +383,18 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__3(Vysyx_2503
     __Vdly__ysyx_25030085_top__DOT__ls_axi4_awvalid 
         = vlSelf->ysyx_25030085_top__DOT__ls_axi4_awvalid;
     vlSelf->ysyx_25030085_top__DOT__arb_rtc_axi4_arready 
-        = ((~ (IData)(vlSelf->rst)) & ((IData)(vlSelf->ysyx_25030085_top__DOT__arb_rtc_axi4_arvalid) 
-                                       & (~ (IData)(vlSelf->ysyx_25030085_top__DOT__arb_rtc_axi4_arready))));
+        = ((~ (IData)(vlSelf->reset)) & ((IData)(vlSelf->ysyx_25030085_top__DOT__arb_rtc_axi4_arvalid) 
+                                         & (~ (IData)(vlSelf->ysyx_25030085_top__DOT__arb_rtc_axi4_arready))));
     __Vdly__ysyx_25030085_top__DOT__arb_sram_axi4_arready 
-        = ((~ (IData)(vlSelf->rst)) & ((IData)(vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_arvalid) 
-                                       & (~ (IData)(vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_arready))));
-    if ((1U & (~ (IData)(vlSelf->rst)))) {
+        = ((~ (IData)(vlSelf->reset)) & ((IData)(vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_arvalid) 
+                                         & (~ (IData)(vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_arready))));
+    if ((1U & (~ (IData)(vlSelf->reset)))) {
         vlSelf->ysyx_25030085_top__DOT__arb_rtc_axi4_rvalid 
             = ((IData)(vlSelf->ysyx_25030085_top__DOT__clint__DOT__AR_active) 
                | ((~ (IData)(vlSelf->ysyx_25030085_top__DOT__clint__DOT__R_active)) 
                   & (IData)(vlSelf->ysyx_25030085_top__DOT__arb_rtc_axi4_rvalid)));
     }
-    if (vlSelf->rst) {
+    if (vlSelf->reset) {
         vlSelf->ysyx_25030085_top__DOT__lsbiu__DOT__lfsr_data = 2U;
         vlSelf->ysyx_25030085_top__DOT__lsbiu__DOT__lfsr_addr = 1U;
         vlSelf->ysyx_25030085_top__DOT__ifbiu__DOT__lfsr = 1U;
@@ -448,7 +448,7 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__3(Vysyx_2503
                 [(7U & (IData)(vlSelf->ysyx_25030085_top__DOT__uart__DOT__addr_fifo_uart__DOT__rd_ptr))];
         }
     }
-    if (vlSelf->rst) {
+    if (vlSelf->reset) {
         __Vdly__ysyx_25030085_top__DOT__arb_sram_axi4_rdata = 0U;
         vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_rresp = 0U;
     } else if (((IData)(vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_arready) 
@@ -478,7 +478,7 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__3(Vysyx_2503
             = vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_rdata;
         vlSelf->ysyx_25030085_top__DOT__arb_sram_axi4_rresp = 0U;
     }
-    if (vlSelf->rst) {
+    if (vlSelf->reset) {
         vlSelf->ysyx_25030085_top__DOT__uart_bvalid = 0U;
         vlSelf->ysyx_25030085_top__DOT__uart_bresp = 0U;
         __Vdly__ysyx_25030085_top__DOT__uart__DOT__data_process = 0U;
@@ -496,7 +496,7 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__3(Vysyx_2503
     } else {
         vlSelf->ysyx_25030085_top__DOT__uart_bresp = 0U;
     }
-    if (vlSelf->rst) {
+    if (vlSelf->reset) {
         vlSelf->ysyx_25030085_top__DOT__sram_bvalid = 0U;
         vlSelf->ysyx_25030085_top__DOT__sram_bresp = 0U;
         __Vdly__ysyx_25030085_top__DOT__sram__DOT__data_process = 0U;
@@ -517,7 +517,7 @@ VL_INLINE_OPT void Vysyx_25030085_top___024root___nba_sequent__TOP__3(Vysyx_2503
     } else {
         vlSelf->ysyx_25030085_top__DOT__sram_bresp = 0U;
     }
-    if (vlSelf->rst) {
+    if (vlSelf->reset) {
         vlSelf->ysyx_25030085_top__DOT__if_axi4_araddr = 0U;
         __Vdly__ysyx_25030085_top__DOT__if_axi4_arvalid = 0U;
         vlSelf->ysyx_25030085_top__DOT__ls_axi4_wdata = 0U;

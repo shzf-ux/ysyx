@@ -4,8 +4,8 @@ module ysyx_25030085_xbar#(
     parameter SRAM_ADDR_START = 32'h80000000,
     parameter SRAM_ADDR_END   = 32'h87ffffff
 )(
-    input               clk             ,
-    input               rst             ,
+    input               clock             ,
+    input               reset             ,
 
     // 主机侧lsu    
     input       [31:0]  m_awaddr        ,    // 主机写地址
@@ -73,8 +73,8 @@ reg        [2:0] state ,next_state;
 
 
 //状态机控制
-always @(posedge clk or posedge rst) begin
-    if(rst)begin
+always @(posedge clock or posedge reset) begin
+    if(reset)begin
         state<=IDLE;      
     end
     else begin

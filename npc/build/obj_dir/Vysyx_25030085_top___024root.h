@@ -19,8 +19,8 @@ class Vysyx_25030085_top___024root final : public VerilatedModule {
     // DESIGN SPECIFIC STATE
     // Anonymous structures to workaround compiler member-count bugs
     struct {
-        VL_IN8(clk,0,0);
-        VL_IN8(rst,0,0);
+        VL_IN8(clock,0,0);
+        VL_IN8(reset,0,0);
         CData/*0:0*/ ysyx_25030085_top__DOT__idu__DOT__invalid;
         CData/*0:0*/ ysyx_25030085_top__DOT__idu__DOT__is_ebreak;
         CData/*0:0*/ ysyx_25030085_top__DOT__regfile__DOT__is_info_register;
@@ -192,8 +192,8 @@ class Vysyx_25030085_top___024root final : public VerilatedModule {
         CData/*0:0*/ __Vdly__ysyx_25030085_top__DOT__if_axi4_rready;
         CData/*0:0*/ __Vdly__ysyx_25030085_top__DOT__ls_axi4_rready;
         CData/*0:0*/ __Vdly__ysyx_25030085_top__DOT__ls_axi4_bready;
-        CData/*0:0*/ __Vtrigrprev__TOP__clk;
-        CData/*0:0*/ __Vtrigrprev__TOP__rst;
+        CData/*0:0*/ __Vtrigrprev__TOP__clock;
+        CData/*0:0*/ __Vtrigrprev__TOP__reset;
         CData/*0:0*/ __Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__invalid;
         CData/*0:0*/ __Vtrigrprev__TOP__ysyx_25030085_top__DOT__idu__DOT__is_ebreak;
         CData/*0:0*/ __Vtrigrprev__TOP__ysyx_25030085_top__DOT__regfile__DOT__is_info_register;

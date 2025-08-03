@@ -3,8 +3,8 @@ module ysyx_25030085_arbiter#(
     parameter SRAM_ADDR_START = 32'h80000000,
     parameter SRAM_ADDR_END   = 32'h87ffffff
 )(           //仲裁if和lsu的读信号 是访问sram还是时钟设备
-    input               clk             ,
-    input               rst             ,
+    input               clock             ,
+    input               reset             ,
     
     // 主设备ifu读信号            if
     input               if_arvalid      ,  // 读地址有效
@@ -71,8 +71,8 @@ always @(*) begin
 end
 
 
-always @(posedge clk or posedge rst) begin
-    if(rst)begin
+always @(posedge clock or posedge reset) begin
+    if(reset)begin
         state<=IDLE;       
     end
     else begin

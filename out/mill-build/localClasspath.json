@@ -1,0 +1,9 @@
+{
+    "value": [
+        "ref:v0:c984eca8:/home/zzy/ysyx-workbench/mill-build/compile-resources",
+        "ref:v0:c984eca8:/home/zzy/ysyx-workbench/mill-build/resources",
+        "ref:v0:42089bb1:/home/zzy/ysyx-workbench/out/mill-build/compile.dest/transformed-classes"
+    ],
+    "valueHash": -130303591,
+    "inputsHash": -1479000057
+}

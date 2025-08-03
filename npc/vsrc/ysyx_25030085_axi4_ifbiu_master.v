@@ -4,8 +4,8 @@ module ysyx_25030085_ifbiu_axi4_lite_master #(
     parameter MAX_DELAY  = 20,        // 随机延迟最大值
     parameter LFSR_WIDTH = 8
 )(
-    input               clk         ,
-    input               rst         ,
+    input               clock         ,
+    input               reset         ,
     
     //与if交互
     input               if_req      ,
@@ -77,8 +77,8 @@ module ysyx_25030085_ifbiu_axi4_lite_master #(
 // 反馈多项式：x^8 + x^6 + x^5 + x^4 + 1（
 assign lfsr_feedback = lfsr[7] ^ lfsr[5] ^ lfsr[4] ^ lfsr[3];
 // LFSR更新逻辑
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         lfsr <= 8'b1;  // 初始值不能为全0，否则会锁定
     end else begin
         lfsr <= {lfsr[6:0], lfsr_feedback};  // 左移一位，补反馈位
@@ -96,8 +96,8 @@ wire [LFSR_WIDTH-1:0] rand_delay = `ifdef DISABLE_IF_DELAY
 
 
 // 读地址通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         M_AXI_ARADDR <= 32'h0;
         M_AXI_ARVALID <= 1'b0;
     end else if (if_req&&!M_AXI_ARVALID&&!read_pending) begin//没有挂起时
@@ -127,8 +127,8 @@ end
 
 
 // 读数据通道
-always @(posedge clk or negedge rst) begin
-    if (rst) begin
+always @(posedge clock or negedge reset) begin
+    if (reset) begin
         M_AXI_RREADY <= 1'b0;
         biu_rdata <= 32'h0;
     end

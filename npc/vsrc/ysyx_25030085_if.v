@@ -2,8 +2,8 @@ import "DPI-C" function void display_call_func (input int pc, input int dnpc);
 import "DPI-C" function void display_ret_func (input int pc, input int dnpc);
 
 module ysyx_25030085_if (
-    input               clk         ,
-    input               rst         ,
+    input               clock         ,
+    input               reset         ,
 
     input               wb_done     ,          // 写回完成信号
     input [31:0]        next_pc     ,          // 下一个 PC 值
@@ -33,8 +33,8 @@ module ysyx_25030085_if (
     state_t state;
 
 // 取指令逻辑
-always @(posedge clk or posedge rst) begin
-    if(rst) begin
+always @(posedge clock or posedge reset) begin
+    if(reset) begin
         if_req    <= 0;
         current_pc<= 32'h80000000; 
         state<=IDLE;
