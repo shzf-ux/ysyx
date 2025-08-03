@@ -1,4 +1,5 @@
-`define DISABLE_DELAY  // 定义此宏则延迟为0，注释则启用延迟
+
+`include "define.vh"
 module ysyx_25030085_ifbiu_axi4_lite_master #(
     parameter MAX_DELAY  = 20,        // 随机延迟最大值
     parameter LFSR_WIDTH = 8
@@ -86,7 +87,7 @@ end
 
 
 // 宏决定延迟值
-wire [LFSR_WIDTH-1:0] rand_delay = `ifdef DISABLE_DELAY 
+wire [LFSR_WIDTH-1:0] rand_delay = `ifdef DISABLE_IF_DELAY 
                                       0  // 延迟为0
                                    `else 
                                       (lfsr % MAX_DELAY)  // 正常随机延迟
@@ -105,7 +106,7 @@ always @(posedge clk or negedge rst) begin
     end
 
     // 根据disable_delay参数决定是否启用延迟计数
-    `ifndef DISABLE_DELAY  // 当需要延迟时，保留计数逻辑
+    `ifndef DISABLE_IF_DELAY  // 当需要延迟时，保留计数逻辑
         else if (read_pending && read_cnt < rand_delay) begin     
             read_cnt <= read_cnt + 1;       
         end

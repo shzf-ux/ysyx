@@ -147,49 +147,54 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
 //读数据，对来自biu的数据进行操作
 always @(*) begin
     lsu_rdata = 32'h00000000;
-    if(state==STORE&&biu_rresp==2'b01)begin
-        case (MemOp)
-            OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展
-            
-            OP_LH: begin
-                // 有符号半字扩展
-                if (offset[1]) 
-                    lsu_rdata = {{16{biu_rdata[31]}}, biu_rdata[31:16]};
-                else 
-                    lsu_rdata = {{16{biu_rdata[15]}}, biu_rdata[15:0]};
-            end
-            
-            OP_LHU: begin
-                // 无符号半字扩展
-                if (offset[1]) 
-                    lsu_rdata = {16'h0000, biu_rdata[31:16]};
-                else 
-                    lsu_rdata = {16'h0000, biu_rdata[15:0]};
-            end
-            
-            OP_LB: begin
-                // 有符号字节扩展
-                case (offset)
-                    2'b00: lsu_rdata = {{24{biu_rdata[7]}}, biu_rdata[7:0]};
-                    2'b01: lsu_rdata = {{24{biu_rdata[15]}}, biu_rdata[15:8]};
-                    2'b10: lsu_rdata = {{24{biu_rdata[23]}}, biu_rdata[23:16]};
-                    2'b11: lsu_rdata = {{24{biu_rdata[31]}}, biu_rdata[31:24]};
-                endcase
-            end
-            
-            OP_LBU: begin
-                // 无符号字节扩展
-                case (offset)
-                    2'b00: lsu_rdata = {24'h000000, biu_rdata[7:0]};
-                    2'b01: lsu_rdata = {24'h000000, biu_rdata[15:8]};
-                    2'b10: lsu_rdata = {24'h000000, biu_rdata[23:16]};
-                    2'b11: lsu_rdata = {24'h000000, biu_rdata[31:24]};
-                endcase
-            end
-            default:begin
-                lsu_rdata =0;
-            end
-        endcase
+    if(state==STORE)begin
+        if(biu_rresp==2'b01)begin
+            case (MemOp)
+                OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展
+                
+                OP_LH: begin
+                    // 有符号半字扩展
+                    if (offset[1]) 
+                        lsu_rdata = {{16{biu_rdata[31]}}, biu_rdata[31:16]};
+                    else 
+                        lsu_rdata = {{16{biu_rdata[15]}}, biu_rdata[15:0]};
+                end
+                
+                OP_LHU: begin
+                    // 无符号半字扩展
+                    if (offset[1]) 
+                        lsu_rdata = {16'h0000, biu_rdata[31:16]};
+                    else 
+                        lsu_rdata = {16'h0000, biu_rdata[15:0]};
+                end
+                
+                OP_LB: begin
+                    // 有符号字节扩展
+                    case (offset)
+                        2'b00: lsu_rdata = {{24{biu_rdata[7]}}, biu_rdata[7:0]};
+                        2'b01: lsu_rdata = {{24{biu_rdata[15]}}, biu_rdata[15:8]};
+                        2'b10: lsu_rdata = {{24{biu_rdata[23]}}, biu_rdata[23:16]};
+                        2'b11: lsu_rdata = {{24{biu_rdata[31]}}, biu_rdata[31:24]};
+                    endcase
+                end
+                
+                OP_LBU: begin
+                    // 无符号字节扩展
+                    case (offset)
+                        2'b00: lsu_rdata = {24'h000000, biu_rdata[7:0]};
+                        2'b01: lsu_rdata = {24'h000000, biu_rdata[15:8]};
+                        2'b10: lsu_rdata = {24'h000000, biu_rdata[23:16]};
+                        2'b11: lsu_rdata = {24'h000000, biu_rdata[31:24]};
+                    endcase
+                end
+                default:begin
+                    lsu_rdata =0;
+                end
+            endcase
+        end
+        else begin
+           // $display("Out-of bound");    
+        end
     end
 end
 

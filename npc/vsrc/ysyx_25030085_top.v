@@ -88,7 +88,7 @@ module ysyx_25030085_top (
     wire [1:0]  ls_axi4_rresp;      // 仲裁器返回LS的读响应
 
     // ------------------------------
-    // 仲裁器与存储器之间的AXI4读信号
+    // 仲裁器与sram之间的AXI4读信号
     // ------------------------------
     wire        arb_sram_axi4_arvalid;  // 仲裁器到存储器的读地址有效
     wire        arb_sram_axi4_arready;  // 存储器到仲裁器的读地址就绪
@@ -97,6 +97,18 @@ module ysyx_25030085_top (
     wire        arb_sram_axi4_rready;   // 仲裁器到存储器的读数据就绪
     wire [31:0] arb_sram_axi4_rdata;    // 存储器到仲裁器的读数据
     wire [1:0]  arb_sram_axi4_rresp;    // 存储器到仲裁器的读响应
+
+    // ------------------------------
+    // 仲裁器与clint(rtc)之间的AXI4读信号
+    // ------------------------------
+
+    wire        arb_rtc_axi4_arvalid ;
+    wire        arb_rtc_axi4_arready ;
+    wire [31:0] arb_rtc_axi4_araddr  ;
+    wire        arb_rtc_axi4_rvalid  ;
+    wire        arb_rtc_axi4_rready  ;
+    wire [31:0] arb_rtc_axi4_rdata   ;
+    wire [1:0]  arb_rtc_axi4_rresp   ;
 
     // ------------------------------
     // LS模块AXI4写信号（直连，经过Xbar）
@@ -419,14 +431,40 @@ ysyx_25030085_arbiter arbiter(
     .ls_rresp       (   ls_axi4_rresp   )   ,
     
     // 到SRAM的读信号（连接仲裁器与存储器的中间信号）
-    .s_arvalid      (   arb_sram_axi4_arvalid    )   ,  
-    .s_arready      (   arb_sram_axi4_arready    )   ,  
-    .s_araddr       (   arb_sram_axi4_araddr     )   ,   
-    .s_rvalid       (   arb_sram_axi4_rvalid     )   ,   
-    .s_rready       (   arb_sram_axi4_rready     )   ,   
-    .s_rdata        (   arb_sram_axi4_rdata      )   ,    
-    .s_rresp        (   arb_sram_axi4_rresp      )        
+    .sram_arvalid      (   arb_sram_axi4_arvalid    )   ,  
+    .sram_arready      (   arb_sram_axi4_arready    )   ,  
+    .sram_araddr       (   arb_sram_axi4_araddr     )   ,   
+    .sram_rvalid       (   arb_sram_axi4_rvalid     )   ,   
+    .sram_rready       (   arb_sram_axi4_rready     )   ,   
+    .sram_rdata        (   arb_sram_axi4_rdata      )   ,    
+    .sram_rresp        (   arb_sram_axi4_rresp      )   ,
+
+    // 到clint的读信号（连接仲裁器与rtc的中间信号）
+    .rtc_arvalid       (   arb_rtc_axi4_arvalid    )   ,  
+    .rtc_arready       (   arb_rtc_axi4_arready    )   ,  
+    .rtc_araddr        (   arb_rtc_axi4_araddr     )   ,   
+    .rtc_rvalid        (   arb_rtc_axi4_rvalid     )   ,   
+    .rtc_rready        (   arb_rtc_axi4_rready     )   ,   
+    .rtc_rdata         (   arb_rtc_axi4_rdata      )   ,    
+    .rtc_rresp         (   arb_rtc_axi4_rresp      )   
 );
+// output declaration of module ysyx_25030085_axi4_clint
+
+
+ysyx_25030085_axi4_clint clint(
+    .clk           	(clk            ),
+    .rst           	(rst            ),
+
+    .S_AXI_ARADDR   (arb_rtc_axi4_araddr    ),  
+    .S_AXI_ARVALID  (arb_rtc_axi4_arvalid   ),  
+    .S_AXI_ARREADY  (arb_rtc_axi4_arready   ),  
+
+    .S_AXI_RDATA    (arb_rtc_axi4_rdata     ),  
+    .S_AXI_RRESP    (arb_rtc_axi4_rresp     ),  
+    .S_AXI_RVALID   (arb_rtc_axi4_rvalid    ),  
+    .S_AXI_RREADY   (arb_rtc_axi4_rready    )   
+);
+
 
 ysyx_25030085_axi4_lite_uart uart(
     .clk                (   clk           ),

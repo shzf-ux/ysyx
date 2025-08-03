@@ -91,48 +91,49 @@ always @(posedge clk or posedge rst) begin
         end
     end
 end
-//组合逻辑状态机
+
+
+
+// 状态转换逻辑（修正后）
 always @(*) begin
     case(state)
-    IDLE:begin
-        if(m_awvalid)begin          //地址先来
-            next_state=AW;           
+        IDLE: begin
+            if(m_awvalid) begin          // 地址先来
+                next_state = AW;                    
+            end
+            else begin
+                next_state = IDLE;              
+            end        
         end
-        else if(m_wvalid)begin      //数据先来
-            next_state=W;          
+        AW: begin
+            if(m_awvalid & m_awready) begin  // 地址握手成功
+                next_state = W;                               
+            end                         
+            else begin
+                next_state = AW;
+            end
         end
-        else begin
-            next_state=IDLE;
-        end        
-    end
-    AW:begin
-        if(m_awvalid&m_awready)begin
-            next_state=W;           
-        end                         //地址握手成功  
-        else begin
-            next_state=AW;
+        W: begin  
+            if(m_wvalid & m_wready) begin  
+                next_state = B;                     
+                     
+            end                        
+            else begin
+                next_state = W;  // 否则保持在W状态
+            end
         end
-        
-    end
-    W:begin
-        if(m_wvalid&m_wready)begin
-            next_state=B;           
-        end                         //数据握手成功  
-        else begin
-            next_state=W;
+        B: begin
+            if(m_bvalid & m_bready) begin  // 响应握手成功
+                next_state = IDLE;
+            end
+            else begin
+                next_state = B;
+            end
         end
-    end
-    B:begin
-        if(m_bvalid&m_bready)begin
-            next_state=IDLE;
-        end
-        else begin
-            next_state=B;
-        end
-        
-    end
     endcase
 end
+
+//若地址后到，需要解码地址才能进行数据选通
 
 //写地址通道            统一组合逻辑
 

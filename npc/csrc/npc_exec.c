@@ -2,7 +2,7 @@
 #include <dlfcn.h>
 #include "difftest/dut.h"
 #define MAX_EXE 1000000
-#define MAX_VCD 500000
+#define MAX_VCD 3000000
 
 extern int sim_time;
 extern int flag_stop;
@@ -74,8 +74,10 @@ void npc_exec(uint64_t n)
             #endif
         }
         top->eval();
-        if(sim_time<MAX_VCD){
-            vcd->dump(sim_time);        
+        //vcd->dump(sim_time);
+        if(sim_time>MAX_VCD){
+            //vcd->dump(sim_time);
+          //  return;
         }
         sim_time++;
    }

@@ -2,6 +2,7 @@
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 void display_memory_read(uint32_t addr, uint32_t data);
 void display_memory_write(uint32_t addr, uint32_t data);
+
 extern "C" void pmem_write(int waddr, int wdata, uint8_t wmask);
 uint64_t get_time();
 static inline uint32_t host_read(void *addr, int len);

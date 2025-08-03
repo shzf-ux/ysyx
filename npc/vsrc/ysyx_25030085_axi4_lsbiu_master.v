@@ -1,8 +1,9 @@
-`define DISABLE_DELAY       // 禁用读地址延迟
+
+`include "define.vh"
 
 module ysyx_25030085_lsbiu_axi4_lite_master #(
-    parameter READ_MAX_DELAY  = 200,  // 随机延迟最大值
-    parameter WRITE_MAX_DELAY = 200 , // 随机延迟最大值
+    parameter READ_MAX_DELAY  = 20,  // 随机延迟最大值
+    parameter WRITE_MAX_DELAY = 20 , // 随机延迟最大值
     parameter LFSR_WIDTH =8
 )(
     input               clk         ,
@@ -102,14 +103,14 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
 
 // LFSR生成的随机延迟（根据宏控制是否为0）
 wire [LFSR_WIDTH-1:0] read_rand_delay  = 
-    `ifdef DISABLE_DELAY 
+    `ifdef DISABLE_LS_DELAY 
         0  // 宏定义时，读延迟强制为0
     `else 
         lfsr_addr % READ_MAX_DELAY  // 宏未定义时，使用随机延迟
     `endif;
 
 wire [LFSR_WIDTH-1:0] write_rand_delay = 
-    `ifdef DISABLE_DELAY 
+    `ifdef DISABLE_LS_DELAY 
         0  // 宏定义时，写延迟强制为0
     `else 
         lfsr_data % WRITE_MAX_DELAY  // 宏未定义时，使用随机延迟
@@ -128,7 +129,7 @@ always @(posedge clk or negedge rst) begin
         read_cnt    <=0;
     end
 
-    `ifndef DISABLE_DELAY
+    `ifndef DISABLE_LS_DELAY
         else if(read_pending&&read_cnt<read_rand_delay)begin
             read_cnt<=read_cnt+1;       
         end 
@@ -175,7 +176,7 @@ always @(posedge clk or negedge rst) begin
         write_addr_cnt    <=0;
     end
 
-    `ifndef DISABLE_DELAY
+    `ifndef DISABLE_LS_DELAY
         else if(write_addr_pending&&write_addr_cnt<read_rand_delay)begin
             write_addr_cnt <=write_addr_cnt+1;
         end 
@@ -206,13 +207,13 @@ always @(posedge clk or negedge rst) begin
         write_data_cnt<=0;
     end
 
-    `ifndef DISABLE_DELAY
-        else if(write_data_pending&&write_data_cnt<write_data_cnt)begin
+    `ifndef DISABLE_LS_DELAY
+        else if(write_data_pending&&write_data_cnt<write_rand_delay)begin
             write_data_cnt<=write_data_cnt+1;
         end
     `endif 
 
-    else if(write_data_pending&&write_data_cnt==write_data_cnt)begin
+    else if(write_data_pending&&write_data_cnt==write_rand_delay)begin
         write_data_pending<=0;
         write_data_cnt<=0;
         M_AXI_WDATA <= lsu_wdata;
