@@ -14,7 +14,7 @@ extern "C"
 void set_scope()
 {
 
-    svScope scope = svGetScopeFromName("TOP.ysyx_25030085_top.regfile");
+    svScope scope = svGetScopeFromName("ysyxSoCFull.regfile");
     if (!scope)
     {
         fprintf(stderr, "Error: Regfile scope not found!\n");
@@ -27,9 +27,10 @@ void set_scope()
 
 static char *rl_gets()
 {
+   
     static char buffer[INPUT_MAX_LEN + 1]; // 静态缓冲区
     memset(buffer, 0, sizeof(buffer));     // 清空缓冲区
-
+    
     printf("(npc) "); // 手动打印提示符
     fflush(stdout);   // 确保立即显示
 
@@ -67,9 +68,9 @@ void display_register(int en)//打印寄存器
 {
     set_scope();
     info_register_en(1,en);
-    top->eval(); // 一定要更新,verilog里面的always的信号是否n更新n看这个
+    soc_top->eval(); // 一定要更新,verilog里面的always的信号是否n更新n看这个
     info_register_en(0,en);
-    top->eval();
+    soc_top->eval();
 }
 static int cmd_info(char *args)
 {
@@ -181,6 +182,7 @@ void sdb_set_batch_mode()
 
 void sdb_mainloop()
 {
+   
     if (is_batch_mode)
     {
         cmd_c(NULL);
@@ -189,6 +191,7 @@ void sdb_mainloop()
 
     for (char *str; (str = rl_gets()) != NULL;)
     {
+      
 
         char *str_end = str + strlen(str);
 

@@ -48,6 +48,7 @@ void init_mem() {
   pmem = malloc(CONFIG_MSIZE);
   assert(pmem);
 #endif
+  printf("1");
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
@@ -62,7 +63,7 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-  if (addr == 0xa00003f8) return ;
+ // if (addr == 0xa00003f8) return ;
 #ifdef CONFIG_MTRACE
   display_memory_write(addr, data);
 #endif

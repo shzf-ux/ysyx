@@ -52,7 +52,7 @@ static long load_img()
     long size = ftell(fp);
 
     printf("%sThe image is %s, size = %ld %s\n", ANSI_FG_BLUE, img_file, size, ANSI_NONE);
-
+   
     fseek(fp, 0, SEEK_SET);
     int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
     assert(ret == 1);
@@ -77,7 +77,7 @@ static int parse_args(int argc, char *argv[])
     int o;
     while ((o = getopt_long(argc, argv, "-bhl:d:p:e:", table, NULL)) != -1)
     {
-      
+
         switch (o)
         {
         case 'b':sdb_set_batch_mode();break; // 设置批处理模式
@@ -111,29 +111,29 @@ void init_rtl(int argc, char *argv[])
     // 启用波形跟踪
     Verilated::traceEverOn(true);
   
-    top->trace(vcd, 5);
+    soc_top->trace(vcd, 5);
     vcd->open("waveform.vcd");
 
     // 1. 初始化信号
-    top->clock = 0;
-    top->reset = 0;
-    top->eval();
+    soc_top->clock = 0;
+    soc_top->reset = 0;
+    soc_top->eval();
 
     sim_time++;
 
     // 1.5 开始复位流程
-    top->clock = 1;
-    top->reset = 1;
-    top->eval();
-    //top->instruction = pmem_read(top->pc_out,4);
+    soc_top->clock = 1;
+    soc_top->reset = 1;
+    soc_top->eval();
+    
     vcd->dump(sim_time); // 写入复位信号置位状态
     sim_time++;
 
     // 3. 释放复位信号
-    top->reset = 0;
-    top->clock = 0;
-    //top->instruction = pmem_read(top->pc_out,4);
-    top->eval();
+    soc_top->reset = 0;
+    soc_top->clock = 0;
+
+    soc_top->eval();
     vcd->dump(sim_time); // 写入复位释放状态
     sim_time++;
 }
@@ -142,16 +142,15 @@ void init_monitor(int argc, char *argv[])
 {
     welcome();
     parse_args(argc, argv); // 解析命令行参数
-    parse_elf(elf_file); // 传入一个elf文件
+  //  parse_elf(elf_file); // 传入一个elf文件
     init_mem();
 
     init_isa();
     
     long img_size = load_img();
-    
+ 
     init_disasm();
+
     init_rtl(argc, argv);
-  
-    init_difftest(diff_so_file, img_size, difftest_port);
-    
+    // init_difftest(diff_so_file, img_size, difftest_port);
 }

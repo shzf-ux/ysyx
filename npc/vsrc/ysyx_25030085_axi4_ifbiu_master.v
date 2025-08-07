@@ -11,36 +11,55 @@ module ysyx_25030085_ifbiu_axi4_lite_master #(
     input               if_req      ,
     input       [31:0]  if_addr     ,
     output  reg [31:0]  biu_rdata    ,
-    output  reg         biu_ready    ,
-    output  reg [1:0]   biu_rresp   ,
+    output  reg         biu_rresp    ,
 
 
-    // 读地址通道
-    output reg  [31:0]  M_AXI_ARADDR,
-    output reg          M_AXI_ARVALID,
-    input               M_AXI_ARREADY,
-    
-    // 读数据通道
-    input       [31:0]  M_AXI_RDATA ,
-    input       [1:0]   M_AXI_RRESP ,          //读响应
-    input               M_AXI_RVALID,
-    output reg          M_AXI_RREADY
-    
-/*    // 写地址通道
+    // AXI4-Lite Master接口信号
+    //************读地址通道**************//
+    output reg  [31:0]  M_AXI_ARADDR    ,
+    output reg          M_AXI_ARVALID   ,
+    input               M_AXI_ARREADY   ,
+    //***********新增信号***************//
+    output reg  [3:0]   M_AXI_ARID      , //读事务id，为乱序传输发起的多个请求分配id
+    output reg  [1:0]   M_AXI_ARBURST   , //读突发类型，设置01，每次按照arsize大小递增度对地址读取
+    output reg  [7:0]   M_AXI_ARLEN     , //突发长度，一次读取的地址数-1，传输1个数据设置0；
+    output reg  [2:0]   M_AXI_ARSIZE    , //数据字节数，1表示读1个字节
+
+
+    //************读数据通道**************//
+    input       [31:0]  M_AXI_RDATA     ,
+    input       [1:0]   M_AXI_RRESP     , //00为ok
+    input               M_AXI_RVALID    ,
+    output reg          M_AXI_RREADY    ,
+    //***********新增信号***************//
+    input       [3:0]   M_AXI_RID       ,//对应响应事务对应id   
+    input               M_AXI_RLAST     //是否最后一个数据，0表示数据未处理，1表示最后一个数据
+
+   
+  /* //************写地址通道*************
     output reg  [31:0]  M_AXI_AWADDR,
     output reg          M_AXI_AWVALID,
     input               M_AXI_AWREADY,
+    //***********新增信号***************
+    output reg  [3:0]   M_AXI_AWRID      , //写事务id，为乱序传输发起的多个请求分配id
+    output reg  [1:0]   M_AXI_AWRBURST   , //写突发类型，设置01，每次按照arsize大小递增度对地址读取
+    output reg  [7:0]   M_AXI_AWRLEN     , //突发长度，一次读取的地址数-1，传输1个数据设置0；
+    output reg  [2:0]   M_AXI_AWRSIZE    , //数据字节数，1表示写1个字节  
+
     
-    // 写数据通道
-    output reg  [31:0]  M_AXI_WDATA ,
-    output reg  [3:0]   M_AXI_WSTRB ,
-    output reg          M_AXI_WVALID,
-    input               M_AXI_WREADY,
-    
-    // 写响应通道
-    input       [1:0]   M_AXI_BRESP ,
-    input               M_AXI_BVALID,
-    output reg          M_AXI_BREADY*/
+    //************写数据通道*************
+    output reg  [31:0]  M_AXI_WDATA     ,
+    output reg  [3:0]   M_AXI_WSTRB     ,
+    output reg          M_AXI_WVALID    ,
+    input               M_AXI_WREADY    ,
+   //***********新增信号***************  
+    output              M_AXI_WLAST     ,//发送数据的一方来确定last信号
+
+    //************写响应通道*************
+    input       [1:0]   M_AXI_BRESP     ,
+    input               M_AXI_BVALID    ,
+    output reg          M_AXI_BREADY    ,
+    input       [3:0]   M_AXI_BID               */     
 );
 
   /*wire         AW_active              ;
@@ -100,6 +119,9 @@ always @(posedge clock or negedge reset) begin
     if (reset) begin
         M_AXI_ARADDR <= 32'h0;
         M_AXI_ARVALID <= 1'b0;
+        M_AXI_ARBURST <= 2'b01;  // 固定为递增模式（单周期传输可固定）
+        M_AXI_ARLEN   <= 8'd0;   // 固定为单周期（传输1个数据，ARLEN = 0）
+        M_AXI_ARSIZE  <= 3'd2;   //3'd2对应4字节
     end else if (if_req&&!M_AXI_ARVALID&&!read_pending) begin//没有挂起时
         read_pending<=1;
         read_cnt    <=0;
@@ -131,17 +153,17 @@ always @(posedge clock or negedge reset) begin
     if (reset) begin
         M_AXI_RREADY <= 1'b0;
         biu_rdata <= 32'h0;
+        biu_rresp  <=0;
     end
     else if(M_AXI_RVALID&!M_AXI_RREADY) begin
-        M_AXI_RREADY <= 1'b1;  // 始终准备好接收读数据   
-        biu_ready   <=1;   
+        M_AXI_RREADY <= 1'b1;  // 始终准备好接收读数据    
         biu_rdata   <= M_AXI_RDATA;
-        biu_rresp   <= M_AXI_RRESP;
+        biu_rresp   <= M_AXI_RRESP==2'b00 ?  1 : 0;
     end
     else begin
         M_AXI_RREADY <= 1'b0; 
         biu_rdata<=biu_rdata;
-        biu_ready<=0;
+        biu_rresp  <=0;
     end
 end
 

@@ -39,24 +39,24 @@ module ysyx_25030085_lsu (//数据存储器
     output reg [3:0]            lsu_strb    ,       // 字节选通信号
 
     // 来自BIU的信号
-    input   [1:0]               biu_rresp   ,      
-    input   [1:0]               biu_wresp   ,
+    input                       biu_rresp   ,      
+    input                       biu_wresp   ,
     input  [31:0]               biu_rdata       // 读取的数据
 
 
 );
-parameter IDLE=0;
-parameter STORE=1;
-parameter OUTPUT=2;
+    parameter IDLE=0;
+    parameter STORE=1;
+    parameter OUTPUT=2;
 
-localparam OP_LW  = 3'b000;  // 加载字(32位，有符号)
-localparam OP_LH  = 3'b001;  // 加载半字(16位，有符号)
-localparam OP_LB  = 3'b010;  // 加载字节(8位，有符号)
-localparam OP_LHU = 3'b011;  // 加载半字(16位，无符号)
-localparam OP_LBU = 3'b100;  // 加载字节(8位，无符号)
-localparam OP_SW  = 3'b101;  // 存储字(32位)
-localparam OP_SH  = 3'b110;  // 存储半字(16位)
-localparam OP_SB  = 3'b111;  // 存储字节(8位)
+    localparam OP_LW  = 3'b000;  // 加载字(32位，有符号)
+    localparam OP_LH  = 3'b001;  // 加载半字(16位，有符号)
+    localparam OP_LB  = 3'b010;  // 加载字节(8位，有符号)
+    localparam OP_LHU = 3'b011;  // 加载半字(16位，无符号)
+    localparam OP_LBU = 3'b100;  // 加载字节(8位，无符号)
+    localparam OP_SW  = 3'b101;  // 存储字(32位)
+    localparam OP_SH  = 3'b110;  // 存储半字(16位)
+    localparam OP_SB  = 3'b111;  // 存储字节(8位)
 
     reg [1:0]           state;
     reg                 has_data;
@@ -117,14 +117,14 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
         STORE:begin
             lsu_req<=0;
             if(MemRead)begin//  加载lw
-            if(biu_rresp==2'b01)begin
+            if(biu_rresp)begin
                 
                 mem_rdata<=lsu_rdata ;
                 state<=OUTPUT;
             end                       
             end
             else if(MemWrite)begin//写
-            if(biu_wresp==2'b01)begin
+            if(biu_wresp)begin
                 state<=OUTPUT;
             end             
             end  
@@ -148,7 +148,7 @@ localparam OP_SB  = 3'b111;  // 存储字节(8位)
 always @(*) begin
     lsu_rdata = 32'h00000000;
     if(state==STORE)begin
-        if(biu_rresp==2'b01)begin
+        if(biu_rresp)begin
             case (MemOp)
                 OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展
                 

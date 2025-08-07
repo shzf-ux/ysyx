@@ -40,7 +40,7 @@ module ysyx_25030085_ex(
             ctrl<=0;
             rs1_data<=0;
             rs2_data<=0;
-            pc<=32'h8000_0000;
+            pc<=32'h2000_0000;
             reg_a5<=0;
             imm<=0;
             state<=IDLE;

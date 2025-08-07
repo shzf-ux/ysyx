@@ -1,6 +1,10 @@
-import "DPI-C" function void display_call_func (input int pc, input int dnpc);
-import "DPI-C" function void display_ret_func (input int pc, input int dnpc);
-
+import "DPI-C" function void dpi_send_signals(
+    input int pc,       // 32位信号用 [31:0] 表示
+    input int inst,     // 32位指令
+    input        valid,     // 单比特用 input 表示（默认reg类型）
+    input        ready,
+    input        done
+);
 module ysyx_25030085_if (
     input               clock         ,
     input               reset         ,
@@ -9,7 +13,7 @@ module ysyx_25030085_if (
     input [31:0]        next_pc     ,          // 下一个 PC 值
 
     //biu
-    input               biu_ready   ,
+    input               biu_rresp   ,
     input      [31:0]   biu_rdata   ,
     output reg [31:0]   if_addr     ,
     output reg          if_req      ,
@@ -19,6 +23,8 @@ module ysyx_25030085_if (
     output  reg [31:0]  pc          ,       // PC 值输出
     input               out_ready         // 下游准备接收
 );
+
+
 
     reg [31:0]        current_pc;
     reg [31:0]        inst_reg;      // 用于暂存当前PC值
@@ -32,23 +38,27 @@ module ysyx_25030085_if (
 
     state_t state;
 
+    
+
 // 取指令逻辑
 always @(posedge clock or posedge reset) begin
     if(reset) begin
         if_req    <= 0;
-        current_pc<= 32'h80000000; 
-        state<=IDLE;
+        current_pc<= 32'h20000000; 
+        pc       = 32'h20000000;
+        state   <=IDLE;
+
     end
     else begin
         case (state)
             IDLE:begin
             if_req    <= 1;                  // 发起取指请求
             if_addr   <= current_pc;         // 发送当前PC作为取指地址  
-            state<=REQUEST; 
+            state     <=REQUEST; 
             end 
             REQUEST:begin
                 if_req<=0;
-                if(biu_ready)begin
+                if( biu_rresp )begin
                 inst_reg  <= biu_rdata;       // 锁存取到的指令
                 if(out_ready)begin
                 state<=OUTPUT;
@@ -78,12 +88,17 @@ always @(*) begin
             inst=inst_reg;
             pc=current_pc;
         end 
-        default: begin
-            
+        default: begin 
         end
     endcase
     
 end
+
+
+
+
+
+
 
 endmodule
     

@@ -124,3 +124,28 @@ void display_memory_write(uint32_t addr, uint32_t data)
 {
     printf(ANSI_FMT("write memory at pc: ", ANSI_FG_YELLOW) "0x%08x, data: 0x%08x\n", addr,  data);
 }
+
+
+
+
+
+
+
+extern "C" void flash_read(int32_t addr, int32_t *data)
+{
+
+    assert(0);
+}
+extern "C" void mrom_read(int32_t addr, int32_t *data)
+{
+    if (data == NULL)
+    {
+        printf("Error: mrom_read: data pointer is NULL\n");
+        return;
+    }
+   
+   // printf("addr:%08x\n", addr);
+    int32_t val = pmem_read(addr, 4);
+    *data = val;
+   // printf("data:%08x\n", val);
+}

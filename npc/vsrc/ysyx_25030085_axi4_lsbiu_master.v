@@ -18,38 +18,57 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     input               lsu_req     ,       //请求信号
 
     output reg  [31:0]  biu_rdata   ,
-    output reg  [1:0]   biu_wresp   ,
-    output reg  [1:0]   biu_rresp   , 
+    output reg          biu_wresp   ,       //写响应
+    output reg          biu_rresp   ,       //读响应
 
 
     
     // AXI4-Lite Master接口信号
-    //读地址
-    output reg  [31:0]  M_AXI_ARADDR,
-    output reg          M_AXI_ARVALID,
-    input               M_AXI_ARREADY,
+    //************读地址通道**************//
+    output reg  [31:0]  M_AXI_ARADDR    ,
+    output reg          M_AXI_ARVALID   ,
+    input               M_AXI_ARREADY   ,
+    //***********新增信号***************//
+    output reg  [3:0]   M_AXI_ARID      , //读事务id，为乱序传输发起的多个请求分配id
+    output reg  [1:0]   M_AXI_ARBURST   , //读突发类型，设置01，每次按照arsize大小递增度对地址读取
+    output reg  [7:0]   M_AXI_ARLEN     , //突发长度，一次读取的地址数-1，传输1个数据设置0；
+    output reg  [2:0]   M_AXI_ARSIZE    , //数据字节数，1表示读1个字节
 
-    //读数据
-    input       [31:0]  M_AXI_RDATA ,
-    input       [1:0]   M_AXI_RRESP ,
-    input               M_AXI_RVALID,
-    output reg          M_AXI_RREADY,
+
+    //************读数据通道**************//
+    input       [31:0]  M_AXI_RDATA     ,
+    input       [1:0]   M_AXI_RRESP     , //00为ok
+    input               M_AXI_RVALID    ,
+    output reg          M_AXI_RREADY    ,
+    //***********新增信号***************//
+    input       [3:0]   M_AXI_RID       ,//对应响应事务对应id   
+    input               M_AXI_RLAST     ,//是否最后一个数据，0表示数据未处理，1表示最后一个数据
+
     
-    //写地址
+    //************写地址通道*************//
     output reg  [31:0]  M_AXI_AWADDR,
     output reg          M_AXI_AWVALID,
     input               M_AXI_AWREADY,
+    //***********新增信号***************//
+    output reg  [3:0]   M_AXI_AWID      , //写事务id，为乱序传输发起的多个请求分配id
+    output reg  [1:0]   M_AXI_AWBURST   , //写突发类型，设置01，每次按照arsize大小递增度对地址读取
+    output reg  [7:0]   M_AXI_AWLEN     , //突发长度，一次读取的地址数-1，传输1个数据设置0；
+    output reg  [2:0]   M_AXI_AWSIZE    , //数据字节数，1表示写1个字节  
+
     
-    //写数据
-    output reg  [31:0]  M_AXI_WDATA ,
-    output reg  [3:0]   M_AXI_WSTRB ,
-    output reg          M_AXI_WVALID,
-    input               M_AXI_WREADY,
+    //************写数据通道*************//
+    output reg  [31:0]  M_AXI_WDATA     ,
+    output reg  [3:0]   M_AXI_WSTRB     ,
+    output reg          M_AXI_WVALID    ,
+    input               M_AXI_WREADY    ,
+   //***********新增信号***************//  
+    output              M_AXI_WLAST     ,//发送数据的一方来确定last信号
 
     //写响应
-    input       [1:0]   M_AXI_BRESP ,
-    input               M_AXI_BVALID,
-    output reg          M_AXI_BREADY
+    input       [1:0]   M_AXI_BRESP     ,
+    input               M_AXI_BVALID    ,
+    output reg          M_AXI_BREADY    ,
+    input       [3:0]   M_AXI_BID
 );
 
     wire         AW_active              ;
@@ -118,33 +137,45 @@ wire [LFSR_WIDTH-1:0] write_rand_delay =
 
 
 
+// 读地址通道（单周期传输专用）
+// 补充AR_active定义：地址通道握手成功（主设备有效且从设备就绪）
+assign AR_active = M_AXI_ARVALID && M_AXI_ARREADY;
 
-// 读地址通道
 always @(posedge clock or negedge reset) begin
-    if (reset) begin
-        M_AXI_ARADDR <= 32'h0;
+    if (reset) begin  
+        M_AXI_ARADDR  <= 32'h0;
         M_AXI_ARVALID <= 1'b0;
-    end else if (lsu_req &&lsu_rwe&&!M_AXI_ARVALID && !M_AXI_AWVALID&&!read_pending) begin
-        read_pending<=1;
-        read_cnt    <=0;
-    end
-
-    `ifndef DISABLE_LS_DELAY
-        else if(read_pending&&read_cnt<read_rand_delay)begin
-            read_cnt<=read_cnt+1;       
-        end 
-    `endif 
-
-    else if(read_pending&&read_cnt==read_rand_delay)begin
-        M_AXI_ARVALID<=1;
-        M_AXI_ARADDR<=lsu_addr;
-        read_pending<=0;
-        read_cnt    <=0;      
+        M_AXI_ARBURST <= 2'b01;  // 固定为递增模式（单周期传输可固定）
+        M_AXI_ARLEN   <= 8'd0;   // 固定为单周期（传输1个数据，ARLEN = 0）
+        M_AXI_ARSIZE  <= 3'd2;   //3'd2对应4字节
+        read_pending  <= 1'b0;
+        read_cnt      <= 8'd0;     
     end 
-    else if (AR_active) begin//地址握手成功置零
-        M_AXI_ARVALID <= 1'b0;
+    // 触发读请求：当有读请求且当前无读写操作、无未完成读请求时
+    else if (lsu_req && lsu_rwe && !M_AXI_ARVALID && !M_AXI_AWVALID && !read_pending) begin
+        read_pending <= 1'b1; 
+        read_cnt     <= 8'd0; 
+    end
+    // 延迟处理（如果启用）
+    `ifndef DISABLE_LS_DELAY
+    else if (read_pending && read_cnt < read_rand_delay) begin
+        read_cnt <= read_cnt + 1'b1;  // 延迟计数递增
+    end
+    `endif
+    // 延迟结束，发起读地址请求
+    else if (read_pending && read_cnt == read_rand_delay) begin
+        M_AXI_ARVALID <= 1'b1;    
+        M_AXI_ARADDR  <= lsu_addr;
+       
+        read_pending  <= 1'b0;    
+        read_cnt      <= 8'd0;   
+    end
+    
+    else if (AR_active) begin
+        M_AXI_ARVALID <= 1'b0;   
     end
 end
+    
 
 
 
@@ -157,7 +188,7 @@ always @(posedge clock or negedge reset) begin
     else if(M_AXI_RVALID&!M_AXI_RREADY) begin
         M_AXI_RREADY <= 1'b1;  // 始终准备好接收读数据      
         biu_rdata <= M_AXI_RDATA;
-        biu_rresp <= M_AXI_RRESP;
+        biu_rresp <= M_AXI_RRESP==2'b00 ?  1 : 0;
     end
     else begin
         M_AXI_RREADY <= 1'b0;
@@ -169,8 +200,13 @@ end
 // 写地址通道
 always @(posedge clock or negedge reset) begin
     if (reset) begin
-        M_AXI_AWADDR <= 32'h0;
+        M_AXI_AWADDR  <= 32'h0;
         M_AXI_AWVALID <= 1'b0;
+        M_AXI_AWBURST <= 2'b01;
+        M_AXI_AWLEN   <= 8'd0; 
+        M_AXI_AWSIZE  <= 3'd2; 
+        write_addr_pending<=0;
+        write_addr_cnt    <=0;
     end else if (lsu_req && lsu_wwe && !M_AXI_AWVALID && !M_AXI_ARVALID&&!write_addr_pending) begin
         write_addr_pending<=1;
         write_addr_cnt    <=0;
@@ -198,9 +234,10 @@ end
 // 写数据通道
 always @(posedge clock or negedge reset) begin
     if (reset) begin
-        M_AXI_WDATA <= 32'h0;
-        M_AXI_WSTRB <= 4'h0;
-        M_AXI_WVALID <= 1'b0;
+        M_AXI_WDATA     <= 32'h0;
+        M_AXI_WSTRB     <= 4'h0;
+        M_AXI_WVALID    <= 1'b0;
+        M_AXI_WLAST     <= 1'b0;
     end else if (lsu_req && lsu_wwe && !M_AXI_WVALID&&!write_data_pending) begin
         strb_reg<=lsu_strb ;          //锁存strb，这个只持续1周期
         write_data_pending<=1;
@@ -214,14 +251,18 @@ always @(posedge clock or negedge reset) begin
     `endif 
 
     else if(write_data_pending&&write_data_cnt==write_rand_delay)begin
-        write_data_pending<=0;
-        write_data_cnt<=0;
-        M_AXI_WDATA <= lsu_wdata;
-        M_AXI_WSTRB <= strb_reg;
-        M_AXI_WVALID <= 1'b1;
+        write_data_pending  <=  0           ;
+        write_data_cnt      <=  0           ;
+        M_AXI_WDATA         <=  lsu_wdata   ;
+        M_AXI_WSTRB         <=  strb_reg    ;
+        M_AXI_WVALID        <=  1'b1        ;
+        M_AXI_WLAST         <=  1'b1        ;       //仅1个数据，因此wlast置1
     end
     else if (W_active) begin
         M_AXI_WVALID <= 1'b0;
+    end
+    else begin
+        M_AXI_WLAST    <= 1'b0;
     end
 end
 
@@ -234,7 +275,7 @@ always @(posedge clock or negedge reset) begin
     end 
     else if(M_AXI_BVALID&!M_AXI_BREADY)begin
         M_AXI_BREADY <= 1'b1;
-        biu_wresp<=M_AXI_BRESP ;
+        biu_wresp<=M_AXI_BRESP==2'b00 ?  1 : 0 ;
     end
     else begin
        M_AXI_BREADY <= 1'b0; 

@@ -1,6 +1,7 @@
 main.o: /home/zzy/ysyx-workbench/npc/csrc/main.cpp \
  /home/zzy/ysyx-workbench/npc/csrc/common.h \
  /home/zzy/ysyx-workbench/npc/include/generated/autoconf.h \
+ /usr/local/share/verilator/include/vltstd/svdpi.h \
  /usr/local/share/verilator/include/verilated.h \
  /usr/local/share/verilator/include/verilatedos.h \
  /usr/local/share/verilator/include/verilated_config.h \
@@ -10,5 +11,4 @@ main.o: /home/zzy/ysyx-workbench/npc/csrc/main.cpp \
  /usr/local/share/verilator/include/verilated.h \
  /usr/local/share/verilator/include/verilated_trace.h \
  /usr/local/share/verilator/include/verilated_trace_defs.h \
- ../obj_dir/Vysyx_25030085_top.h \
- /usr/local/share/verilator/include/vltstd/svdpi.h
+ ../obj_dir/VysyxSoCFull.h

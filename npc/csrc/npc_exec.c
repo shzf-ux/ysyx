@@ -1,6 +1,7 @@
 #include "common.h"
 #include <dlfcn.h>
 #include "difftest/dut.h"
+
 #define MAX_EXE 1000000
 #define MAX_VCD 3000000
 
@@ -21,22 +22,24 @@ void npc_exec(uint64_t n)
     int batch_mode = (int)n == -1;
     while (flag_stop == 0 && (n--) > 0)
     {
-        top->clock = !top->clock;
-        int is_rising_edge = (top->clock == 1);//记录上升沿
+        soc_top->clock = !soc_top->clock;
+        int is_rising_edge = (soc_top->clock == 1);//记录上升沿
         //握手
-        int valid = top->top_valid;
-        int ready = top->top_ready;
+        int valid = top.valid;
+        int ready = top.ready;
         int inst_fetch = valid && ready;
-        int inst_t = top->top_inst;
+        int inst_t = top.inst;
 
-// printf("pc:%08x\n", top->top_pc);
+// printf("pc:%08x\n", top.pc);
 #ifdef CONFIG_ITRACE_COND
-
+       // printf("simtime:%d\n", sim_time);
+       // printf("pc:%08x\n", top.pc);
+       // printf("inst:%08x\n", top.inst);
         if (is_rising_edge && !batch_mode && inst_fetch)
         {
             s = (LogBuf *)malloc(sizeof(LogBuf));
         char *p = s->logbuf;
-        p += snprintf(p, sizeof(s->logbuf), "%08x:", top->top_pc);
+        p += snprintf(p, sizeof(s->logbuf), "%08x:", top.pc);
         int ilen =4;
         int i;
         uint8_t *inst = (uint8_t *)&inst_t; // 储存指令，并把指令分为四段
@@ -58,23 +61,23 @@ void npc_exec(uint64_t n)
         void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
         disassemble(p, s->logbuf + sizeof(s->logbuf) - p, // 向buf加入反汇编后的内容
-                    top->top_pc, (uint8_t *)&inst_t, ilen);
+                    top.pc, (uint8_t *)&inst_t, ilen);
 
         printf("%s\n", s->logbuf);
         free(s);
         }
        #endif
-        top->eval();
-        if (is_rising_edge&&top->inst_done)
+        soc_top->eval();
+        if (is_rising_edge&&top.done)
         {
            // printf("simtime:%d\n", sim_time);
-           // printf("pc:%08x\n", top->top_pc);
+           // printf("pc:%08x\n", top.pc);
             #ifdef CONFIG_DIFFTEST
-            difftest_step(top->top_pc);
+            difftest_step(top.pc);
             #endif
         }
-        top->eval();
-        //vcd->dump(sim_time);
+        soc_top->eval();
+        vcd->dump(sim_time);
         if(sim_time>MAX_VCD){
             //vcd->dump(sim_time);
           //  return;

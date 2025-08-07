@@ -1,4 +1,28 @@
 #include"common.h"
+
+//获得全局变量的pc值
+ Top_Module top ={0};
+
+ extern "C" void dpi_send_signals(
+     uint32_t pc,
+     uint32_t inst,
+     unsigned char valid,
+     unsigned char ready,
+     unsigned char done)
+ {
+        top.pc = pc;
+        top.inst = inst;
+        top.valid = valid;
+        top.ready = ready;
+        top.done = done;
+        // 将值写入全局共享变量
+       
+ }
+
+
+
+
+
 extern  int flag_stop ;
 extern "C" void ebreak_instruction(uint32_t inst)
 {
@@ -39,7 +63,7 @@ extern "C" void info_register(uint32_t reg_value,int en_display)
        if (reg_index < 32)
        {
               CPU_state.gpr[reg_index] = reg_value;
-              CPU_state.pc = top->top_pc;
+              CPU_state.pc = top.pc;
               
               if (en_display)
               {

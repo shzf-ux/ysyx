@@ -7,9 +7,12 @@ int sim_time = 0;
 
 void init_monitor(int, char *[]);
 void sdb_mainloop();
-Vysyx_25030085_top *top = new Vysyx_25030085_top;
+
+VysyxSoCFull *soc_top = new VysyxSoCFull;
 VerilatedVcdC *vcd = new VerilatedVcdC;
 CPU CPU_state;
+
+
 
 int main(int argc, char **argv)
 {
@@ -20,7 +23,7 @@ int main(int argc, char **argv)
     if (flag_stop == 2) // 不合理
     {
         printf("%sHIT BAD TRAP  %s", ANSI_FG_RED, ANSI_NONE);
-        printf("at pc = %08x\n", top->top_pc);
+        printf("at pc = %08x\n", top.pc);
         NPC_State = 2;
 
     }
@@ -28,7 +31,7 @@ int main(int argc, char **argv)
     else if(flag_stop==1||flag_stop==0)//遇到ebreak指令
     {
         printf("%sHIT GOOD TRAP  %s", ANSI_FG_GREEN, ANSI_NONE);
-        printf("at pc = %08x\n", top->top_pc);
+        printf("at pc = %08x\n", top.pc);
         NPC_State = 0;
     }
     else
@@ -36,7 +39,7 @@ int main(int argc, char **argv)
 
     // 清理
     vcd->close();
-    delete top;
+    delete soc_top;
     delete vcd;
 
     return NPC_State;

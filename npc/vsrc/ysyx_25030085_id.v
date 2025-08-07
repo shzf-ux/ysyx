@@ -38,10 +38,11 @@ module ysyx_25030085_id (
 
 
 
+
     always @(posedge clock or posedge reset) begin
       if(reset)begin
         inst<=0;
-        pc<=32'h8000_0000;
+        pc<=32'h2000_0000;
         state<=IDLE;
       end
       else begin
