@@ -23,18 +23,51 @@ void display_memory_write(uint32_t addr, uint32_t data);
 #if   defined(CONFIG_PMEM_MALLOC)
     static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
-    static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
+    static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};//rom,程序加载的地方
 #endif
+#define IS_ROM(addr) (addr >= 0x20000000 && addr < 0x20000fff)
+#define IS_SRAM(addr) (addr >= 0x0f000000 && addr < 0x0f001fff)
 
-uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
+    uint8_t *guest_to_host(paddr_t paddr)
+    {
+      // ROM 大小为 4K（0x1000），映射到 pmem 起始位置
+      if (IS_ROM(paddr))
+      {
+        uint32_t offset = paddr - 0x20000000;
+        // 检查 ROM 地址是否越界（可选，增强健壮性）
+        if (offset >= 0x1000)
+          return NULL; // 超出 4K ROM 范围
+        return pmem + offset;
+      }
+      // SRAM 大小为 8K（0x2000），映射到 ROM 之后的区域（pmem + 0x1000）
+      else if (IS_SRAM(paddr))
+      {
+        uint32_t offset = paddr - 0x0f000000;
+        // 检查 SRAM 地址是否越界
+        if (offset >= 0x2000)
+          return NULL;                 // 超出 8K SRAM 范围
+        return pmem + 0x1000 + offset; // 偏移 4K 存放 SRAM，避免与 ROM 重叠
+      }
+      // 其他地址（如外设）的映射逻辑（根据需求调整）
+      else
+      {
+        // 确保不与 ROM/SRAM 重叠，例如从 pmem + 0x3000 开始
+        uint32_t offset = paddr - CONFIG_MBASE;
+        if (offset + 0x3000 >= CONFIG_MSIZE)
+          return NULL; // 检查总大小是否足够
+        return pmem + 0x3000 + offset;
+      }
+    }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
 static word_t pmem_read(paddr_t addr, int len) {
+ 
   word_t ret = host_read(guest_to_host(addr), len);
   return ret;
 }
 
 static void pmem_write(paddr_t addr, int len, word_t data) {
+  
   host_write(guest_to_host(addr), len, data);
 }
 
@@ -48,7 +81,6 @@ void init_mem() {
   pmem = malloc(CONFIG_MSIZE);
   assert(pmem);
 #endif
-  printf("1");
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }

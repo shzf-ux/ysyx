@@ -86,7 +86,8 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     assign       AR_active = M_AXI_ARVALID & M_AXI_ARREADY;     //读
     assign       R_active  = M_AXI_RVALID  & M_AXI_RREADY ;  
 
-    reg [3:0]strb_reg;//无延迟可以不加  //锁存strb，这个只持续1周期   
+    reg [3:0]  strb_reg;//无延迟可以不加  //锁存strb，这个只持续1周期  
+    reg [31:0] wdata_reg; //锁存strb，这个只持续1周期 
 
     // 读延迟计数器
     reg [LFSR_WIDTH-1:0] read_cnt;
@@ -240,6 +241,7 @@ always @(posedge clock or negedge reset) begin
         M_AXI_WLAST     <= 1'b0;
     end else if (lsu_req && lsu_wwe && !M_AXI_WVALID&&!write_data_pending) begin
         strb_reg<=lsu_strb ;          //锁存strb，这个只持续1周期
+        wdata_reg<=lsu_wdata;
         write_data_pending<=1;
         write_data_cnt<=0;
     end
@@ -253,7 +255,7 @@ always @(posedge clock or negedge reset) begin
     else if(write_data_pending&&write_data_cnt==write_rand_delay)begin
         write_data_pending  <=  0           ;
         write_data_cnt      <=  0           ;
-        M_AXI_WDATA         <=  lsu_wdata   ;
+        M_AXI_WDATA         <=  wdata_reg   ;
         M_AXI_WSTRB         <=  strb_reg    ;
         M_AXI_WVALID        <=  1'b1        ;
         M_AXI_WLAST         <=  1'b1        ;       //仅1个数据，因此wlast置1
@@ -268,20 +270,32 @@ end
 
 
 
-// 写响应通道
 always @(posedge clock or negedge reset) begin
     if (reset) begin
         M_AXI_BREADY <= 1'b0;      
     end 
-    else if(M_AXI_BVALID&!M_AXI_BREADY)begin
-        M_AXI_BREADY <= 1'b1;
-        biu_wresp<=M_AXI_BRESP==2'b00 ?  1 : 0 ;
-    end
     else begin
-       M_AXI_BREADY <= 1'b0; 
-       biu_wresp    <=0;
+                                 // 始终准备好接收响应,而不是valid置位才ready置，那样延迟1111周期                              
+        M_AXI_BREADY <= 1'b1;  
+        // 仅在握手成功时锁存响应结果
+        if (M_AXI_BVALID && M_AXI_BREADY) begin
+            biu_wresp <= (M_AXI_BRESP==2'b00) ? 1 : 0;
+        end
     end
 end
+
+// 改为同步检测（仅在有效握手时判断）
+always @(posedge clock) begin
+    if(M_AXI_BVALID && M_AXI_BREADY) begin  // 确保在握手成功时检查
+        if(M_AXI_BRESP != 2'b00) begin
+            $display("[ERROR] Write error at %t, addr=%h, resp=%b", 
+                    $time, M_AXI_AWADDR, M_AXI_BRESP);
+        end
+    end
+end
+
+
+
 
 
 

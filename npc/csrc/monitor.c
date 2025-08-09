@@ -142,7 +142,7 @@ void init_monitor(int argc, char *argv[])
 {
     welcome();
     parse_args(argc, argv); // 解析命令行参数
-  //  parse_elf(elf_file); // 传入一个elf文件
+    parse_elf(elf_file); // 传入一个elf文件
     init_mem();
 
     init_isa();
@@ -150,7 +150,9 @@ void init_monitor(int argc, char *argv[])
     long img_size = load_img();
  
     init_disasm();
-
+   
     init_rtl(argc, argv);
-    // init_difftest(diff_so_file, img_size, difftest_port);
+
+    init_difftest(diff_so_file, img_size, difftest_port);
+ 
 }

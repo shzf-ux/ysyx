@@ -22,7 +22,10 @@ module ysyx_25030085_regfile (
     reg [31:0]      register [0:31] ;
     reg             is_info_register;
     reg             is_en_display   ;
-
+// initial begin
+//   $display("Hierarchy path of regfile: %m"); 
+//   // %m 会打印当前作用域的完整层次路径，运行后根据输出调整 C 代码中的路径
+// end
 
     integer i; 
     initial begin

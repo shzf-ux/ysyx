@@ -14,7 +14,7 @@ extern "C"
 void set_scope()
 {
 
-    svScope scope = svGetScopeFromName("ysyxSoCFull.regfile");
+    svScope scope = svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.regfile");
     if (!scope)
     {
         fprintf(stderr, "Error: Regfile scope not found!\n");

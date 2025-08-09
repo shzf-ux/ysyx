@@ -3,7 +3,7 @@
 #include "difftest/dut.h"
 
 #define MAX_EXE 1000000
-#define MAX_VCD 3000000
+#define MAX_VCD 300000
 
 extern int sim_time;
 extern int flag_stop;
@@ -70,17 +70,16 @@ void npc_exec(uint64_t n)
         soc_top->eval();
         if (is_rising_edge&&top.done)
         {
-           // printf("simtime:%d\n", sim_time);
+           printf("simtime:%d\n", sim_time);
            // printf("pc:%08x\n", top.pc);
             #ifdef CONFIG_DIFFTEST
             difftest_step(top.pc);
             #endif
         }
         soc_top->eval();
-        vcd->dump(sim_time);
-        if(sim_time>MAX_VCD){
-            //vcd->dump(sim_time);
-          //  return;
+       vcd->dump(sim_time);
+        if(sim_time>95000){
+            //return;
         }
         sim_time++;
    }

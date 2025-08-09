@@ -59,7 +59,7 @@ all: compile run
 
 # 编译规则：调用Verilator处理Verilog和C源文件
 compile:
-	@$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
+	$(VERILATOR) $(VERILATOR_FLAGS) $(SOURCES) $(TESTBENCH)
 
 # 查看波形
 wave:
@@ -68,7 +68,7 @@ wave:
 
 
 run: compile
-	@$(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
+	$(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
 
 
 

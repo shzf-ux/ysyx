@@ -198,37 +198,31 @@ always @(*) begin
     end
 end
 
-
-// 存储操作：生成字节选通和写数据,发送biu给
 always @(*) begin
     lsu_strb = 4'b0000;
-    lsu_wdata = wdata;
+    lsu_wdata = wdata;  // 默认值
     
-    if (lsu_req && lsu_wwe&&state==STORE) begin
+    if (lsu_req && lsu_wwe && state==STORE) begin
         case (MemOp)
-            OP_SW: lsu_strb = 4'b1111;  // 字操作，所有字节有效
+            OP_SW: begin
+                lsu_strb = 4'b1111;  // 字操作，所有字节有效
+            end
             
             OP_SH: begin
-                // 半字操作，根据地址选择高低半字
                 lsu_strb = offset[1] ? 4'b1100 : 4'b0011;
+                lsu_wdata = {16'h0, wdata[15:0]} << (8 * offset);  // 数据左移对齐
             end
             
             OP_SB: begin
-                // 字节操作，根据地址选择具体字节
-                case (offset)
-                    2'b00: begin lsu_strb = 4'b0001; end
-                    2'b01: begin lsu_strb = 4'b0010; end
-                    2'b10: begin lsu_strb = 4'b0100; end
-                    2'b11: begin lsu_strb = 4'b1000; end
-                endcase
+               
+                lsu_strb = 4'b0001 << offset;  // 根据偏移选择字节位置
+                lsu_wdata = {24'h0, wdata[7:0]} << (8 * offset);  // 数据左移对齐
             end
-            default:begin
-                lsu_strb=4'b0000;
-            end
+            
+            default: lsu_strb = 4'b0000;
         endcase
     end
 end
-
 
 
 

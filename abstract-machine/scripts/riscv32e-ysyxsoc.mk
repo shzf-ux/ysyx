@@ -8,5 +8,3 @@ AM_SRCS += riscv/ysyxsoc/libgcc/div.S \
            riscv/ysyxsoc/libgcc/multi3.c \
            riscv/ysyxsoc/libgcc/ashldi3.c \
            riscv/ysyxsoc/libgcc/unused.c
-
-
