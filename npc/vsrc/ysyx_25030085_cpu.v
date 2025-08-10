@@ -224,47 +224,6 @@ end
     wire [3:0]  ls_axi4_bid     ;        // 存储器返回LS的写响应事务ID（新增，对应awid）
 
 
-    // ------------------------------
-    // 仲裁器模块到xbar
-    // ------------------------------
-    // 读地址通道信号
-    wire          arbit_xbar_arvalid ;  // 读地址有效
-    wire          arbit_xbar_arready ;  // 读地址就绪
-    wire [31:0]   arbit_xbar_araddr  ;  // 读地址
-    wire [3:0]    arbit_xbar_arid    ;  // 读事务ID
-    wire [7:0]    arbit_xbar_arlen   ;  // 读突发长度
-    wire [2:0]    arbit_xbar_arsize  ;  // 读数据位宽
-    wire [1:0]    arbit_xbar_arburst ;  // 读突发类型
-
-    // 读数据通道信号
-    wire          arbit_xbar_rvalid  ;  // 读数据有效
-    wire          arbit_xbar_rready  ;  // 读数据就绪
-    wire [31:0]   arbit_xbar_rdata   ;  // 读数据
-    wire [1:0]    arbit_xbar_rresp   ;  // 读响应
-    wire [3:0]    arbit_xbar_rid     ;  // 读响应ID
-    wire          arbit_xbar_rlast   ;  // 读最后一个数据标记
-
-    // 写地址通道信号
-    wire          arbit_xbar_awvalid ;  // 写地址有效
-    wire          arbit_xbar_awready ;  // 写地址就绪
-    wire [31:0]   arbit_xbar_awaddr  ;  // 写地址
-    wire [3:0]    arbit_xbar_awid    ;  // 写事务ID
-    wire [7:0]    arbit_xbar_awlen   ;  // 写突发长度
-    wire [2:0]    arbit_xbar_awsize  ;  // 写数据位宽
-    wire [1:0]    arbit_xbar_awburst ;  // 写突发类型
-
-    // 写数据通道信号
-    wire          arbit_xbar_wvalid  ;  // 写数据有效
-    wire          arbit_xbar_wready  ;  // 写数据就绪
-    wire [31:0]   arbit_xbar_wdata   ;  // 写数据
-    wire [3:0]    arbit_xbar_wstrb   ;  // 写字节选通
-    wire          arbit_xbar_wlast   ;  // 写最后一个数据标记
-
-    // 写响应通道信号
-    wire          arbit_xbar_bvalid  ;  // 写响应有效
-    wire          arbit_xbar_bready  ;  // 写响应就绪
-    wire [1:0]    arbit_xbar_bresp   ;  // 写响应
-    wire [3:0]    arbit_xbar_bid     ;  // 写响应ID
 
 
     // ------------------------------
@@ -515,123 +474,55 @@ lsbiu(
 
 
 
-ysyx_25030085_arbiter arbiter(
-    .clock              	(clock               ),
-    .reset              	(reset               ),
-    //lfbiu-->arbit
-    .if_arvalid         	(if_axi4_arvalid          ),
-    .if_arready         	(if_axi4_arready          ),
-    .if_araddr          	(if_axi4_araddr           ),
-    .if_arid            	(if_axi4_arid             ),
-    .if_arlen           	(if_axi4_arlen            ),
-    .if_arsize          	(if_axi4_arsize           ),
-    .if_arburst         	(if_axi4_arburst          ),
-    .if_rvalid          	(if_axi4_rvalid           ),
-    .if_rready          	(if_axi4_rready           ),
-    .if_rdata           	(if_axi4_rdata            ),
-    .if_rresp           	(if_axi4_rresp            ),
-    .if_rid             	(if_axi4_rid              ),
-    .if_rlast           	(if_axi4_rlast            ),
-    //lsbiu-->arbit
-    .ls_arvalid         	(ls_axi4_arvalid          ),
-    .ls_arready         	(ls_axi4_arready          ),
-    .ls_araddr          	(ls_axi4_araddr           ),
-    .ls_arid            	(ls_axi4_arid             ),
-    .ls_arlen           	(ls_axi4_arlen            ),
-    .ls_arsize          	(ls_axi4_arsize           ),
-    .ls_arburst         	(ls_axi4_arburst          ),
-    .ls_rvalid          	(ls_axi4_rvalid           ),
-    .ls_rready          	(ls_axi4_rready           ),
-    .ls_rdata           	(ls_axi4_rdata            ),
-    .ls_rresp           	(ls_axi4_rresp            ),
-    .ls_rid             	(ls_axi4_rid              ),
-    .ls_rlast           	(ls_axi4_rlast            ),
-    .ls_awvalid         	(ls_axi4_awvalid          ),
-    .ls_awready         	(ls_axi4_awready          ),
-    .ls_awaddr          	(ls_axi4_awaddr           ),
-    .ls_awid            	(ls_axi4_awid             ),
-    .ls_awlen           	(ls_axi4_awlen            ),
-    .ls_awsize          	(ls_axi4_awsize           ),
-    .ls_awburst         	(ls_axi4_awburst          ),
-    .ls_wvalid          	(ls_axi4_wvalid           ),
-    .ls_wready          	(ls_axi4_wready           ),
-    .ls_wdata           	(ls_axi4_wdata            ),
-    .ls_wstrb           	(ls_axi4_wstrb            ),
-    .ls_wlast           	(ls_axi4_wlast            ),
-    .ls_bvalid          	(ls_axi4_bvalid           ),
-    .ls_bready          	(ls_axi4_bready           ),
-    .ls_bresp           	(ls_axi4_bresp            ),
-    .ls_bid             	(ls_axi4_bid              ),
-   // arbit-->xbar
-    .arbit_xbar_arvalid 	(arbit_xbar_arvalid  ),
-    .arbit_xbar_arready 	(arbit_xbar_arready  ),
-    .arbit_xbar_araddr  	(arbit_xbar_araddr   ),
-    .arbit_xbar_arid    	(arbit_xbar_arid     ),
-    .arbit_xbar_arlen   	(arbit_xbar_arlen    ),
-    .arbit_xbar_arsize  	(arbit_xbar_arsize   ),
-    .arbit_xbar_arburst 	(arbit_xbar_arburst  ),
-    .arbit_xbar_rvalid  	(arbit_xbar_rvalid   ),
-    .arbit_xbar_rready  	(arbit_xbar_rready   ),
-    .arbit_xbar_rdata   	(arbit_xbar_rdata    ),
-    .arbit_xbar_rresp   	(arbit_xbar_rresp    ),
-    .arbit_xbar_rid     	(arbit_xbar_rid      ),
-    .arbit_xbar_rlast   	(arbit_xbar_rlast    ),
-    .arbit_xbar_awvalid 	(arbit_xbar_awvalid  ),
-    .arbit_xbar_awready 	(arbit_xbar_awready  ),
-    .arbit_xbar_awaddr  	(arbit_xbar_awaddr   ),
-    .arbit_xbar_awid    	(arbit_xbar_awid     ),
-    .arbit_xbar_awlen   	(arbit_xbar_awlen    ),
-    .arbit_xbar_awsize  	(arbit_xbar_awsize   ),
-    .arbit_xbar_awburst 	(arbit_xbar_awburst  ),
-    .arbit_xbar_wvalid  	(arbit_xbar_wvalid   ),
-    .arbit_xbar_wready  	(arbit_xbar_wready   ),
-    .arbit_xbar_wdata   	(arbit_xbar_wdata    ),
-    .arbit_xbar_wstrb   	(arbit_xbar_wstrb    ),
-    .arbit_xbar_wlast   	(arbit_xbar_wlast    ),
-    .arbit_xbar_bvalid  	(arbit_xbar_bvalid   ),
-    .arbit_xbar_bready  	(arbit_xbar_bready   ),
-    .arbit_xbar_bresp   	(arbit_xbar_bresp    ),
-    .arbit_xbar_bid     	(arbit_xbar_bid      )
-);
-
-
-
-
-
-ysyx_25030085_xbar #(
+ysyx_25030085_arbiter#(
     .RTC_ADDR 	(32'ha0000048 ))
-xbar(
+arbiter(
     .clock       	(clock        ),
     .reset       	(reset        ),
-    .m_awaddr    	(arbit_xbar_awaddr     ),
-    .m_awvalid   	(arbit_xbar_awvalid    ),
-    .m_awid      	(arbit_xbar_awid       ),
-    .m_awlen     	(arbit_xbar_awlen      ),
-    .m_awsize    	(arbit_xbar_awsize     ),
-    .m_awburst   	(arbit_xbar_awburst    ),
-    .m_awready   	(arbit_xbar_awready    ),
-    .m_wdata     	(arbit_xbar_wdata      ),
-    .m_wstrb     	(arbit_xbar_wstrb      ),
-    .m_wvalid    	(arbit_xbar_wvalid     ),
-    .m_wlast     	(arbit_xbar_wlast      ),
-    .m_wready    	(arbit_xbar_wready     ),
-    .m_bresp     	(arbit_xbar_bresp      ),
-    .m_bvalid    	(arbit_xbar_bvalid     ),
-    .m_bid       	(arbit_xbar_bid        ),
-    .m_bready    	(arbit_xbar_bready     ),
-    .m_araddr    	(arbit_xbar_araddr     ),
-    .m_arvalid   	(arbit_xbar_arvalid    ),
-    .m_arid      	(arbit_xbar_arid       ),
-    .m_arlen     	(arbit_xbar_arlen      ),
-    .m_arsize    	(arbit_xbar_arsize     ),
-    .m_arburst   	(arbit_xbar_arburst    ),
-    .m_arready   	(arbit_xbar_arready    ),
-    .m_rready    	(arbit_xbar_rready     ),
-    .m_rdata     	(arbit_xbar_rdata      ),
-    .m_rvalid    	(arbit_xbar_rvalid     ),
-    .m_rresp     	(arbit_xbar_rresp      ),
-    .m_rlast     	(arbit_xbar_rlast      ),
-    .m_rid       	(arbit_xbar_rid        ),
+
+    .if_arvalid  	(if_axi4_arvalid   ),
+    .if_arready  	(if_axi4_arready   ),
+    .if_araddr   	(if_axi4_araddr    ),
+    .if_arid     	(if_axi4_arid      ),
+    .if_arlen    	(if_axi4_arlen     ),
+    .if_arsize   	(if_axi4_arsize    ),
+    .if_arburst  	(if_axi4_arburst   ),
+    .if_rvalid   	(if_axi4_rvalid    ),
+    .if_rready   	(if_axi4_rready    ),
+    .if_rdata    	(if_axi4_rdata     ),
+    .if_rresp    	(if_axi4_rresp     ),
+    .if_rid      	(if_axi4_rid       ),
+    .if_rlast    	(if_axi4_rlast     ),
+
+    .ls_arvalid  	(ls_axi4_arvalid   ),
+    .ls_arready  	(ls_axi4_arready   ),
+    .ls_araddr   	(ls_axi4_araddr    ),
+    .ls_arid     	(ls_axi4_arid      ),
+    .ls_arlen    	(ls_axi4_arlen     ),
+    .ls_arsize   	(ls_axi4_arsize    ),
+    .ls_arburst  	(ls_axi4_arburst   ),
+    .ls_rvalid   	(ls_axi4_rvalid    ),
+    .ls_rready   	(ls_axi4_rready    ),
+    .ls_rdata    	(ls_axi4_rdata     ),
+    .ls_rresp    	(ls_axi4_rresp     ),
+    .ls_rid      	(ls_axi4_rid       ),
+    .ls_rlast    	(ls_axi4_rlast     ),
+    .ls_awvalid  	(ls_axi4_awvalid   ),
+    .ls_awready  	(ls_axi4_awready   ),
+    .ls_awaddr   	(ls_axi4_awaddr    ),
+    .ls_awid     	(ls_axi4_awid      ),
+    .ls_awlen    	(ls_axi4_awlen     ),
+    .ls_awsize   	(ls_axi4_awsize    ),
+    .ls_awburst  	(ls_axi4_awburst   ),
+    .ls_wvalid   	(ls_axi4_wvalid    ),
+    .ls_wready   	(ls_axi4_wready    ),
+    .ls_wdata    	(ls_axi4_wdata     ),
+    .ls_wstrb    	(ls_axi4_wstrb     ),
+    .ls_wlast    	(ls_axi4_wlast     ),
+    .ls_bvalid   	(ls_axi4_bvalid    ),
+    .ls_bready   	(ls_axi4_bready    ),
+    .ls_bresp    	(ls_axi4_bresp     ),
+    .ls_bid      	(ls_axi4_bid       ),
 
     .rtc_araddr  	(rtc_araddr   ),
     .rtc_arvalid 	(rtc_arvalid  ),
@@ -677,6 +568,10 @@ xbar(
     .soc_rid     	(io_master_rid      ),
     .soc_rready  	(io_master_rready   )
 );
+
+
+
+
 
 
 

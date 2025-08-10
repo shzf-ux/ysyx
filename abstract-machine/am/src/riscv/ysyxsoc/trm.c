@@ -16,7 +16,7 @@ void putch(char ch)
 {
 
     // 使用大括号明确while循环体（即使为空）
-   //while ((inb(UART_REG_LS) & 0x20) == 0)
+   while ((inb(UART_REG_LS) & 0x20) == 0)
     {
 
     }
@@ -27,8 +27,9 @@ __attribute__((noinline)) // 阻止内联，方便观察汇编
 void init_uart(uint32_t baud)
 {
   // 1. 确保复位状态
-  outb(UART_REG_FC, 0x00); // 禁用FIFO
+
   outb(UART_REG_LC, 0x80); // 启用DLAB
+  inb(UART_REG_LC);
 
   // 2. 计算并设置波特率
   uint32_t divisor = SYSTEM_CLK / (16 * baud);

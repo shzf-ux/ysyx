@@ -1,94 +1,114 @@
-module ysyx_25030085_arbiter(
+module ysyx_25030085_arbiter#(
+    parameter RTC_ADDR = 32'ha0000048  // RTC地址（仅支持读）
+)(
+    // 全局信号
     input               clock             ,
     input               reset             ,
 
+    // IF Master 接口
     input               if_arvalid      ,  // 读地址有效
     output reg          if_arready      ,  // 读地址就绪
     input       [31:0]  if_araddr       ,  // 读地址
-    input       [3:0]   if_arid         ,  // 读事务ID（新增）
-    input       [7:0]   if_arlen        ,  // 突发长度（新增）
-    input       [2:0]   if_arsize       ,  // 数据位宽（新增）
-    input       [1:0]   if_arburst      ,  // 突发类型（新增）
+    input       [3:0]   if_arid         ,  // 读事务ID
+    input       [7:0]   if_arlen        ,  // 突发长度
+    input       [2:0]   if_arsize       ,  // 数据位宽
+    input       [1:0]   if_arburst      ,  // 突发类型
 
     output reg          if_rvalid       ,  // 读数据有效
     input               if_rready       ,  // 读数据就绪
     output reg [31:0]   if_rdata        ,  // 读数据
     output reg [1:0]    if_rresp        ,  // 读响应
-    output reg [3:0]    if_rid          ,  // 读响应ID（新增）
-    output reg          if_rlast        ,  // 读最后一个数据（新增）
+    output reg [3:0]    if_rid          ,  // 读响应ID
+    output reg          if_rlast        ,  // 读最后一个数据
     
-  
+    // LS Master 接口
     input               ls_arvalid      ,  // 读地址有效
     output reg          ls_arready      ,  // 读地址就绪
     input       [31:0]  ls_araddr       ,  // 读地址
-    input       [3:0]   ls_arid         ,  // 读事务ID（新增）
-    input       [7:0]   ls_arlen        ,  // 突发长度（新增）
-    input       [2:0]   ls_arsize       ,  // 数据位宽（新增）
-    input       [1:0]   ls_arburst      ,  // 突发类型（新增）
+    input       [3:0]   ls_arid         ,  // 读事务ID
+    input       [7:0]   ls_arlen        ,  // 突发长度
+    input       [2:0]   ls_arsize       ,  // 数据位宽
+    input       [1:0]   ls_arburst      ,  // 突发类型
    
     output reg          ls_rvalid       ,  // 读数据有效
     input               ls_rready       ,  // 读数据就绪
     output reg [31:0]   ls_rdata        ,  // 读数据
     output reg [1:0]    ls_rresp        ,  // 读响应
-    output reg [3:0]    ls_rid          ,  // 读响应ID（新增）
-    output reg          ls_rlast        ,  // 读最后一个数据（新增）
+    output reg [3:0]    ls_rid          ,  // 读响应ID
+    output reg          ls_rlast        ,  // 读最后一个数据
 
-  
-    // 写地址通道（AW）
+    // LS Write 通道
     input               ls_awvalid      ,  // 写地址有效
     output reg          ls_awready      ,  // 写地址就绪
     input       [31:0]  ls_awaddr       ,  // 写地址
-    input       [3:0]   ls_awid         ,  // 写事务ID（新增）
-    input       [7:0]   ls_awlen        ,  // 突发长度（新增）
-    input       [2:0]   ls_awsize       ,  // 数据位宽（新增）
-    input       [1:0]   ls_awburst      ,  // 突发类型（新增）
-    // 写数据通道（W）
+    input       [3:0]   ls_awid         ,  // 写事务ID
+    input       [7:0]   ls_awlen        ,  // 突发长度
+    input       [2:0]   ls_awsize       ,  // 数据位宽
+    input       [1:0]   ls_awburst      ,  // 突发类型
+    
     input               ls_wvalid       ,  // 写数据有效
     output reg          ls_wready       ,  // 写数据就绪
     input       [31:0]  ls_wdata        ,  // 写数据
     input       [3:0]   ls_wstrb        ,  // 写字节选通
     input               ls_wlast        ,  // 写最后一拍标记
-    // 写响应通道（B）
+    
     output reg          ls_bvalid       ,  // 写响应有效
     input               ls_bready       ,  // 写响应就绪
     output reg [1:0]    ls_bresp        ,  // 写响应
-    output reg [3:0]    ls_bid          ,  // 写响应ID（新增）
+    output reg [3:0]    ls_bid          ,  // 写响应ID
     
-    // 读通道（扩充至从设备）
-    output reg          arbit_xbar_arvalid     ,  // 读地址有效
-    input               arbit_xbar_arready     ,  // 读地址就绪
-    output reg [31:0]   arbit_xbar_araddr      ,  // 读地址
-    output reg [3:0]    arbit_xbar_arid        ,  // 读事务ID（新增）
-    output reg [7:0]    arbit_xbar_arlen       ,  // 突发长度（新增）
-    output reg [2:0]    arbit_xbar_arsize      ,  // 数据位宽（新增）
-    output reg [1:0]    arbit_xbar_arburst     ,  // 突发类型（新增）
-    
-    input               arbit_xbar_rvalid      ,  // 读数据有效
-    output reg          arbit_xbar_rready      ,  // 读数据就绪
-    input       [31:0]  arbit_xbar_rdata       ,  // 读数据
-    input       [1:0]   arbit_xbar_rresp       ,  // 读响应
-    input       [3:0]   arbit_xbar_rid         ,  // 读响应ID（新增）
-    input               arbit_xbar_rlast       ,  // 读最后一个数据（新增）
+    // XBAR 从设备侧（RTC）
+    output reg  [31:0]  rtc_araddr      ,    // RTC读地址
+    output reg          rtc_arvalid     ,    // RTC读地址有效
+    output reg  [3:0]   rtc_arid        ,    // RTC读事务ID
+    output reg  [7:0]   rtc_arlen       ,    // RTC突发长度
+    output reg  [2:0]   rtc_arsize      ,    // RTC数据位宽
+    output reg  [1:0]   rtc_arburst     ,    // RTC突发类型
+    input               rtc_arready     ,    // RTC读地址就绪
 
-    // 写通道（扩充至从设备）
-    output reg          arbit_xbar_awvalid     ,  // 写地址有效
-    input               arbit_xbar_awready     ,  // 写地址就绪
-    output reg [31:0]   arbit_xbar_awaddr      ,  // 写地址
-    output reg [3:0]    arbit_xbar_awid        ,  // 写事务ID（新增）
-    output reg [7:0]    arbit_xbar_awlen       ,  // 突发长度（新增）
-    output reg [2:0]    arbit_xbar_awsize      ,  // 数据位宽（新增）
-    output reg [1:0]    arbit_xbar_awburst     ,  // 突发类型（新增）
+    input       [31:0]  rtc_rdata       ,    // RTC返回的读数据
+    input               rtc_rvalid      ,    // RTC读数据有效
+    input       [1:0]   rtc_rresp       ,    // RTC读响应
+    input               rtc_rlast       ,    // RTC读最后一个数据
+    input       [3:0]   rtc_rid         ,    // RTC读响应ID
+    output reg          rtc_rready      ,    // RTC读数据就绪
 
-    output reg          arbit_xbar_wvalid      ,  // 写数据有效
-    input               arbit_xbar_wready      ,  // 写数据就绪
-    output reg [31:0]   arbit_xbar_wdata       ,  // 写数据
-    output reg [3:0]    arbit_xbar_wstrb       ,  // 写字节选通
-    output reg          arbit_xbar_wlast       ,  // 写最后一拍标记
-    input               arbit_xbar_bvalid      , 
-    output reg          arbit_xbar_bready      , 
-    input       [1:0]   arbit_xbar_bresp       ,
-    input       [3:0]   arbit_xbar_bid         // 写响应ID（新增）
+    // XBAR 从设备侧（SOC）
+    output reg  [31:0]  soc_awaddr      ,    // SOC写地址
+    output reg          soc_awvalid     ,    // SOC写地址有效
+    output reg  [3:0]   soc_awid        ,    // SOC写事务ID
+    output reg  [7:0]   soc_awlen       ,    // SOC突发长度
+    output reg  [2:0]   soc_awsize      ,    // SOC数据位宽
+    output reg  [1:0]   soc_awburst     ,    // SOC突发类型
+    input               soc_awready     ,    // SOC写地址就绪
+
+    output reg  [31:0]  soc_wdata       ,    // SOC写数据
+    output reg  [3:0]   soc_wstrb       ,    // SOC写字节选通
+    output reg          soc_wvalid      ,    // SOC写数据有效
+    output reg          soc_wlast       ,    // SOC最后一个写数据
+    input               soc_wready      ,    // SOC写数据就绪
+
+    input       [1:0]   soc_bresp       ,    // SOC写响应
+    input               soc_bvalid      ,    // SOC写响应有效
+    input       [3:0]   soc_bid         ,    // SOC响应ID
+    output reg          soc_bready      ,    // SOC写响应就绪
+
+    output reg  [31:0]  soc_araddr      ,    // SOC读地址
+    output reg          soc_arvalid     ,    // SOC读地址有效
+    output reg  [3:0]   soc_arid        ,    // SOC读事务ID
+    output reg  [7:0]   soc_arlen       ,    // SOC突发长度
+    output reg  [2:0]   soc_arsize      ,    // SOC数据位宽
+    output reg  [1:0]   soc_arburst     ,    // SOC突发类型
+    input               soc_arready     ,    // SOC读地址就绪
+
+    input       [31:0]  soc_rdata       ,    // SOC返回的读数据
+    input               soc_rvalid      ,    // SOC读数据有效
+    input       [1:0]   soc_rresp       ,    // SOC读响应
+    input               soc_rlast       ,    // SOC读最后一个数据
+    input       [3:0]   soc_rid         ,    // SOC读响应ID
+    output reg          soc_rready        // SOC读数据就绪
 );  
+
 
 localparam IDLE       = 3'b000;
 localparam IF_MASTER  = 3'b001;  // IF读占用总线
@@ -97,8 +117,7 @@ localparam LS_WRITE   = 3'b100;  // LS写占用总线
 
 reg [2:0] state, next_state; 
 
-
-// 状态转换逻辑（保持原有优先级：IF读 > LS写 > LS读）
+// 状态转换逻辑（优先级：IF读 > LS写 > LS读）
 always @(*) begin
     case (state)
         IDLE: begin
@@ -117,66 +136,36 @@ always @(*) begin
         end
 
         IF_MASTER: begin
-            // IF读完成（读数据最后一拍握手）
+            // IF读完成（最后一拍数据握手）
             if (if_rvalid && if_rready && if_rlast) begin
-                if (if_arvalid) begin
-                    next_state = IF_MASTER;
-                end
-                else if (ls_awvalid || ls_wvalid) begin
-                    next_state = LS_WRITE;
-                end
-                else if (ls_arvalid) begin
-                    next_state = LS_READ;
-                end
-                else begin
-                    next_state = IDLE;
-                end
+                if (if_arvalid) next_state = IF_MASTER;
+                else if (ls_awvalid || ls_wvalid) next_state = LS_WRITE;
+                else if (ls_arvalid) next_state = LS_READ;
+                else next_state = IDLE;
             end
-            else begin
-                next_state = IF_MASTER;  
-            end
+            else next_state = IF_MASTER;  
         end
 
         LS_READ: begin
-            // LS读完成（读数据最后一拍握手）
+            // LS读完成（最后一拍数据握手）
             if (ls_rvalid && ls_rready && ls_rlast) begin
-                if (if_arvalid) begin
-                    next_state = IF_MASTER;
-                end
-                else if (ls_awvalid || ls_wvalid) begin
-                    next_state = LS_WRITE;
-                end
-                else if (ls_arvalid) begin
-                    next_state = LS_READ;
-                end
-                else begin
-                    next_state = IDLE;
-                end
+                if (if_arvalid) next_state = IF_MASTER;
+                else if (ls_awvalid || ls_wvalid) next_state = LS_WRITE;
+                else if (ls_arvalid) next_state = LS_READ;
+                else next_state = IDLE;
             end
-            else begin
-                next_state = LS_READ;
-            end
+            else next_state = LS_READ;
         end
 
         LS_WRITE: begin
             // LS写完成（写响应握手）
             if (ls_bvalid && ls_bready) begin
-                if (if_arvalid) begin
-                    next_state = IF_MASTER;
-                end
-                else if (ls_awvalid || ls_wvalid) begin
-                    next_state = LS_WRITE;
-                end
-                else if (ls_arvalid) begin
-                    next_state = LS_READ;
-                end
-                else begin
-                    next_state = IDLE;
-                end
+                if (if_arvalid) next_state = IF_MASTER;
+                else if (ls_awvalid || ls_wvalid) next_state = LS_WRITE;
+                else if (ls_arvalid) next_state = LS_READ;
+                else next_state = IDLE;
             end
-            else begin
-                next_state = LS_WRITE;
-            end
+            else next_state = LS_WRITE;
         end
 
         default: next_state = IDLE;
@@ -185,145 +174,225 @@ end
 
 // 状态寄存器时序
 always @(posedge clock or posedge reset) begin
-    if (reset) begin
-        state <= IDLE;
+    if (reset) state <= IDLE;
+    else state <= next_state;
+end
+
+
+// ========================================
+// 地址译码（区分RTC/SOC，基于当前仲裁状态）
+// ========================================
+reg       is_rtc;    // 读地址是否指向RTC
+reg       is_soc;    // 地址是否指向SOC
+
+always @(*) begin
+    is_rtc = 1'b0;
+    is_soc = 1'b1;
+
+    // 仅读事务需要判断RTC地址
+    if (state == IF_MASTER) begin
+        is_rtc = (if_araddr == RTC_ADDR);  // IF读的地址是否为RTC
+        is_soc = !is_rtc;
     end
-    else begin
-        state <= next_state;
+    else if (state == LS_READ) begin
+        is_rtc = (ls_araddr == RTC_ADDR);  // LS读的地址是否为RTC
+        is_soc = !is_rtc;
+    end
+    // 写事务固定访问SOC
+    else if (state == LS_WRITE) begin
+        is_soc = 1'b1;
+        is_rtc = 1'b0;
     end
 end
 
 
-// ------------------------ 读地址通道仲裁（IF和LS读） ------------------------
+// ========================================
+// 读通道逻辑（IF/LS读，基于仲裁状态驱动）
+// ========================================
+// 1. 读地址通道（转发到RTC/SOC）
 always @(*) begin
-    // 默认值
-    arbit_xbar_arvalid = 1'b0;
-    arbit_xbar_araddr  = 32'h0;
-    arbit_xbar_arid    = 4'h0;
-    arbit_xbar_arlen   = 8'h0;
-    arbit_xbar_arsize  = 3'h0;
-    arbit_xbar_arburst = 2'h0;
+    // 默认值（所有信号无效）
+    rtc_arvalid = 1'b0;
+    rtc_araddr  = 32'h0;
+    rtc_arid    = 4'h0;
+    rtc_arlen   = 8'h0;
+    rtc_arsize  = 3'h0;
+    rtc_arburst = 2'h0;
+
+    soc_arvalid = 1'b0;
+    soc_araddr  = 32'h0;
+    soc_arid    = 4'h0;
+    soc_arlen   = 8'h0;
+    soc_arsize  = 3'h0;
+    soc_arburst = 2'h0;
+
     if_arready  = 1'b0;
     ls_arready  = 1'b0;
 
     case (state)
-        IF_MASTER: begin
-            arbit_xbar_arvalid = if_arvalid;
-            arbit_xbar_araddr  = if_araddr;
-            arbit_xbar_arid    = if_arid;      // 转发事务ID
-            arbit_xbar_arlen   = if_arlen;     // 转发突发长度
-            arbit_xbar_arsize  = if_arsize;    // 转发数据位宽
-            arbit_xbar_arburst = if_arburst;   // 转发突发类型
-            if_arready  = arbit_xbar_arready;
+        IF_MASTER: begin  // IF读占用总线
+            if (is_rtc) begin  // 读RTC
+                rtc_arvalid = if_arvalid;
+                rtc_araddr  = if_araddr;
+                rtc_arid    = if_arid;
+                rtc_arlen   = if_arlen;
+                rtc_arsize  = if_arsize;
+                rtc_arburst = if_arburst;
+                if_arready  = rtc_arready;  // RTC就绪反馈给IF
+            end
+            else begin  // 读SOC
+                soc_arvalid = if_arvalid;
+                soc_araddr  = if_araddr;
+                soc_arid    = if_arid;
+                soc_arlen   = if_arlen;
+                soc_arsize  = if_arsize;
+                soc_arburst = if_arburst;
+                if_arready  = soc_arready;  // SOC就绪反馈给IF
+            end
         end
-        LS_READ: begin
-            arbit_xbar_arvalid = ls_arvalid;
-            arbit_xbar_araddr  = ls_araddr;
-            arbit_xbar_arid    = ls_arid;
-            arbit_xbar_arlen   = ls_arlen;
-            arbit_xbar_arsize  = ls_arsize;
-            arbit_xbar_arburst = ls_arburst;
-            ls_arready  = arbit_xbar_arready;
+
+        LS_READ: begin  // LS读占用总线
+            if (is_rtc) begin  // 读RTC
+                rtc_arvalid = ls_arvalid;
+                rtc_araddr  = ls_araddr;
+                rtc_arid    = ls_arid;
+                rtc_arlen   = ls_arlen;
+                rtc_arsize  = ls_arsize;
+                rtc_arburst = ls_arburst;
+                ls_arready  = rtc_arready;  // RTC就绪反馈给LS
+            end
+            else begin  // 读SOC
+                soc_arvalid = ls_arvalid;
+                soc_araddr  = ls_araddr;
+                soc_arid    = ls_arid;
+                soc_arlen   = ls_arlen;
+                soc_arsize  = ls_arsize;
+                soc_arburst = ls_arburst;
+                ls_arready  = soc_arready;  // SOC就绪反馈给LS
+            end
         end
-        default: ;  
+        default: ;  // 其他状态读地址无效
     endcase
 end
 
-
-// ------------------------ 读数据通道仲裁（IF和LS读） ------------------------
+// 2. 读数据通道（从RTC/SOC转发到IF/LS）
 always @(*) begin
-    // 默认值
+    // 默认值（所有信号无效）
     if_rvalid  = 1'b0;
     if_rdata   = 32'h0;
     if_rresp   = 2'b00;
     if_rid     = 4'h0;
     if_rlast   = 1'b0;
+
     ls_rvalid  = 1'b0;
     ls_rdata   = 32'h0;
     ls_rresp   = 2'b00;
     ls_rid     = 4'h0;
     ls_rlast   = 1'b0;
-    arbit_xbar_rready = 1'b0;
+
+    rtc_rready = 1'b0;
+    soc_rready = 1'b0;
 
     case (state)
-        IF_MASTER: begin
-            if_rvalid  = arbit_xbar_rvalid;
-            if_rdata   = arbit_xbar_rdata;
-            if_rresp   = arbit_xbar_rresp;
-            if_rid     = arbit_xbar_rid;      // 转发响应ID
-            if_rlast   = arbit_xbar_rlast;    // 转发最后一个数据标记
-            arbit_xbar_rready = if_rready;
+        IF_MASTER: begin  // IF读占用总线
+            if (is_rtc) begin  // 从RTC读
+                if_rvalid  = rtc_rvalid;
+                if_rdata   = rtc_rdata;
+                if_rresp   = rtc_rresp;
+                if_rid     = rtc_rid;
+                if_rlast   = rtc_rlast;
+                rtc_rready = if_rready;  // IF就绪反馈给RTC
+            end
+            else begin  // 从SOC读
+                if_rvalid  = soc_rvalid;
+                if_rdata   = soc_rdata;
+                if_rresp   = soc_rresp;
+                if_rid     = soc_rid;
+                if_rlast   = soc_rlast;
+                soc_rready = if_rready;  // IF就绪反馈给SOC
+            end
         end
-        LS_READ: begin
-            ls_rvalid  = arbit_xbar_rvalid;
-            ls_rdata   = arbit_xbar_rdata;
-            ls_rresp   = arbit_xbar_rresp;
-            ls_rid     = arbit_xbar_rid;
-            ls_rlast   = arbit_xbar_rlast;
-            arbit_xbar_rready = ls_rready;
+
+        LS_READ: begin  // LS读占用总线
+            if (is_rtc) begin  // 从RTC读
+                ls_rvalid  = rtc_rvalid;
+                ls_rdata   = rtc_rdata;
+                ls_rresp   = rtc_rresp;
+                ls_rid     = rtc_rid;
+                ls_rlast   = rtc_rlast;
+                rtc_rready = ls_rready;  // LS就绪反馈给RTC
+            end
+            else begin  // 从SOC读
+                ls_rvalid  = soc_rvalid;
+                ls_rdata   = soc_rdata;
+                ls_rresp   = soc_rresp;
+                ls_rid     = soc_rid;
+                ls_rlast   = soc_rlast;
+                soc_rready = ls_rready;  // LS就绪反馈给SOC
+            end
         end
-        default: ;  
+        default: ;  // 其他状态读数据无效
     endcase
 end
 
 
-// ------------------------ 写地址通道仲裁（LS写） ------------------------
+// ========================================
+// 写通道逻辑（仅LS写，基于仲裁状态驱动）
+// ========================================
+// 1. 写地址通道（转发到SOC）
 always @(*) begin
-    // 默认值
-    arbit_xbar_awvalid = 1'b0;
-    arbit_xbar_awaddr  = 32'h0;
-    arbit_xbar_awid    = 4'h0;
-    arbit_xbar_awlen   = 8'h0;
-    arbit_xbar_awsize  = 3'h0;
-    arbit_xbar_awburst = 2'h0;
+    // 默认值（无效）
+    soc_awvalid = 1'b0;
+    soc_awaddr  = 32'h0;
+    soc_awid    = 4'h0;
+    soc_awlen   = 8'h0;
+    soc_awsize  = 3'h0;
+    soc_awburst = 2'h0;
     ls_awready  = 1'b0;
 
-    if (state == LS_WRITE) begin
-        arbit_xbar_awvalid = ls_awvalid;
-        arbit_xbar_awaddr  = ls_awaddr;
-        arbit_xbar_awid    = ls_awid;      // 转发事务ID
-        arbit_xbar_awlen   = ls_awlen;     // 转发突发长度
-        arbit_xbar_awsize  = ls_awsize;    // 转发数据位宽
-        arbit_xbar_awburst = ls_awburst;   // 转发突发类型
-        ls_awready  = arbit_xbar_awready;
+    if (state == LS_WRITE) begin  // 仅LS_WRITE状态激活写地址
+        soc_awvalid = ls_awvalid;
+        soc_awaddr  = ls_awaddr;
+        soc_awid    = ls_awid;
+        soc_awlen   = ls_awlen;
+        soc_awsize  = ls_awsize;
+        soc_awburst = ls_awburst;
+        ls_awready  = soc_awready;  // SOC就绪反馈给LS
     end
 end
 
-
-// ------------------------ 写数据通道仲裁（LS写） ------------------------
+// 2. 写数据通道（转发到SOC）
 always @(*) begin
-    // 默认值
-    arbit_xbar_wvalid = 1'b0;
-    arbit_xbar_wdata  = 32'h0;
-    arbit_xbar_wstrb  = 4'h0;
-    arbit_xbar_wlast  = 1'b0;
+    // 默认值（无效）
+    soc_wvalid = 1'b0;
+    soc_wdata  = 32'h0;
+    soc_wstrb  = 4'h0;
+    soc_wlast  = 1'b0;
     ls_wready  = 1'b0;
 
-    if (state == LS_WRITE) begin
-        arbit_xbar_wvalid = ls_wvalid;
-        arbit_xbar_wdata  = ls_wdata;
-        arbit_xbar_wstrb  = ls_wstrb;
-        arbit_xbar_wlast  = ls_wlast;
-        ls_wready  = arbit_xbar_wready;
+    if (state == LS_WRITE) begin  // 仅LS_WRITE状态激活写数据
+        soc_wvalid = ls_wvalid;
+        soc_wdata  = ls_wdata;
+        soc_wstrb  = ls_wstrb;
+        soc_wlast  = ls_wlast;
+        ls_wready  = soc_wready;  // SOC就绪反馈给LS
     end
 end
 
-
-// ------------------------ 写响应通道仲裁（LS写） ------------------------
+// 3. 写响应通道（从SOC转发到LS）
 always @(*) begin
-    // 默认值
-    ls_bvalid = 1'b0;
-    ls_bresp  = 2'b00;
-    ls_bid    = 4'h0;
-    arbit_xbar_bready = 1'b0;
+    // 默认值（无效）
+    ls_bvalid  = 1'b0;
+    ls_bresp   = 2'b00;
+    ls_bid     = 4'h0;
+    soc_bready = 1'b0;
 
-    if (state == LS_WRITE) begin
-        ls_bvalid = arbit_xbar_bvalid;
-        ls_bresp  = arbit_xbar_bresp;
-        ls_bid    = arbit_xbar_bid;      // 转发响应ID
-        arbit_xbar_bready = ls_bready;
+    if (state == LS_WRITE) begin  // 仅LS_WRITE状态激活写响应
+        ls_bvalid  = soc_bvalid;
+        ls_bresp   = soc_bresp;
+        ls_bid     = soc_bid;
+        soc_bready = ls_bready;  // LS就绪反馈给SOC
     end
 end
-
 
 endmodule

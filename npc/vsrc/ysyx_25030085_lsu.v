@@ -75,6 +75,9 @@ module ysyx_25030085_lsu (//数据存储器
 
     wire [1:0]  offset=addr[1:0];//获取偏移量
     wire [31:0] aligned_addr=addr&32'hFFFFFFFC;
+    // 外设地址范围定义（根据实际硬件调整，此处示例为0x10000000~0x1FFFFfff）
+    wire is_peripheral = (addr >= 32'h10000000) && (addr <= 32'h1FFFFfff);
+
 
     assign in_ready=state==IDLE;
     assign out_valid=state==OUTPUT;
@@ -86,7 +89,6 @@ module ysyx_25030085_lsu (//数据存储器
     assign imm_out      =   imm  ;
     assign rd_out       =   rd   ;
     //biu数据
-    assign lsu_addr    =  aligned_addr  ;
     assign lsu_wdata   =  wdata         ;
     assign lsu_wwe     =  MemWrite      ;
     assign lsu_rwe     =  MemRead       ;
@@ -147,11 +149,18 @@ module ysyx_25030085_lsu (//数据存储器
 //读数据，对来自biu的数据进行操作
 always @(*) begin
     lsu_rdata = 32'h00000000;
+    lsu_addr =addr;
     if(state==STORE)begin
         if(biu_rresp)begin
+            if (is_peripheral) begin
+            // 外设读：直接取32位数据的低8位（外设寄存器通常为8位）
+            lsu_rdata = {24'h000000, biu_rdata[7:0]};
+            lsu_addr=addr;
+            end
+            else begin
+                 lsu_addr = aligned_addr;  // 内存地址对齐到4字节
             case (MemOp)
-                OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展
-                
+                OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展   
                 OP_LH: begin
                     // 有符号半字扩展
                     if (offset[1]) 
@@ -191,6 +200,7 @@ always @(*) begin
                     lsu_rdata =0;
                 end
             endcase
+            end
         end
         else begin
            // $display("Out-of bound");    
@@ -203,6 +213,14 @@ always @(*) begin
     lsu_wdata = wdata;  // 默认值
     
     if (lsu_req && lsu_wwe && state==STORE) begin
+        if (is_peripheral) begin
+            // 外设写：使用原始地址，强制字节访问（忽略对齐）
+            lsu_addr  = addr;  // 外设地址不对齐，直接使用原始地址
+            lsu_strb  = 4'b0001;  // 外设寄存器通常为8位，选通第0字节
+            lsu_wdata = {24'h000000, wdata[7:0]};  // 只写低8位有效数据
+        end
+        else begin
+            lsu_addr = aligned_addr;  // 内存地址对齐到4字节
         case (MemOp)
             OP_SW: begin
                 lsu_strb = 4'b1111;  // 字操作，所有字节有效
@@ -221,6 +239,7 @@ always @(*) begin
             
             default: lsu_strb = 4'b0000;
         endcase
+        end
     end
 end
 
