@@ -78,8 +78,8 @@ void npc_exec(uint64_t n)
         }
         soc_top->eval();
        vcd->dump(sim_time);
-        if(sim_time>95000){
-            //return;
+        if(sim_time>3000){
+         //  return;
         }
         sim_time++;
    }

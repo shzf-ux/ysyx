@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <string.h>
 
-
-
 static const char mainargs[] = MAINARGS;
 
 int main(const char *args);
@@ -16,45 +14,39 @@ int main(const char *args);
 
 void putch(char ch)
 {
-  while ((inb(UART_REG_LS) & 0x20) == 0); //// 等待THRE置位
-  outb(UART_REG_TX, ch);
-}
 
+    // 使用大括号明确while循环体（即使为空）
+   //while ((inb(UART_REG_LS) & 0x20) == 0)
+    {
+
+    }
+    outb(UART_REG_TX, ch); // 明确在循环外
+  
+}
+__attribute__((noinline)) // 阻止内联，方便观察汇编
 void init_uart(uint32_t baud)
-{ 
+{
+  // 1. 确保复位状态
+  outb(UART_REG_FC, 0x00); // 禁用FIFO
+  outb(UART_REG_LC, 0x80); // 启用DLAB
 
-  //  解锁除数寄存器（允许设置波特率）
-  outb(UART_REG_LC, inb(UART_REG_LC) | 0x80);
+  // 2. 计算并设置波特率
+  uint32_t divisor = SYSTEM_CLK / (16 * baud);
+  outb(UART_REG_DLL, divisor & 0xFF);
+  outb(UART_REG_DLM, (divisor >> 8) & 0xFF);
 
-  uint16_t divisior = SYSTEM_CLK / (16 * baud);
+  // 3. 基本配置
+  outb(UART_REG_LC, 0x03); // 8N1模式
 
-  //  写入除数高/低字节
-  outb(UART_REG_DLM, divisior >> 8); // 高8位
-  outb(UART_REG_DLL, divisior);      // 低8位
+  // 4. 启用FIFO（简化版）
+  outb(UART_REG_FC, 0x01); // 仅启用FIFO，不清空
 
-  //  锁定除数寄存器（恢复正常模式）
-  outb(UART_REG_LC, inb(UART_REG_LC) & (~0x80));
-
-  //  配置8N1数据格式（8位数据，无校验，1停止位）
-  outb(UART_REG_LC, 0x03);
-
-  //  启用并清空FIFO（16字节缓冲）
-  outb(UART_REG_FC, 0x07);
+  // 5. 强制触发THRE
+  outb(UART_REG_TX, 0x00); // 发送空字符强制更新状态
 }
 
-void halt(int code)
+void init_section()
 {
-  asm volatile("ebreak");
-  while (1);
-}
-
-// TRM初始化函数（由start.S调用）
-void _trm_init()
-{
-  //init_uart(115200);
-  // 初始化UART（可选）
-  // init_uart(115200);
-
   /* 1. 复制所有初始化数据 */
   extern uint8_t _data_lma[], _data_vma[], _edata[];
   uint32_t data_size = _edata - _data_vma;
@@ -70,15 +62,25 @@ void _trm_init()
   {
     memset(_bss_start, 0, bss_size);
   }
-  /* 3. 清零.sbss段（新增） */
-  extern uint8_t _sbss_start[], _sbss_end[];
-  uint32_t sbss_size = _sbss_end - _sbss_start;
-  if (sbss_size > 0)
-  {
-    memset(_sbss_start, 0, sbss_size);
-  }
+}
 
 
+
+void halt(int code)
+{
+  ysyxsoc_ebreak(code);
+  // should not reach here
+  while (1)
+    ;
+}
+
+
+
+void _trm_init()
+{
+ 
+  init_section();
+ // init_uart(115200);
   int ret = main(mainargs);
 
   // 4. 程序终止
