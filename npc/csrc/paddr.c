@@ -65,6 +65,14 @@ void init_mem()
     flash[2] = 0x000000de; // 0x30000008
     flash[3] = 0x000000ca; // 0x3000000c
 
+    //char test
+    flash[10] =0x100007b7;  ///300000040
+    flash[11] =0x04100713;
+    flash[12] =0x00e78023;
+    flash[13] =0x00a00713;
+    flash[12] =0x00e78023;
+    flash[13] =0x00008067;
+
     memset(pmem, rand(), CONFIG_MSIZE);
 }
 
@@ -113,7 +121,7 @@ extern "C" void flash_read(int32_t addr, int32_t *data)
 
     uint32_t ret = host_read(&flash[addr/sizeof(uint32_t)], 4);
     *data = ret;
-    printf("addr%08x, data:%08x\n", addr, ret);
+   printf("[paddr flash read] addr:%08x, data:%08x\n", addr, ret);
 }
 
 // ROM读取函数
