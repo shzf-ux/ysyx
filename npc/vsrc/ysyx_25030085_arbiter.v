@@ -113,7 +113,7 @@ module ysyx_25030085_arbiter#(
 localparam IDLE       = 3'b000;
 localparam IF_MASTER  = 3'b001;  // IF读占用总线
 localparam LS_READ    = 3'b010;  // LS读占用总线
-localparam LS_WRITE   = 3'b100;  // LS写占用总线
+
 
 reg [2:0] state, next_state; 
 
@@ -123,9 +123,6 @@ always @(*) begin
         IDLE: begin
             if (if_arvalid) begin
                 next_state = IF_MASTER;
-            end
-            else if (ls_awvalid || ls_wvalid) begin  // LS有写请求
-                next_state = LS_WRITE;
             end
             else if (ls_arvalid) begin  // LS有读请求
                 next_state = LS_READ;
@@ -139,7 +136,6 @@ always @(*) begin
             // IF读完成（最后一拍数据握手）
             if (if_rvalid && if_rready && if_rlast) begin
                 if (if_arvalid) next_state = IF_MASTER;
-                else if (ls_awvalid || ls_wvalid) next_state = LS_WRITE;
                 else if (ls_arvalid) next_state = LS_READ;
                 else next_state = IDLE;
             end
@@ -147,25 +143,12 @@ always @(*) begin
         end
 
         LS_READ: begin
-            // LS读完成（最后一拍数据握手）
             if (ls_rvalid && ls_rready && ls_rlast) begin
                 if (if_arvalid) next_state = IF_MASTER;
-                else if (ls_awvalid || ls_wvalid) next_state = LS_WRITE;
                 else if (ls_arvalid) next_state = LS_READ;
                 else next_state = IDLE;
             end
             else next_state = LS_READ;
-        end
-
-        LS_WRITE: begin
-            // LS写完成（写响应握手）
-            if (ls_bvalid && ls_bready) begin
-                if (if_arvalid) next_state = IF_MASTER;
-                else if (ls_awvalid || ls_wvalid) next_state = LS_WRITE;
-                else if (ls_arvalid) next_state = LS_READ;
-                else next_state = IDLE;
-            end
-            else next_state = LS_WRITE;
         end
 
         default: next_state = IDLE;
@@ -179,9 +162,7 @@ always @(posedge clock or posedge reset) begin
 end
 
 
-// ========================================
-// 地址译码（区分RTC/SOC，基于当前仲裁状态）
-// ========================================
+
 reg       is_rtc;    // 读地址是否指向RTC
 reg       is_soc;    // 地址是否指向SOC
 
@@ -198,17 +179,10 @@ always @(*) begin
         is_rtc = (ls_araddr == RTC_ADDR);  // LS读的地址是否为RTC
         is_soc = !is_rtc;
     end
-    // 写事务固定访问SOC
-    else if (state == LS_WRITE) begin
-        is_soc = 1'b1;
-        is_rtc = 1'b0;
-    end
 end
 
 
-// ========================================
-// 读通道逻辑（IF/LS读，基于仲裁状态驱动）
-// ========================================
+
 // 1. 读地址通道（转发到RTC/SOC）
 always @(*) begin
     // 默认值（所有信号无效）
@@ -275,7 +249,7 @@ always @(*) begin
     endcase
 end
 
-// 2. 读数据通道（从RTC/SOC转发到IF/LS）
+//  读数据通道（从RTC/SOC转发到IF/LS）
 always @(*) begin
     // 默认值（所有信号无效）
     if_rvalid  = 1'b0;
@@ -336,63 +310,25 @@ always @(*) begin
 end
 
 
-// ========================================
-// 写通道逻辑（仅LS写，基于仲裁状态驱动）
-// ========================================
-// 1. 写地址通道（转发到SOC）
-always @(*) begin
-    // 默认值（无效）
-    soc_awvalid = 1'b0;
-    soc_awaddr  = 32'h0;
-    soc_awid    = 4'h0;
-    soc_awlen   = 8'h0;
-    soc_awsize  = 3'h0;
-    soc_awburst = 2'h0;
-    ls_awready  = 1'b0;
+assign soc_awvalid = ls_awvalid;
+assign soc_awaddr  = ls_awaddr;
+assign soc_awid    = ls_awid;
+assign soc_awlen   = ls_awlen;
+assign soc_awsize  = ls_awsize;
+assign soc_awburst = ls_awburst;
+assign ls_awready  = soc_awready;
 
-    if (state == LS_WRITE) begin  // 仅LS_WRITE状态激活写地址
-        soc_awvalid = ls_awvalid;
-        soc_awaddr  = ls_awaddr;
-        soc_awid    = ls_awid;
-        soc_awlen   = ls_awlen;
-        soc_awsize  = ls_awsize;
-        soc_awburst = ls_awburst;
-        ls_awready  = soc_awready;  // SOC就绪反馈给LS
-    end
-end
+// 2. 写数据通道（直接连接）
+assign soc_wvalid = ls_wvalid;
+assign soc_wdata  = ls_wdata;
+assign soc_wstrb  = ls_wstrb;
+assign soc_wlast  = ls_wlast;
+assign ls_wready  = soc_wready;
 
-// 2. 写数据通道（转发到SOC）
-always @(*) begin
-    // 默认值（无效）
-    soc_wvalid = 1'b0;
-    soc_wdata  = 32'h0;
-    soc_wstrb  = 4'h0;
-    soc_wlast  = 1'b0;
-    ls_wready  = 1'b0;
-
-    if (state == LS_WRITE) begin  // 仅LS_WRITE状态激活写数据
-        soc_wvalid = ls_wvalid;
-        soc_wdata  = ls_wdata;
-        soc_wstrb  = ls_wstrb;
-        soc_wlast  = ls_wlast;
-        ls_wready  = soc_wready;  // SOC就绪反馈给LS
-    end
-end
-
-// 3. 写响应通道（从SOC转发到LS）
-always @(*) begin
-    // 默认值（无效）
-    ls_bvalid  = 1'b0;
-    ls_bresp   = 2'b00;
-    ls_bid     = 4'h0;
-    soc_bready = 1'b0;
-
-    if (state == LS_WRITE) begin  // 仅LS_WRITE状态激活写响应
-        ls_bvalid  = soc_bvalid;
-        ls_bresp   = soc_bresp;
-        ls_bid     = soc_bid;
-        soc_bready = ls_bready;  // LS就绪反馈给SOC
-    end
-end
+// 3. 写响应通道（直接连接）
+assign ls_bvalid  = soc_bvalid;
+assign ls_bresp   = soc_bresp;
+assign ls_bid     = soc_bid;
+assign soc_bready = ls_bready;
 
 endmodule

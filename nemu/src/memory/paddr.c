@@ -30,15 +30,15 @@ void display_memory_write(uint32_t addr, uint32_t data);
 
     uint8_t *guest_to_host(paddr_t paddr)
     {
-      // ROM 大小为 4K（0x1000），映射到 pmem 起始位置
+     
       if (IS_ROM(paddr))
       {
         uint32_t offset = paddr - 0x20000000;
-        // 检查 ROM 地址是否越界（可选，增强健壮性）
         if (offset >= 0x1000)
-          return NULL; // 超出 4K ROM 范围
+          return NULL; 
         return pmem + offset;
       }
+      
       // SRAM 大小为 8K（0x2000），映射到 ROM 之后的区域（pmem + 0x1000）
       else if (IS_SRAM(paddr))
       {
@@ -51,7 +51,7 @@ void display_memory_write(uint32_t addr, uint32_t data);
       // 其他地址（如外设）的映射逻辑（根据需求调整）
       else
       {
-        // 确保不与 ROM/SRAM 重叠，例如从 pmem + 0x3000 开始
+      
         uint32_t offset = paddr - CONFIG_MBASE;
         if (offset + 0x3000 >= CONFIG_MSIZE)
           return NULL; // 检查总大小是否足够

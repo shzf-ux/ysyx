@@ -57,6 +57,12 @@
     "sdl_main.h": "c",
     "random": "c",
     "stdarg.h": "c",
-    "fstream": "c"
+    "fstream": "c",
+    "system_error": "c",
+    "ysyxsoc.h": "c",
+    "riscv.h": "c",
+    "*.def": "c",
+    "condition_variable": "c",
+    "algorithm": "c"
   }
 }

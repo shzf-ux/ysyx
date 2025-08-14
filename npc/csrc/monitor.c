@@ -1,12 +1,9 @@
 #include "common.h" //不能用<>
 #include "difftest/dut.h"
+#include "paddr.h"
 void sdb_set_batch_mode();
-
 extern int sim_time;
 void init_disasm();
-uint32_t pmem_read(uint32_t raddr,int len);
-uint8_t *guest_to_host(uint32_t paddr);
-void init_mem();
 void parse_elf(char *elf_file); // 传入一个elf文件
 
 static char *img_file = NULL;

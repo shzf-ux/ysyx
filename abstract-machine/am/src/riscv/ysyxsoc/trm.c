@@ -3,48 +3,45 @@
 #include "ysyxsoc.h"
 #include <stdio.h>
 #include <string.h>
+#include <riscv/riscv.h>
 
 static const char mainargs[] = MAINARGS;
 
 int main(const char *args);
 
-#define SYSTEM_CLK 50000000     //系统时钟50MHz
+
 
 
 
 void putch(char ch)
 {
 
-    // 使用大括号明确while循环体（即使为空）
-   while ((inb(UART_REG_LS) & 0x20) == 0)
-    {
+  while ((inb(UART_REG_LS) & 0x20) == 0)
+  {
+  }
+    outb(UART_REG_TX, ch); 
+                          
 
-    }
-    outb(UART_REG_TX, ch); // 明确在循环外
-  
 }
 __attribute__((noinline)) // 阻止内联，方便观察汇编
-void init_uart(uint32_t baud)
+void
+init_uart()
 {
-  // 1. 确保复位状态
 
-  outb(UART_REG_LC, 0x80); // 启用DLAB
-  inb(UART_REG_LC);
 
-  // 2. 计算并设置波特率
-  uint32_t divisor = SYSTEM_CLK / (16 * baud);
-  outb(UART_REG_DLL, divisor & 0xFF);
-  outb(UART_REG_DLM, (divisor >> 8) & 0xFF);
+  // 2. 启用DLAB访问除数寄存器
+  outb(UART_REG_LC, 0x83);
 
-  // 3. 基本配置
-  outb(UART_REG_LC, 0x03); // 8N1模式
+  // 3. 写入除数
+  outb(UART_REG_DLL, 1);
+  outb(UART_REG_DLM, 0);
 
-  // 4. 启用FIFO（简化版）
-  outb(UART_REG_FC, 0x01); // 仅启用FIFO，不清空
+  outb(UART_REG_LC, 0x03); // DLAB=0
 
-  // 5. 强制触发THRE
-  outb(UART_REG_TX, 0x00); // 发送空字符强制更新状态
+  // 5. 启用并清空FIFO
+  outb(UART_REG_FC, 0xC7); 
 }
+
 
 void init_section()
 {
@@ -81,7 +78,7 @@ void _trm_init()
 {
  
   init_section();
- // init_uart(115200);
+  init_uart();
   int ret = main(mainargs);
 
   // 4. 程序终止

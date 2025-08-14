@@ -11,8 +11,7 @@ VSRC_INCLUDE := $(abspath $(VSRC_DIR)/include)
 PERIP_UART_INCLUDE := $(abspath ../ysyxSoC/perip/uart16550/rtl)
 PERIP_SPI_INCLUDE := $(abspath ../ysyxSoC/perip/spi/rtl)
 
-# --- 递归查找所有 Verilog 文件（.v/.vh）---
-# 1. 主源码目录（递归所有子目录）
+
 SOURCES := $(abspath $(shell find $(VSRC_DIR) -type f \( -name "*.v" -o -name "*.vh" \)))
 # 2. 外设目录（递归所有子目录）
 SOURCES += $(abspath $(shell find ../ysyxSoC/perip -type f -name "*.v"))
@@ -29,8 +28,7 @@ TESTBENCH += $(abspath $(shell find $(CSRC_DIR) -mindepth 2 -type f \( -name "*.
 NEMU_LIB_NAME := $(abspath $(shell find $(NEMU_HOME)/build -type f -name "riscv32-nemu-interpreter-so"))
 
 VERILATOR      := verilator
-# Verilator编译选项
-#强制仿真程序实时刷新输出，无需等待换行符。-unbuffered
+
 VERILATOR_FLAGS += --cc --exe --build --trace \
                   --timescale 1ns/1ns --no-timing \
                   -Wno-UNUSED \

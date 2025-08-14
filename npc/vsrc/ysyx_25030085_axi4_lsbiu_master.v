@@ -70,6 +70,11 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     output reg          M_AXI_BREADY    ,
     input       [3:0]   M_AXI_BID
 );
+    parameter UART_ADDR_LOW  = 32'h10000000;  // 范围起始地址
+    parameter UART_ADDR_HIGH = 32'h10000FFF;  // 范围结束地址
+
+
+
 
     wire         AW_active              ;
     wire         W_active               ;
@@ -99,6 +104,8 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     reg [LFSR_WIDTH-1:0] write_data_cnt;
     reg                  write_data_pending;  // 写数据请求挂起标志  
 
+    wire is_uart_addr;
+    assign is_uart_addr=(lsu_addr>=UART_ADDR_LOW)&&(lsu_addr<=UART_ADDR_HIGH);
 
     //LFSR模块（生成伪随机数）
     reg [LFSR_WIDTH-1:0] lfsr_addr;         //最大为8位
@@ -139,6 +146,7 @@ wire [LFSR_WIDTH-1:0] write_rand_delay =
 
 
 // 读地址通道（单周期传输专用）
+//读单子节size为0
 // 补充AR_active定义：地址通道握手成功（主设备有效且从设备就绪）
 assign AR_active = M_AXI_ARVALID && M_AXI_ARREADY;
 
@@ -167,9 +175,14 @@ always @(posedge clock or negedge reset) begin
     else if (read_pending && read_cnt == read_rand_delay) begin
         M_AXI_ARVALID <= 1'b1;    
         M_AXI_ARADDR  <= lsu_addr;
-       
         read_pending  <= 1'b0;    
         read_cnt      <= 8'd0;   
+        if(is_uart_addr)begin
+           M_AXI_ARSIZE  <= 3'd0; 
+        end
+        else begin
+           M_AXI_ARSIZE  <= 3'd2;
+        end
     end
     
     else if (AR_active) begin
@@ -180,7 +193,7 @@ end
 
 
 
-// 读数据通道
+// 读数据通道 
 always @(posedge clock or negedge reset) begin
     if (reset) begin
         M_AXI_RREADY <= 1'b0;
@@ -196,7 +209,6 @@ always @(posedge clock or negedge reset) begin
         biu_rresp    <=0;
     end
 end
-
 
 // 写地址通道
 always @(posedge clock or negedge reset) begin
@@ -224,6 +236,12 @@ always @(posedge clock or negedge reset) begin
         write_addr_cnt    <=0;
         M_AXI_AWADDR      <= lsu_addr;
         M_AXI_AWVALID     <= 1'b1;  
+        if(is_uart_addr)begin
+            M_AXI_AWSIZE     <= 3'b0;   
+        end
+        else begin
+            M_AXI_AWSIZE     <= 3'd2; 
+        end
     end
     else if (AW_active) begin
         M_AXI_AWVALID <= 1'b0;
@@ -274,17 +292,16 @@ always @(posedge clock or negedge reset) begin
     if (reset) begin
         M_AXI_BREADY <= 1'b0;      
     end 
-    else begin
-                                 // 始终准备好接收响应,而不是valid置位才ready置，那样延迟1111周期                              
+    else begin        // 始终准备好接收响应,而不是valid置位才ready置，那1111                             
         M_AXI_BREADY <= 1'b1;  
-        // 仅在握手成功时锁存响应结果
+       
         if (M_AXI_BVALID && M_AXI_BREADY) begin
             biu_wresp <= (M_AXI_BRESP==2'b00) ? 1 : 0;
         end
     end
 end
 
-// 改为同步检测（仅在有效握手时判断）
+
 always @(posedge clock) begin
     if(M_AXI_BVALID && M_AXI_BREADY) begin  // 确保在握手成功时检查
         if(M_AXI_BRESP != 2'b00) begin
