@@ -48,7 +48,7 @@ always @(posedge clock or posedge reset) begin
         csr_rdata<=0;
         mem_rdata<=0;
         alu_result<=0;  
-        npc<=32'h2000_0000;   
+        npc<=`RESET_VECTOR;   
         state<=IDLE;
     end
     else begin

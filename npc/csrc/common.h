@@ -31,8 +31,8 @@
 #define ANSI_NONE "\33[0m"
 #define PG_ALIGN __attribute((aligned(4096)))
 #define CONFIG_MSIZE 0x8000000
-#define RESET_VECTOR 0x20000000
-#define CONFIG_MBASE 0x20000000
+#define RESET_VECTOR 0x30000000
+#define CONFIG_MBASE 0x30000000
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 #define MAX_SIM_TIME 655300
 extern unsigned char isa_logo[];

@@ -44,8 +44,8 @@ module ysyx_25030085_if (
 always @(posedge clock or posedge reset) begin
     if(reset) begin
         if_req    <= 0;
-        current_pc<= 32'h20000000; 
-        pc       = 32'h20000000;
+        current_pc<= `RESET_VECTOR; 
+        pc       = `RESET_VECTOR;
         state   <=IDLE;
 
     end

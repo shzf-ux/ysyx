@@ -4,7 +4,7 @@
 
 // 物理内存和闪存定义
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
-static uint32_t flash[FLASH_SIZE / sizeof(uint32_t)] PG_ALIGN = {};
+static uint8_t flash[FLASH_SIZE ] PG_ALIGN = {};
 
 // 主机端内存读取辅助函数
 static inline uint32_t host_read(void *addr, int len)
@@ -28,10 +28,9 @@ static inline uint32_t host_read(void *addr, int len)
 // 客户机地址到主机地址的转换
 uint8_t *guest_to_host(uint32_t paddr)
 {
-    // 新增地址范围检查，防止越界
-    assert(paddr >= CONFIG_MBASE && paddr < CONFIG_MBASE + CONFIG_MSIZE &&
-           "Address out of pmem range");
-    return pmem + paddr - CONFIG_MBASE;
+   // printf("%08x\n", paddr);
+
+    return flash + paddr - CONFIG_MBASE;
 }
 
 // 物理内存读取函数
@@ -59,21 +58,8 @@ extern "C" uint32_t pmem_readv(int raddr)
 
 void init_mem()
 {
-    // 初始化闪存内容
-    flash[0] = 0x12345678; // 0x30000000
-    flash[1] = 0x87654321; // 0x30000004
-    flash[2] = 0x000000de; // 0x30000008
-    flash[3] = 0x000000ca; // 0x3000000c
 
-    //char test
-    flash[10] =0x100007b7;  ///300000040
-    flash[11] =0x04100713;
-    flash[12] =0x00e78023;
-    flash[13] =0x00a00713;
-    flash[12] =0x00e78023;
-    flash[13] =0x00008067;
-
-    memset(pmem, rand(), CONFIG_MSIZE);
+    memset(flash, rand(), CONFIG_MSIZE);
 }
 
 // 物理内存写入函数（修复并启用写入逻辑）
@@ -110,18 +96,12 @@ void display_memory_write(uint32_t addr, uint32_t data)
 extern "C" void flash_read(int32_t addr, int32_t *data)
 {
     
-    // 新增空指针检查
-    if (data == NULL)
-    {
-        printf("Error: flash_read: data pointer is NULL\n");
-        return;
-    }
 
+   //printf("[flash] addr:%08x\n", addr);
 
-
-    uint32_t ret = host_read(&flash[addr/sizeof(uint32_t)], 4);
+    uint32_t ret = host_read(&flash[addr], 4);
     *data = ret;
-   printf("[paddr flash read] addr:%08x, data:%08x\n", addr, ret);
+  // printf("[paddr flash read] addr:%08x, data:%08x\n", addr, ret);
 }
 
 // ROM读取函数

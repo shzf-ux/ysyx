@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define FLASH_SIZE (8 * 1024)
+#define FLASH_SIZE (128 * 1024 * 1024)
 #define FLASH_START 0x30000000
 #define FLASH_END 0x3fffffff
 
