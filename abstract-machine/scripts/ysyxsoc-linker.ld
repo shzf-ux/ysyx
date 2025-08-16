@@ -1,6 +1,7 @@
 MEMORY {
-    ROM (rx)  : ORIGIN = 0x20000000, LENGTH = 4K
-    SRAM (rwx): ORIGIN = 0x0F000000, LENGTH = 8K
+    ROM   (rx)  : ORIGIN = 0x20000000, LENGTH = 4K
+    SRAM  (rwx) : ORIGIN = 0x0F000000, LENGTH = 8K
+    flash (rwx) : ORIGIN = 0x30000000, LENGTH = 16M
 }
 
 SECTIONS {
@@ -10,7 +11,7 @@ SECTIONS {
         *(.text .text.*)
         . = ALIGN(4);
         _etext = .;         /* 代码段结束 */
-    } > ROM
+    } > flash
 
     .rodata : ALIGN(4) {
         _rodata_start = .;        /* 只读数据段起始地址 */     
@@ -18,7 +19,7 @@ SECTIONS {
         *(.rodata* .srodata*)     /* 通配符模式：覆盖所有只读相关段 */ 
         . = ALIGN(4);             /* 保持4字节对齐 */
         _rodata_end = .;          /* 只读数据段结束地址 */
-    } > ROM                       /* 所有只读数据存储在ROM中 */
+    } > flash                      /* 所有只读数据存储在ROM中 */
 
 
   /* 合并所有数据段 */
@@ -28,7 +29,7 @@ SECTIONS {
         *(.sdata .sdata.*)   /* 包含小数据段 */
         . = ALIGN(4);
         _edata = .;
-    } > SRAM AT > ROM
+    } > SRAM AT > flash
     _data_lma = LOADADDR(.data);
 
 

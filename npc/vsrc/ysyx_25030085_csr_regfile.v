@@ -25,11 +25,15 @@ module ysyx_25030085_csr_regfile (
 );
 
 // CSR寄存器
-reg [31:0] mstatus;
-reg [31:0] mtvec;
-reg [31:0] mepc;
-reg [31:0] mcause;
-//
+reg [31:0] mstatus  ;
+reg [31:0] mtvec    ;
+reg [31:0] mepc     ;
+reg [31:0] mcause   ;
+
+reg [31:0] mvendorid ;
+reg [31:0] marchid   ;
+assign mvendorid=`MVENDORID_VALUE;
+assign marchid  = `MARCHID_VALUE;
 
 assign mtvec_out=mtvec;
 assign mepc_out =mepc;
@@ -44,6 +48,8 @@ always @(*) begin
         12'h305: rdata_reg = mtvec;
         12'h341: rdata_reg = mepc;
         12'h342: rdata_reg = mcause;
+        12'hf11: rdata_reg = mvendorid;
+        12'hf12: rdata_reg = marchid ;
         default: rdata_reg = 32'h0;
     endcase
 end

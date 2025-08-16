@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <riscv/riscv.h>
-
+//#define DIFFTEST_OPEN
 static const char mainargs[] = MAINARGS;
 
 int main(const char *args);
@@ -71,14 +71,30 @@ void halt(int code)
   while (1)
     ;
 }
+void show_id()
+{
+  uint32_t mvendorid, marchid;
 
+  // 读取CSR寄存器的值
+  // csrr指令格式：csrr 目标寄存器, CSR名称
+  asm volatile("csrr %0, mvendorid" : "=r"(mvendorid)); // 读mvendorid
+  asm volatile("csrr %0, marchid" : "=r"(marchid));     // 读marchid
 
+  // 输出结果
+  printf("mvendorid: %08x \n", mvendorid);
+  printf("marchid: %d \n", marchid);
+
+}
 
 void _trm_init()
 {
  
   init_section();
+  #ifndef DIFFTEST_OPEN
   init_uart();
+  show_id();
+  #endif
+
   int ret = main(mainargs);
 
   // 4. 程序终止
