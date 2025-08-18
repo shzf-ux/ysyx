@@ -3,8 +3,10 @@
 
 
 // 物理内存和闪存定义
-static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
+static uint8_t psram[CONFIG_MSIZE] PG_ALIGN = {};
+
 static uint8_t flash[FLASH_SIZE ] PG_ALIGN = {};
+
 
 // 主机端内存读取辅助函数
 static inline uint32_t host_read(void *addr, int len)
@@ -20,6 +22,22 @@ static inline uint32_t host_read(void *addr, int len)
     default:
         assert(0 && "Invalid read length");
         return 0;
+    }
+}
+
+static inline void host_write(void *addr, int len, int32_t data)
+{
+    switch (len)
+    {
+    case 1:
+        *(uint8_t *)addr = data;
+        return;
+    case 2:
+        *(uint16_t *)addr = data;
+        return;
+    case 4:
+        *(uint32_t *)addr = data;
+        return;
     }
 }
 
@@ -62,21 +80,11 @@ void init_mem()
     memset(flash, rand(), CONFIG_MSIZE);
 }
 
-// 物理内存写入函数（修复并启用写入逻辑）
-extern "C" void pmem_write(int waddr, int wdata, uint8_t wmask)
-{
-    if (waddr == SERIAL_ADDR)
-    {
-        putc(wdata, stdout); // 启用串口输出功能
-        fflush(stdout);      // 确保立即刷新输出缓冲区
-        return;
-    }
 
 #ifdef CONFIG_MTRACE
     display_memory_write(waddr, wdata);
 #endif
 
-}
 
 // 内存读取显示函数
 void display_memory_read(uint32_t addr, uint32_t data)
@@ -115,4 +123,23 @@ extern "C" void mrom_read(int32_t addr, int32_t *data)
 
     int32_t val = pmem_read(addr, 4);
     *data = val;
+}
+
+
+
+
+// psram读函数
+extern "C" int psram_read(int32_t addr)
+{
+ 
+    int data;
+    data = host_read(&psram[addr], 4);
+    printf(" read addr:%08x data:%08x\n", addr, data);
+    return data;
+}
+// pasrm写函数
+extern "C" void psram_write(int32_t addr, int32_t data)
+{
+    printf(" write addr:%08x data:%08x\n", addr ,data);
+    host_write(&psram[addr], 4, data);
 }

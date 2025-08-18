@@ -75,8 +75,10 @@ module ysyx_25030085_lsu (//数据存储器
 
     wire [1:0]  offset=addr[1:0];//获取偏移量
     wire [31:0] aligned_addr=addr&32'hFFFFFFFC;
-    // 外设地址范围定义（根据实际硬件调整，此处示例为0x10000000~0x1FFFFfff）
-    wire is_uart16550 = (addr >= 32'h10000000) && (addr <= 32'h10000fff);
+
+
+    // uart 0x1000_00000x1000_0fff）
+    wire unaligned_ac = (addr[31:12]==`UART16550)||(addr[31:24]==`PSRAM);
 
 
     assign in_ready=state==IDLE;
@@ -152,7 +154,7 @@ always @(*) begin
     lsu_addr =addr;
     if(state==STORE)begin
         if(biu_rresp)begin
-            if (is_uart16550) begin
+            if (unaligned_ac) begin
             // 外设读：直接取32位数据的低8位（外设寄存器通常为8位）
             lsu_rdata = {24'h000000, biu_rdata[7:0]};
             lsu_addr=addr;
@@ -216,7 +218,9 @@ always @(*) begin
     lsu_addr = aligned_addr;  // 默认使用对齐地址（内存访问）
     
     if (lsu_req && lsu_wwe && state == STORE) begin
-        if (is_uart16550) begin     //uart 不需要写选通信号
+
+
+        if (unaligned_ac) begin     //uart 不需要写选通信号
             lsu_addr = addr;  
             lsu_wdata = {24'h0, wdata[7:0]} << (8 * addr[1:0]);
         end
@@ -238,6 +242,9 @@ always @(*) begin
                 default: lsu_strb = 4'b0000;
             endcase
         end
+
+
+        
     end
 end
 

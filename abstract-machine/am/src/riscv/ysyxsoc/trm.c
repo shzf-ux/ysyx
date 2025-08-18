@@ -66,6 +66,9 @@ void init_section()
 
 void halt(int code)
 {
+  if(code){
+    printf("error!\n");
+  }
   ysyxsoc_ebreak(code);
   // should not reach here
   while (1)
@@ -90,10 +93,10 @@ void _trm_init()
 {
  
   init_section();
-  #ifndef DIFFTEST_OPEN
+  //#ifdef DIFFTEST_OPEN
   init_uart();
   show_id();
-  #endif
+ // #endif
 
   int ret = main(mainargs);
 

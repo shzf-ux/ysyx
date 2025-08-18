@@ -104,8 +104,14 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     reg [LFSR_WIDTH-1:0] write_data_cnt;
     reg                  write_data_pending;  // 写数据请求挂起标志  
 
+
+
+
     wire is_uart_addr;
     assign is_uart_addr=(lsu_addr>=UART_ADDR_LOW)&&(lsu_addr<=UART_ADDR_HIGH);
+
+
+
 
     //LFSR模块（生成伪随机数）
     reg [LFSR_WIDTH-1:0] lfsr_addr;         //最大为8位

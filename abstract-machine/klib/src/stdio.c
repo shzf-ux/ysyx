@@ -125,11 +125,20 @@ int vsprintf(char *out, const char *fmt, va_list ap)
         }
       }
 
+      // 检查是否有 'l' 修饰符（long 类型）
+      int is_long = 0;
+      if (*fmt == 'l')
+      {
+        is_long = 1;
+        fmt++;
+      }
+
       switch (*fmt)
       {
       case 'd':
+      case 'i':
       { // 十进制整数
-        int num = va_arg(ap, int);
+        long num = is_long ? va_arg(ap, long) : va_arg(ap, int);
         num_to_str(out, &index, num, width, pad);
         break;
       }
@@ -174,7 +183,7 @@ int vsprintf(char *out, const char *fmt, va_list ap)
       case 'x': // 小写十六进制
       case 'X':
       { // 大写十六进制
-        uint32_t num = va_arg(ap, uint32_t);
+        uint32_t num = is_long ? va_arg(ap, unsigned long) : va_arg(ap, uint32_t);
         out[index++] = '0';
         out[index++] = (*fmt == 'X') ? 'X' : 'x';
         hex_to_str(out, &index, num, (*fmt == 'X'), width);
@@ -210,7 +219,6 @@ int vsprintf(char *out, const char *fmt, va_list ap)
   out[index] = '\0'; // 终止符
   return index;
 }
-
 int sprintf(char *out, const char *fmt, ...)
 {
   va_list arg;
