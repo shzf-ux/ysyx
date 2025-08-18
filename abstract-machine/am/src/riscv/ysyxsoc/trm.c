@@ -33,8 +33,9 @@ init_uart()
   outb(UART_REG_LC, 0x83);
 
   // 3. 写入除数
-  outb(UART_REG_DLL, 1);
   outb(UART_REG_DLM, 0);
+  outb(UART_REG_DLL, 1);
+
 
   outb(UART_REG_LC, 0x03); // DLAB=0
 
@@ -95,7 +96,7 @@ void _trm_init()
   init_section();
   //#ifdef DIFFTEST_OPEN
   init_uart();
-  show_id();
+  //show_id();
  // #endif
 
   int ret = main(mainargs);

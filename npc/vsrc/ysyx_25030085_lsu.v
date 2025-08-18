@@ -80,7 +80,6 @@ module ysyx_25030085_lsu (//数据存储器
     // uart 0x1000_00000x1000_0fff）
     wire unaligned_ac = (addr[31:12]==`UART16550)||(addr[31:24]==`PSRAM);
 
-
     assign in_ready=state==IDLE;
     assign out_valid=state==OUTPUT;
 
@@ -110,10 +109,10 @@ module ysyx_25030085_lsu (//数据存储器
                 ctrl<=in_ctrl;
                 wdata<=in_lsu_wdata;
                 addr <=in_lsu_addr;
-                pc<=in_pc;
-                npc<=in_npc;
-                imm<=in_imm;
-                rd<=in_rd;
+                pc  <=in_pc;
+                npc <=in_npc;
+                imm <=in_imm;
+                rd  <=in_rd;
                 lsu_req<=1;         // 发起请求
                 state<=STORE;
             end    
@@ -222,7 +221,7 @@ always @(*) begin
 
         if (unaligned_ac) begin     //uart 不需要写选通信号
             lsu_addr = addr;  
-            lsu_wdata = {24'h0, wdata[7:0]} << (8 * addr[1:0]);
+            lsu_wdata = wdata << (8 * addr[1:0]);
         end
         else begin
             // 内存写：使用对齐地址，按正常内存操作处理

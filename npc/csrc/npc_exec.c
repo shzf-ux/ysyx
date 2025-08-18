@@ -79,10 +79,10 @@ void npc_exec(uint64_t n)
             difftest_step(top.pc);
             #endif
         }
-        soc_top->eval();
+        //soc_top->eval();
         vcd->dump(sim_time);
         if(sim_time>2000000){
-      return;
+     // return;
         }
         sim_time++;
    }

@@ -73,9 +73,6 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     parameter UART_ADDR_LOW  = 32'h10000000;  // 范围起始地址
     parameter UART_ADDR_HIGH = 32'h10000FFF;  // 范围结束地址
 
-
-
-
     wire         AW_active              ;
     wire         W_active               ;
     wire         B_active               ;
@@ -103,7 +100,6 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
 
     reg [LFSR_WIDTH-1:0] write_data_cnt;
     reg                  write_data_pending;  // 写数据请求挂起标志  
-
 
 
 
@@ -308,14 +304,7 @@ always @(posedge clock or negedge reset) begin
 end
 
 
-always @(posedge clock) begin
-    if(M_AXI_BVALID && M_AXI_BREADY) begin  // 确保在握手成功时检查
-        if(M_AXI_BRESP != 2'b00) begin
-            $display("[ERROR] Write error at %t, addr=%h, resp=%b", 
-                    $time, M_AXI_AWADDR, M_AXI_BRESP);
-        end
-    end
-end
+
 
 
 

@@ -138,8 +138,8 @@ extern "C" int psram_read(int32_t addr)
     return data;
 }
 // pasrm写函数
-extern "C" void psram_write(int32_t addr, int32_t data)
+extern "C" void psram_write(int32_t addr, int32_t data,int mask)
 {
-    printf(" write addr:%08x data:%08x\n", addr ,data);
-    host_write(&psram[addr], 4, data);
+    printf(" write addr:%08x data:%08x mask :%d \n", addr ,data,mask);
+    host_write(&psram[addr], mask/2, data);
 }
