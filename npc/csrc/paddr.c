@@ -23,27 +23,33 @@ static inline uint32_t host_read(void *addr, int len)
 }
 uint8_t *guest_to_host(uint32_t paddr)
  {
-    
-    
-     return pmem + paddr - CONFIG_MBASE;
+     if ((paddr - CONFIG_MBASE)<0)
+     {
+         printf("%08x\n", paddr);
+         assert(0);
+     }
+
+         return pmem + paddr - CONFIG_MBASE;
  }
  uint32_t pmem_read(uint32_t addr, int len)
  {
-
-
-     uint32_t ret = host_read(guest_to_host(addr), len);
-     return ret;
+    if(addr==0){
+        return 0;
+    }
+    uint32_t ret = host_read(guest_to_host(addr), len);
+    return ret;
+     
  }
 extern "C" uint32_t pmem_readv(int raddr)
 {
-    //printf("c  lw %08x\n", raddr);
+   
     if (raddr == UPTIME_ADDR)
     {
 
         return get_time();
     }
     uint32_t ret = pmem_read(raddr, 4);
-
+   // printf(ANSI_FMT("read pc: ", ANSI_FG_GREEN) "0x%08x, data: 0x%08x\n", raddr, ret);
     //printf("ret:%08x\n", ret);
     #ifdef CONFIG_MTRACE
     display_memory_read(raddr, ret);
@@ -67,7 +73,7 @@ extern "C" void pmem_write( int waddr,int wdata,uint8_t wmask)
 
         return;
     }
-
+   // printf(ANSI_FMT("write pc: ", ANSI_FG_YELLOW) "0x%08x, data: 0x%08x\n", waddr, wdata);
 //0001  0011  1111
 //0010  1100
 //0100         

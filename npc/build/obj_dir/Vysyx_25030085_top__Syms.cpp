@@ -6,7 +6,7 @@
 #include "Vysyx_25030085_top___024root.h"
 #include "Vysyx_25030085_top___024unit.h"
 
-void Vysyx_25030085_top___024root____Vdpiexp_ysyx_25030085_top__DOT__regfile_init__DOT__info_register_en_TOP(Vysyx_25030085_top__Syms* __restrict vlSymsp, CData/*0:0*/ enable, CData/*0:0*/ en_display);
+void Vysyx_25030085_top___024root____Vdpiexp_ysyx_25030085_top__DOT__regfile__DOT__info_register_en_TOP(Vysyx_25030085_top__Syms* __restrict vlSymsp, CData/*0:0*/ enable, CData/*0:0*/ en_display);
 
 // FUNCTIONS
 Vysyx_25030085_top__Syms::~Vysyx_25030085_top__Syms()
@@ -30,9 +30,9 @@ Vysyx_25030085_top__Syms::Vysyx_25030085_top__Syms(VerilatedContext* contextp, c
     TOP.__Vconfigure(true);
     TOP____024unit.__Vconfigure(true);
     // Setup scopes
-    __Vscope_ysyx_25030085_top__regfile_init.configure(this, name(), "ysyx_25030085_top.regfile_init", "regfile_init", -9, VerilatedScope::SCOPE_OTHER);
+    __Vscope_ysyx_25030085_top__regfile.configure(this, name(), "ysyx_25030085_top.regfile", "regfile", -9, VerilatedScope::SCOPE_OTHER);
     // Setup export functions
     for (int __Vfinal = 0; __Vfinal < 2; ++__Vfinal) {
-        __Vscope_ysyx_25030085_top__regfile_init.exportInsert(__Vfinal, "info_register_en", (void*)(&Vysyx_25030085_top___024root____Vdpiexp_ysyx_25030085_top__DOT__regfile_init__DOT__info_register_en_TOP));
+        __Vscope_ysyx_25030085_top__regfile.exportInsert(__Vfinal, "info_register_en", (void*)(&Vysyx_25030085_top___024root____Vdpiexp_ysyx_25030085_top__DOT__regfile__DOT__info_register_en_TOP));
     }
 }

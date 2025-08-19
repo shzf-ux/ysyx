@@ -81,7 +81,7 @@ static int parse_args(int argc, char *argv[])
         switch (o)
         {
         case 'b':sdb_set_batch_mode();break; // 设置批处理模式
-        case 'd': diff_so_file = optarg;printf("%s\n", diff_so_file);break;
+        case 'd': diff_so_file = optarg;break;
         case 'e': elf_file = optarg;break;
         case 1:img_file = optarg;return 0;
         default:
@@ -116,15 +116,15 @@ void init_rtl(int argc, char *argv[])
 
     // 1. 初始化信号
     top->clk = 0;
-    top->rst = 0;
-    top->eval();
-
-    sim_time++;
-
-    // 1.5 开始复位流程
-    top->clk = 1;
     top->rst = 1;
     top->eval();
+    vcd->dump(sim_time); // 写入复位释放状态
+    sim_time++;
+    // 1.5 开始复位流程
+    top->clk = 1;
+    top->eval();
+
+
     top->instruction = pmem_read(top->pc_out,4);
     vcd->dump(sim_time); // 写入复位信号置位状态
     sim_time++;
@@ -148,10 +148,12 @@ void init_monitor(int argc, char *argv[])
     init_isa();
     
     long img_size = load_img();
-    
+
     init_disasm();
+
     init_rtl(argc, argv);
-  
+
+
     init_difftest(diff_so_file, img_size, difftest_port);
     
 }

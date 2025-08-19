@@ -20,19 +20,15 @@ extern "C" {
     extern void info_register_en(svBit enable, svBit en_display);
 
     // DPI IMPORTS
-    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/pc.v:1:30
-    extern void display_call_func(int pc, int dnpc);
-    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/pc.v:2:30
-    extern void display_ret_func(int pc, int dnpc);
     // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/control.v:1:30
     extern void ebreak_instruction(int inst);
-    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/regfile.v:1:31
+    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/regfile.v:3:31
     extern void info_register(int value, svBit en_display);
     // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/control.v:2:30
     extern void invalid_inst(int pc, int inst);
     // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/DataMem.v:1:29
     extern int pmem_readv(int raddr);
-    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/DataMem.v:5:30
+    // DPI import at /home/zzy/ysyx-workbench/npc/vsrc/DataMem.v:2:30
     extern void pmem_write(int waddr, int wdata, char wmask);
 
 #ifdef __cplusplus

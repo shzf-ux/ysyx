@@ -14,7 +14,7 @@ extern "C"
 void set_scope()
 {
 
-    svScope scope = svGetScopeFromName("TOP.ysyx_25030085_top.regfile_init");
+    svScope scope = svGetScopeFromName("TOP.ysyx_25030085_top.regfile");
     if (!scope)
     {
         fprintf(stderr, "Error: Regfile scope not found!\n");

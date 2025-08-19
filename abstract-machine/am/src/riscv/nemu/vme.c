@@ -1,7 +1,6 @@
 #include <am.h>
 #include <nemu.h>
 #include <klib.h>
-#include </home/zzy/ysyx-workbench/abstract-machine/am/include/arch/riscv.h>
 
 static AddrSpace kas = {};
 static void* (*pgalloc_usr)(int) = NULL;
