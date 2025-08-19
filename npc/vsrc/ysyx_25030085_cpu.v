@@ -269,6 +269,8 @@ end
     wire       [31:0]  lsu_addr;     // LS模块发送到BIU的地址信号
     wire       [31:0]  lsu_wdata;    // LS模块发送到BIU的写数据
     wire       [3:0]   lsu_strb;     // LS模块发送到BIU的字节选通信号
+    wire       [2:0]   lsu_arsize;
+    wire       [2:0]   lsu_awsize;
 
     // BIU返回给LS模块的信号
     wire               biu_rresp_ls  ;
@@ -430,6 +432,8 @@ lsbiu(
     .lsu_rwe        	(  lsu_rwe         ),
     .lsu_wdata      	(  lsu_wdata       ),
     .lsu_strb       	(  lsu_strb        ),
+    .lsu_arsize          	(  lsu_arsize        ),
+    .lsu_awsize          	(  lsu_awsize        ),
     .lsu_req        	(  lsu_req         ),
 
     .biu_rdata      	(  biu_rdata_ls     ),
@@ -636,6 +640,8 @@ ysyx_25030085_lsu lsu(
     .lsu_rwe        (   lsu_rwe     ) ,  // LS模块向BIU发起的读使能信号
     .lsu_addr       (   lsu_addr    ) ,  // LS模块发送到BIU的地址信号
     .lsu_wdata      (   lsu_wdata   ) ,  // LS模块发送到BIU的写数据
+    .lsu_arsize     (  lsu_arsize   ) ,
+    .lsu_awsize     (  lsu_awsize   ) ,
     .lsu_strb       (   lsu_strb    ) ,  // LS模块发送到BIU的字节选通信号
     
     // 来自BIU的信号    

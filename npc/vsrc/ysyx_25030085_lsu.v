@@ -37,7 +37,8 @@ module ysyx_25030085_lsu (//数据存储器
     output reg [31:0]           lsu_addr    ,       // 地址输出
     output reg [31:0]           lsu_wdata   ,      // 写数据输出
     output reg [3:0]            lsu_strb    ,       // 字节选通信号
-
+    output reg [2:0]            lsu_arsize    ,
+    output reg [2:0]            lsu_awsize   ,
     // 来自BIU的信号
     input                       biu_rresp   ,      
     input                       biu_wresp   ,
@@ -109,10 +110,10 @@ module ysyx_25030085_lsu (//数据存储器
                 ctrl<=in_ctrl;
                 wdata<=in_lsu_wdata;
                 addr <=in_lsu_addr;
-                pc  <=in_pc;
-                npc <=in_npc;
-                imm <=in_imm;
-                rd  <=in_rd;
+                pc<=in_pc;
+                npc<=in_npc;
+                imm<=in_imm;
+                rd<=in_rd;
                 lsu_req<=1;         // 发起请求
                 state<=STORE;
             end    
@@ -149,17 +150,9 @@ module ysyx_25030085_lsu (//数据存储器
   
 //读数据，对来自biu的数据进行操作
 always @(*) begin
-    lsu_rdata = 32'h00000000;
-    lsu_addr =addr;
+lsu_rdata = 32'h00000000;
     if(state==STORE)begin
         if(biu_rresp)begin
-            if (unaligned_ac) begin
-            // 外设读：直接取32位数据的低8位（外设寄存器通常为8位）
-            lsu_rdata = {24'h000000, biu_rdata[7:0]};
-            lsu_addr=addr;
-            end
-            else begin
-                 lsu_addr = aligned_addr;  // 内存地址对齐到4字节
             case (MemOp)
                 OP_LW: lsu_rdata = biu_rdata;  // 字操作，无需扩展   
                 OP_LH: begin
@@ -168,16 +161,14 @@ always @(*) begin
                         lsu_rdata = {{16{biu_rdata[31]}}, biu_rdata[31:16]};
                     else 
                         lsu_rdata = {{16{biu_rdata[15]}}, biu_rdata[15:0]};
-                end
-                
+                end               
                 OP_LHU: begin
                     // 无符号半字扩展
                     if (offset[1]) 
                         lsu_rdata = {16'h0000, biu_rdata[31:16]};
                     else 
                         lsu_rdata = {16'h0000, biu_rdata[15:0]};
-                end
-                
+                end               
                 OP_LB: begin
                     // 有符号字节扩展
                     case (offset)
@@ -186,8 +177,7 @@ always @(*) begin
                         2'b10: lsu_rdata = {{24{biu_rdata[23]}}, biu_rdata[23:16]};
                         2'b11: lsu_rdata = {{24{biu_rdata[31]}}, biu_rdata[31:24]};
                     endcase
-                end
-                
+                end               
                 OP_LBU: begin
                     // 无符号字节扩展
                     case (offset)
@@ -201,7 +191,7 @@ always @(*) begin
                     lsu_rdata =0;
                 end
             endcase
-            end
+
         end
         else begin
            // $display("Out-of bound");    
@@ -209,23 +199,49 @@ always @(*) begin
     end
 end
 
+// 生成arsize（读大小）和awsize（写大小）
+always @(*) begin
+    // 默认为4字节（字操作）
+    lsu_arsize = 3'b010;
+    lsu_awsize = 3'b010;
+    lsu_addr   = 0;  // 默认使用对齐地址（内存访问）
+    // 读操作：根据MemOp生成arsize
+    if (MemRead) begin
+        case (MemOp)
+            OP_LB, OP_LBU: lsu_arsize = 3'b000;  // 1字节
+            OP_LH, OP_LHU: lsu_arsize = 3'b001;  // 2字节
+            OP_LW:         lsu_arsize = 3'b010;  // 4字节
+            default:       lsu_arsize = 3'b010;
+        endcase
+    end
+
+    // 写操作：根据MemOp生成awsize
+    if (MemWrite) begin
+        case (MemOp)
+            OP_SB:         lsu_awsize = 3'b000;  // 1字节
+            OP_SH:         lsu_awsize = 3'b001;  // 2字节
+            OP_SW:         lsu_awsize = 3'b010;  // 4字节
+            default:       lsu_awsize = 3'b010;
+        endcase
+    end
+
+    if(unaligned_ac)begin
+        lsu_addr = addr;  // 内存地址对齐到4字节
+        end
+    else begin
+        lsu_addr = aligned_addr;  // 内存地址对齐到4字节
+    end
+end
 
 
 always @(*) begin
     lsu_strb = 4'b0000;
     lsu_wdata = wdata;  // 默认值
-    lsu_addr = aligned_addr;  // 默认使用对齐地址（内存访问）
+   
     
     if (lsu_req && lsu_wwe && state == STORE) begin
-
-
-        if (unaligned_ac) begin     //uart 不需要写选通信号
-            lsu_addr = addr;  
-            lsu_wdata = wdata << (8 * addr[1:0]);
-        end
-        else begin
-            // 内存写：使用对齐地址，按正常内存操作处理
-            lsu_addr = aligned_addr;
+        begin
+            // 内存写：使用对齐地址，按正常内存操作处理    
             case (MemOp)
                 OP_SW: begin  // 字操作（4字节）
                     lsu_strb = 4'b1111;
@@ -240,10 +256,7 @@ always @(*) begin
                 end
                 default: lsu_strb = 4'b0000;
             endcase
-        end
-
-
-        
+        end    
     end
 end
 

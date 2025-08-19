@@ -73,16 +73,16 @@ void npc_exec(uint64_t n)
         soc_top->eval();
         if (is_rising_edge&&top.done)
         {
-          // printf("simtime:%d\n", sim_time);
+           //printf("simtime:%d\n", sim_time);
           // printf("pc:%08x\n", top.pc);
             #ifdef CONFIG_DIFFTEST
             difftest_step(top.pc);
             #endif
         }
         //soc_top->eval();
-        vcd->dump(sim_time);
-        if(sim_time>2000000){
-     // return;
+       // vcd->dump(sim_time);
+        if(sim_time>1000000){
+    // return;
         }
         sim_time++;
    }

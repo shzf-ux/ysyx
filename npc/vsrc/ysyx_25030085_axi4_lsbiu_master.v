@@ -16,6 +16,8 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     input       [31:0]  lsu_wdata   ,
     input       [3:0]   lsu_strb    ,
     input               lsu_req     ,       //请求信号
+    input       [2:0]   lsu_arsize  ,   
+    input       [2:0]   lsu_awsize  ,
 
     output reg  [31:0]  biu_rdata   ,
     output reg          biu_wresp   ,       //写响应
@@ -89,6 +91,8 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     assign       R_active  = M_AXI_RVALID  & M_AXI_RREADY ;  
 
     reg [3:0]  strb_reg;//无延迟可以不加  //锁存strb，这个只持续1周期  
+    reg [2:0]  awsize_reg;
+    reg [2:0]  arsize_reg;
     reg [31:0] wdata_reg; //锁存strb，这个只持续1周期 
 
     // 读延迟计数器
@@ -166,6 +170,7 @@ always @(posedge clock or negedge reset) begin
     else if (lsu_req && lsu_rwe && !M_AXI_ARVALID && !M_AXI_AWVALID && !read_pending) begin
         read_pending <= 1'b1; 
         read_cnt     <= 8'd0; 
+        arsize_reg <=lsu_arsize;
     end
     // 延迟处理（如果启用）
     `ifndef DISABLE_LS_DELAY
@@ -179,12 +184,7 @@ always @(posedge clock or negedge reset) begin
         M_AXI_ARADDR  <= lsu_addr;
         read_pending  <= 1'b0;    
         read_cnt      <= 8'd0;   
-        if(is_uart_addr)begin
-           M_AXI_ARSIZE  <= 3'd0; 
-        end
-        else begin
-           M_AXI_ARSIZE  <= 3'd2;
-        end
+        M_AXI_ARSIZE  <= arsize_reg;
     end
     
     else if (AR_active) begin
@@ -225,6 +225,7 @@ always @(posedge clock or negedge reset) begin
     end else if (lsu_req && lsu_wwe && !M_AXI_AWVALID && !M_AXI_ARVALID&&!write_addr_pending) begin
         write_addr_pending<=1;
         write_addr_cnt    <=0;
+        awsize_reg<=lsu_awsize;
     end
 
     `ifndef DISABLE_LS_DELAY
@@ -238,12 +239,7 @@ always @(posedge clock or negedge reset) begin
         write_addr_cnt    <=0;
         M_AXI_AWADDR      <= lsu_addr;
         M_AXI_AWVALID     <= 1'b1;  
-        if(is_uart_addr)begin
-            M_AXI_AWSIZE     <= 3'b0;   
-        end
-        else begin
-            M_AXI_AWSIZE     <= 3'd2; 
-        end
+        M_AXI_AWSIZE     <= awsize_reg; 
     end
     else if (AW_active) begin
         M_AXI_AWVALID <= 1'b0;

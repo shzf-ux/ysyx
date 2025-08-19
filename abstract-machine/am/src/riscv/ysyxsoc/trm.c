@@ -95,7 +95,7 @@ void _trm_init()
  
   init_section();
   //#ifdef DIFFTEST_OPEN
-  init_uart();
+ init_uart();
   //show_id();
  // #endif
 
