@@ -8,10 +8,11 @@
 static const char mainargs[] = MAINARGS;
 
 int main(const char *args);
-
-
-
-
+void _trm_init();
+//设置堆区
+extern char _heap_start;
+extern char _heap_end;
+Area heap = RANGE(&_heap_start, &_heap_end);
 
 void putch(char ch)
 {
@@ -44,26 +45,32 @@ init_uart()
 }
 
 
-void init_section()
+void _bootloader()
 {
-  /* 1. 复制所有初始化数据 */
+
+  /* 从lma加载rodata段到vma */
+  extern uint8_t _program_lma[], _program_vma[], _program_end[];
+  uint32_t program_size = _program_end - _program_vma;
+  memcpy(_program_vma, _program_lma, program_size); // 把lma->vma
+
+  /* 从lma加载rodata段到vma */
+  extern uint8_t _rodata_lma[], _rodata_vma[], _rodata_end[];
+  uint32_t rodata_size = _rodata_end - _rodata_vma;
+  memcpy(_rodata_vma, _rodata_lma, rodata_size); // 把lma->vma
+
+  /* 从lma加载data段到vma */
   extern uint8_t _data_lma[], _data_vma[], _edata[];
   uint32_t data_size = _edata - _data_vma;
-  if (data_size > 0)
-  {
-    memcpy(_data_vma, _data_lma, data_size);
-  }
+    memcpy(_data_vma, _data_lma, data_size);      //把lma->vma
 
-  /* 2. 清零.bss段 */
+
+  /*  清零.bss段 */
   extern uint8_t _bss_start[], _bss_end[];
   uint32_t bss_size = _bss_end - _bss_start;
-  if (bss_size > 0)
-  {
     memset(_bss_start, 0, bss_size);
-  }
+
+    
 }
-
-
 
 void halt(int code)
 {
@@ -93,7 +100,6 @@ void show_id()
 void _trm_init()
 {
  
-  init_section();
   //#ifdef DIFFTEST_OPEN
  init_uart();
   //show_id();

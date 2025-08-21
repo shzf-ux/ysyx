@@ -134,7 +134,7 @@ extern "C" int psram_read(int32_t addr)
  
     int data;
     data = host_read(&psram[addr], 4);
-    printf(" read addr:%08x data:%08x\n", addr, data);
+   // printf(" read addr:%08x data:%08x\n", addr, data);
     return data;
 }
 // pasrm写函数
@@ -144,6 +144,6 @@ extern "C" void psram_write(int32_t addr, int32_t data,int mask)
     mask &= 0x0F;
     data = data >> (4 - mask)*8;
 
-    printf(" write addr:%08x data:%08x mask :%d \n", addr ,data,mask);
+   // printf(" write addr:%08x data:%08x mask :%d \n", addr ,data,mask);
     host_write(&psram[addr], mask, data);
 }

@@ -1,6 +1,6 @@
 #include <am.h>
 
-/*void __am_timer_init() {
+void __am_timer_init() {
 }
 static inline uint32_t inl(uintptr_t addr) { return *(volatile uint32_t *)addr; }
 #define NS_PER_US 1000
@@ -17,4 +17,4 @@ void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
   rtc->day    = 0;
   rtc->month  = 0;
   rtc->year   = 1900;
-}*/
+}
