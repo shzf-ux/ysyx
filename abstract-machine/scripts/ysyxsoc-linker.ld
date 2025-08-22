@@ -1,3 +1,4 @@
+ENTRY(_start)
 MEMORY {
     ROM   (rx)  : ORIGIN = 0x20000000, LENGTH = 4K
     sram  (rwx) : ORIGIN = 0x0F000000, LENGTH = 8K
@@ -7,37 +8,44 @@ MEMORY {
 
 SECTIONS {
 
-    /* 1. 优先处理需要放在flash的.text.entry和.text.bootloader */
-    .text : ALIGN(4) {
-        _text_vma = .;                 
-        *(.text.entry)                 
-        *(.text._bootloader)   
-        *(.text.memset) 
-        *(.text.memcpy)    
+    .fsbl : ALIGN(4) {          /*flash最开始的函数*/
+        _fsbl_vma = .;  
+        *(.text.bootloader)                         
+        *(.text.fsbl)    
         . = ALIGN(4);                  
-        _text_end = .;                 
-    } > flash                          
+        _fsbl_end = .;                 
+    } > flash   
 
+    .ssbl : ALIGN(4) {          /*flash最开始的函数*/
+        _ssbl_vma = .;                           
+        *(.text.ssbl) 
+        *(.text.memcpy)   
+        *(.text.memset) 
+        . = ALIGN(4);                  
+        _ssbl_end = .;                 
+    } > sram AT > flash        
+    _ssbl_lma = LOADADDR(.ssbl); 
+                          
 
     /* 2. 其他.text内容放入.program段（加载到sram执行） */
     .program : ALIGN(4) {
-        _program_vma = .;               /* .program段的VMA起始（sram中） */
-        *(.text)                        /* 除上述外的其他.text内容 */
-        *(.text.*)                      /* 所有.text.xxx子段（不含已匹配的） */
+        _program_vma = .;               
+        *(.text)                        
+        *(.text.*)                      
         . = ALIGN(4);
-        _program_end = .;               /* .program段结束 */
-    } > sram AT > flash                 /* VMA在sram，LMA在flash */
-    _program_lma = LOADADDR(.program);  /* 记录.program段在flash中的加载地址 */
+        _program_end = .;               
+    } > psram AT > flash                
+    _program_lma = LOADADDR(.program);  
+
 
 
     .rodata : ALIGN(4) {
-        _rodata_vma = .;        /* 只读数据段起始地址 */     
-        /* 匹配所有以.rodata或.srodata开头的段及其子段 */
+        _rodata_vma = .;            
         *(.rodata* .srodata*)    
         . = ALIGN(4);            
         _rodata_end = .;         
-    } > sram AT > flash          
-    _rodata_lma =LOADADDR(.rodata);
+    } > flash       
+ 
 
   /* 合并所有数据段 */
     .data : ALIGN(4) {
@@ -46,28 +54,41 @@ SECTIONS {
         *(.sdata .sdata.*)  
         . = ALIGN(4);
         _edata = .;
-    } > sram AT > flash
+    } > psram AT > flash
     _data_lma = LOADADDR(.data);
+
+ /* 来自rtt的data.extra段的 */
+ /*也要进行复制*/
+    _data_extra_vma = DEFINED(  _data_extra_vma ) ?   _data_extra_vma : 0;
+    _edata_extra    = DEFINED(  _edata_extra) ?   _edata_extra_vma : 0;
+    _data_extra_lma  = DEFINED(  _data_extra_lma ) ?   _data_extra_lma : 0;
+    
 
 
     .bss (NOLOAD) : ALIGN(4) {
-        _bss_start = .;        /* BSS段起始地址 */ 
-        /* 先存放小BSS数据（.sbss） */
-        *(.sbss .sbss.*)       /* 小型未初始化变量（如标志位、小尺寸静态变量） */    
-        /* 再存放常规BSS数据 */
+        _bss_start = .;       
+      
+        *(.sbss .sbss.*)       
+      
         *(.bss .bss.*)      
         *(COMMON)          
         . = ALIGN(4);        
         _bss_end = .;     
-    } > sram                
+    } > psram 
+/* 来自rtt的bss.extra段的 */
+ /*也要进行清0*/      
+    _bss_extra_vma = DEFINED(_bss_extra_vma) ? _bss_extra_vma : 0;
+    _ebss_extra_vma = DEFINED(_ebss_extra_vma) ? _ebss_extra_vma : 0;
+
+
 
 
     /* 5. 堆空间 */
     .heap (NOLOAD) : ALIGN(8) {
         _heap_start = .;
-        . = ORIGIN(sram) + LENGTH(sram) - 3k;  /* 预留4KB栈空间 */
+        . = ORIGIN(psram) + LENGTH(psram) - 3k;  /* 预留4KB栈空间 */
         _heap_end = .;
-    } > sram
+    } > psram
 
     /* 6. 栈空间（向下增长） */
     .stack (NOLOAD) : ALIGN(16) {

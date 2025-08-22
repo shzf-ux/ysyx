@@ -10,14 +10,17 @@ SECTIONS {
   } : text
   etext = .;
   _etext = .;
+  
   .rodata : {
     *(.rodata*)
   }
+
   .data : {
     *(.data)
   } : data
   edata = .;
   _data = .;
+
   .bss : {
 	_bss_start = .;
     *(.bss*)

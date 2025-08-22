@@ -9,9 +9,17 @@ static const char mainargs[] = MAINARGS;
 
 int main(const char *args);
 void _trm_init();
-//设置堆区
+void ssbl();
+// 设置堆区
 extern char _heap_start;
 extern char _heap_end;
+extern uint8_t _program_lma[], _program_vma[], _program_end[];
+extern uint8_t _data_lma[], _data_vma[], _edata[];
+extern uint8_t _bss_start[], _bss_end[];
+
+extern uint8_t _data_extra_lma[], _data_extra_vma[], _edata_extra[];
+extern uint8_t _bss_extra_vma[], _ebss_extra_vma[];
+
 Area heap = RANGE(&_heap_start, &_heap_end);
 
 void putch(char ch)
@@ -36,40 +44,50 @@ init_uart()
   // 3. 写入除数
   outb(UART_REG_DLM, 0);
   outb(UART_REG_DLL, 1);
-
-
   outb(UART_REG_LC, 0x03); // DLAB=0
 
   // 5. 启用并清空FIFO
   outb(UART_REG_FC, 0xC7); 
 }
 
+void fsbl()
+{
+  //拷贝ssbl段到sram
+  /* 从lma加载rodata段到vma */
+  extern uint8_t _ssbl_vma[], _ssbl_end[], _ssbl_lma[];
+  uint32_t ssbl_size = _ssbl_end - _ssbl_vma;
+ // memcpy(_ssbl_vma, _ssbl_lma, ssbl_size); // 把lma->vma
+  for (uint32_t i = 0; i < ssbl_size; i++)
+  {
+    _ssbl_vma[i] = _ssbl_lma[i];
+  }
+   
+  ssbl();
+}
 
-void _bootloader()
+void ssbl()
 {
 
-  /* 从lma加载rodata段到vma */
-  extern uint8_t _program_lma[], _program_vma[], _program_end[];
-  uint32_t program_size = _program_end - _program_vma;
-  memcpy(_program_vma, _program_lma, program_size); // 把lma->vma
-
-  /* 从lma加载rodata段到vma */
-  extern uint8_t _rodata_lma[], _rodata_vma[], _rodata_end[];
-  uint32_t rodata_size = _rodata_end - _rodata_vma;
-  memcpy(_rodata_vma, _rodata_lma, rodata_size); // 把lma->vma
-
-  /* 从lma加载data段到vma */
-  extern uint8_t _data_lma[], _data_vma[], _edata[];
-  uint32_t data_size = _edata - _data_vma;
-    memcpy(_data_vma, _data_lma, data_size);      //把lma->vma
+    /* 从lma加载rodata段到vma */
+    uint32_t program_size = _program_end - _program_vma;
+    memcpy(_program_vma, _program_lma, program_size); // 把lma->vma
 
 
-  /*  清零.bss段 */
-  extern uint8_t _bss_start[], _bss_end[];
-  uint32_t bss_size = _bss_end - _bss_start;
+    /* 从lma加载data段到vma */
+    uint32_t data_size = _edata - _data_vma;
+    memcpy(_data_vma, _data_lma, data_size);   
+
+    /* 从lma加载data extra段到vma */
+    uint32_t data_extra_size = _edata_extra - _data_extra_vma;
+    memcpy(_data_extra_vma, _data_extra_lma, data_extra_size);
+
+    /*  清零.bss段 */
+    uint32_t bss_size = _bss_end - _bss_start;
     memset(_bss_start, 0, bss_size);
 
-    
+    /*  清零.bss.extra段 */
+    uint32_t bss_extra_size = _ebss_extra_vma - _bss_extra_vma;
+    memset(_bss_extra_vma, 0, bss_extra_size);
 }
 
 void halt(int code)
