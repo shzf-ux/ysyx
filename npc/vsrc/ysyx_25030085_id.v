@@ -353,7 +353,9 @@ end
         if(is_ebreak)begin
       ebreak_instruction(inst);   
         end
-        else if(invalid)
-      invalid_inst(pc,inst);   
+        else if(invalid)begin
+          invalid_inst(pc,inst);   
+        end
+     
     end   
 endmodule

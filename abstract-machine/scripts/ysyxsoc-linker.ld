@@ -4,6 +4,7 @@ MEMORY {
     sram  (rwx) : ORIGIN = 0x0F000000, LENGTH = 8K
     flash (rwx) : ORIGIN = 0x30000000, LENGTH = 16M
     psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
+    sdram (rwx) : ORIGIN = 0xa0000000, LENGTH = 32M
 }
 
 SECTIONS {
@@ -34,7 +35,7 @@ SECTIONS {
         *(.text.*)                      
         . = ALIGN(4);
         _program_end = .;               
-    } > psram AT > flash                
+    } > sdram AT > flash                
     _program_lma = LOADADDR(.program);  
 
 
@@ -54,7 +55,7 @@ SECTIONS {
         *(.sdata .sdata.*)  
         . = ALIGN(4);
         _edata = .;
-    } > psram AT > flash
+    } > sdram AT > flash
     _data_lma = LOADADDR(.data);
 
  /* 来自rtt的data.extra段的 */
@@ -74,7 +75,7 @@ SECTIONS {
         *(COMMON)          
         . = ALIGN(4);        
         _bss_end = .;     
-    } > psram 
+    } > sdram 
 /* 来自rtt的bss.extra段的 */
  /*也要进行清0*/      
     _bss_extra_vma = DEFINED(_bss_extra_vma) ? _bss_extra_vma : 0;
@@ -86,9 +87,9 @@ SECTIONS {
     /* 5. 堆空间 */
     .heap (NOLOAD) : ALIGN(8) {
         _heap_start = .;
-        . = ORIGIN(psram) + LENGTH(psram) - 3k;  /* 预留4KB栈空间 */
+        . = ORIGIN(sdram) + LENGTH(sdram) - 3k;  /* 预留4KB栈空间 */
         _heap_end = .;
-    } > psram
+    } > sdram
 
     /* 6. 栈空间（向下增长） */
     .stack (NOLOAD) : ALIGN(16) {

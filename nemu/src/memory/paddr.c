@@ -20,7 +20,9 @@
 
 #define FLASH_SIZE 0x1000000 // 16MB Flash
 #define SRAM_SIZE 0x2000 // 8KB SRAM
+#define SDRAM_SIZE 0x2000000 // 32MB SRAM
 #define IS_FLASH(addr) (addr >= 0x30000000 && addr < 0x30000000 + FLASH_SIZE)
+#define IS_SDRAM(addr) (addr >= 0xa0000000 && addr < 0xa0000000 + SDRAM_SIZE)
 #define IS_SRAM(addr) (addr >= 0x0f000000 && addr < 0x0f000000 + SRAM_SIZE)
 
 
@@ -29,8 +31,9 @@ void display_memory_write(uint32_t addr, uint32_t data);
 #if   defined(CONFIG_PMEM_MALLOC)
     static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
-    static uint8_t flash[CONFIG_MSIZE] PG_ALIGN = {};//rom,程序加载的地方
-    static uint8_t sram[CONFIG_MSIZE] PG_ALIGN = {}; // rom,程序加载的地方
+    static uint8_t flash[CONFIG_MSIZE] PG_ALIGN = {};//程序加载的地方
+    static uint8_t sram[CONFIG_MSIZE] PG_ALIGN = {}; // 程序运行加载的地方
+    static uint8_t sdram[CONFIG_MSIZE] PG_ALIGN = {}; // 程序运行加载的地方
 #endif
 
 
@@ -46,10 +49,15 @@ uint8_t *guest_to_host(paddr_t paddr)
     uint32_t offset = paddr - 0x0f000000;
     return (offset < SRAM_SIZE) ? (sram + offset) : NULL;
   }
+  else if (IS_SDRAM(paddr))
+  {
+   // printf("%08x\n", paddr);
+    uint32_t offset = paddr - 0xa0000000;
+    return (offset < SDRAM_SIZE) ? (sdram + offset) : NULL;
+  }
 
   return NULL;
 }
-
 
 
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - flash + CONFIG_MBASE; }

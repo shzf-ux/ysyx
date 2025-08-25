@@ -14,7 +14,7 @@ LDFLAGS   += -T $(AM_HOME)/scripts/ysyxsoc-linker.ld
 LDFLAGS   += --defsym=_stack_size=1K
 LDFLAGS   += --gc-sections -e _start
 
-NPCFLAGS  +=  -b
+NPCFLAGS  += 
 NPCFLAGS  += -d $(NEMU_LIB_NAME)   # DiffTest库
 NEMU_LIB_NAME := /home/zzy/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
 
