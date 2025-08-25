@@ -43,7 +43,8 @@
 `define PSRAM             8'h80
 `define PSRAM_BASE        32'h80000000
 `define PSRAM_END         32'h803fffff
-
+//32MB 
+`define SDRAM             8'ha0
 `define SDRAM_BASE        32'ha0000000
 `define SDRAM_END         32'hbfffffff
 

@@ -1,5 +1,7 @@
 module ysyx_25030085_arbiter#(
-    parameter RTC_ADDR = 32'ha0000048  // RTC地址（仅支持读）
+    parameter CLINT = 8'h02 ,
+    parameter CLINT_ADDR = 32'h02000000  ,
+    parameter CLINT_END  = 32'h0200ffff 
 )(
     // 全局信号
     input               clock             ,
@@ -172,11 +174,11 @@ always @(*) begin
 
     // 仅读事务需要判断RTC地址
     if (state == IF_MASTER) begin
-        is_rtc = (if_araddr == RTC_ADDR);  // IF读的地址是否为RTC
+        is_rtc = (if_araddr[31:24] == CLINT);  // IF读的地址是否为RTC
         is_soc = !is_rtc;
     end
     else if (state == LS_READ) begin
-        is_rtc = (ls_araddr == RTC_ADDR);  // LS读的地址是否为RTC
+        is_rtc = (ls_araddr[31:24] == CLINT);  // LS读的地址是否为RTC
         is_soc = !is_rtc;
     end
 end

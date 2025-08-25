@@ -1,6 +1,5 @@
-module ysyx_25030085_axi4_clint#(
-    parameter RTC_ADDR = 32'ha0000048
-)(
+module ysyx_25030085_axi4_clint
+(
     input               clock               ,
     input               reset               ,
     
@@ -49,11 +48,8 @@ always @(posedge clock or posedge reset) begin
     if (reset) begin
         S_AXI_ARREADY <= 1'b0;
     end else begin
-        // 仅当地址有效、未就绪，且地址匹配RTC_ADDR时，置位ARREADY
-        if (S_AXI_ARVALID && !S_AXI_ARREADY && (S_AXI_ARADDR == RTC_ADDR)) begin
-            // 校验AXI参数（RTC仅支持单周期读，固定参数）
-            // 突发长度必须为0（单数据），位宽必须为4字节（32位），突发类型为递增
-            if (S_AXI_ARLEN == 8'd0 && S_AXI_ARSIZE == 3'b010 && S_AXI_ARBURST == 2'b01) begin
+        if (S_AXI_ARVALID && !S_AXI_ARREADY ) begin
+            if (S_AXI_ARLEN == 8'd0 && S_AXI_ARSIZE == 3'b010) begin
                 S_AXI_ARREADY <= 1'b1;  // 参数合法，允许握手
             end else begin
                 S_AXI_ARREADY <= 1'b0;  

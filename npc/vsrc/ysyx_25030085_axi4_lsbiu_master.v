@@ -239,7 +239,8 @@ always @(posedge clock or negedge reset) begin
         write_addr_cnt    <=0;
         M_AXI_AWADDR      <= lsu_addr;
         M_AXI_AWVALID     <= 1'b1;  
-        M_AXI_AWSIZE     <= awsize_reg; 
+        M_AXI_AWLEN       <= 8'd0; 
+        M_AXI_AWSIZE      <= awsize_reg; 
     end
     else if (AW_active) begin
         M_AXI_AWVALID <= 1'b0;

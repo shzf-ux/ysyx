@@ -478,9 +478,7 @@ lsbiu(
 
 
 
-ysyx_25030085_arbiter#(
-    .RTC_ADDR 	(32'ha0000048 ))
-arbiter(
+ysyx_25030085_arbiter arbiter(
     .clock       	(clock        ),
     .reset       	(reset        ),
 
@@ -582,9 +580,7 @@ arbiter(
 
 
 
-ysyx_25030085_axi4_clint #(
-    .RTC_ADDR 	(32'ha0000048))
-clint(
+ysyx_25030085_axi4_clint clint(
     .clock         	(clock          ),
     .reset         	(reset          ),
     .S_AXI_ARADDR  	(rtc_araddr     ),  

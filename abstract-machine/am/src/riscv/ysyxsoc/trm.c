@@ -13,10 +13,10 @@ void ssbl();
 // 设置堆区
 extern char _heap_start;
 extern char _heap_end;
+
 extern uint8_t _program_lma[], _program_vma[], _program_end[];
 extern uint8_t _data_lma[], _data_vma[], _edata[];
 extern uint8_t _bss_start[], _bss_end[];
-
 extern uint8_t _data_extra_lma[], _data_extra_vma[], _edata_extra[];
 extern uint8_t _bss_extra_vma[], _ebss_extra_vma[];
 
@@ -60,8 +60,7 @@ void fsbl()
   for (uint32_t i = 0; i < ssbl_size; i++)
   {
     _ssbl_vma[i] = _ssbl_lma[i];
-  }
-   
+  }  
   ssbl();
 }
 

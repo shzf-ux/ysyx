@@ -115,7 +115,7 @@ void init_rtl(int argc, char *argv[])
     soc_top->clock = 0;
     soc_top->reset = 0;
     soc_top->eval();
-
+    vcd->dump(sim_time); // 写入复位信号置位状态
     sim_time++;
 
     // 1.5 开始复位流程

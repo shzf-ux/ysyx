@@ -79,7 +79,7 @@ module ysyx_25030085_lsu (//数据存储器
 
 
     // uart 0x1000_00000x1000_0fff）
-    wire unaligned_ac = (addr[31:12]==`UART16550)||(addr[31:24]==`PSRAM);
+    wire unaligned_ac = (addr[31:12]==`UART16550)||(addr[31:24]==`PSRAM)||(addr[31:24]==`SDRAM);
 
     assign in_ready=state==IDLE;
     assign out_valid=state==OUTPUT;
