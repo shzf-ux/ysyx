@@ -2,4 +2,6 @@
 /fceux-am
 /am-kernels
 /npc/waveform.vcd
+/npc/build/
 /ysyxSoC
+/rt-thread-am
