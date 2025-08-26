@@ -2051,7 +2051,7 @@ module APBSDRAM(	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:87:9
                 sdram_bundle_ras,	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
                 sdram_bundle_cas,	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
                 sdram_bundle_we,	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
-  output [12:0] sdram_bundle_a,	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
+  output [13:0] sdram_bundle_a,	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
   output [1:0]  sdram_bundle_ba,	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
   output [3:0]  sdram_bundle_dqm,	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
   inout  [31:0] sdram_bundle_dq	// home/zzy/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
@@ -4246,7 +4246,7 @@ module ysyxSoCASIC(	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:59:9
                 sdram_ras,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
                 sdram_cas,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
                 sdram_we,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
-  output [12:0] sdram_a,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
+  output [13:0] sdram_a,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
   output [1:0]  sdram_ba,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
   output [3:0]  sdram_dqm,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
   inout  [31:0] sdram_dq,	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:89:19
@@ -5288,7 +5288,7 @@ module ysyxSoCFull(	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:111:9
   wire        _asic_sdram_ras;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
   wire        _asic_sdram_cas;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
   wire        _asic_sdram_we;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
-  wire [12:0] _asic_sdram_a;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
+  wire [13:0] _asic_sdram_a;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
   wire [1:0]  _asic_sdram_ba;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
   wire [3:0]  _asic_sdram_dqm;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:107:24
   wire [3:0]  _dio_wire;	// home/zzy/ysyx-workbench/ysyxSoC/src/SoC.scala:143:23

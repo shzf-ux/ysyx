@@ -56,7 +56,7 @@ module sdram_axi_core
     ,output          sdram_cas_o
     ,output          sdram_we_o
     ,output [  3:0]  sdram_dqm_o
-    ,output [ 12:0]  sdram_addr_o
+    ,output [ 13:0]  sdram_addr_o
     ,output [  1:0]  sdram_ba_o
     ,output [ 31:0]  sdram_data_output_o
     ,output          sdram_data_out_en_o
@@ -710,7 +710,8 @@ assign sdram_cas_o  = command_q[1];
 assign sdram_we_o   = command_q[0];
 assign sdram_dqm_o  = dqm_q;
 assign sdram_ba_o   = bank_q;
-assign sdram_addr_o = addr_q;
+assign sdram_addr_o[12:0] = addr_q;
+assign sdram_addr_o[13]   = ram_addr_w[26];
 
 //-----------------------------------------------------------------
 // Simulation only
