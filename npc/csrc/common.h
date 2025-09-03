@@ -12,6 +12,8 @@
 #include <verilated.h>
 #include <verilated_vcd_c.h>
 #include "../obj_dir/VysyxSoCFull.h"
+#include <nvboard.h>
+#include <VysyxSoCFull.h>
 #define ANSI_FG_BLACK "\33[1;30m"
 #define ANSI_FG_RED "\33[1;31m"
 #define ANSI_FG_GREEN "\33[1;32m"

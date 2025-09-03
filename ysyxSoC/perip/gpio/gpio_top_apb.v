@@ -24,4 +24,7 @@ module gpio_top_apb(
   output [7:0]  gpio_seg_7
 );
 
+
+assign in_pready=1;
+
 endmodule

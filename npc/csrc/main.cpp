@@ -1,5 +1,6 @@
 #include <iostream>
 #include "common.h"
+
 int flag_stop = 0;
 //0正常；1 ebreak指令；2不合理指令
 int NPC_State = 0;
@@ -13,12 +14,10 @@ VerilatedVcdC *vcd = new VerilatedVcdC;
 CPU CPU_state;
 
 
-
 int main(int argc, char **argv)
 {
    
     init_monitor(argc, argv);
-    
     sdb_mainloop();
     if (flag_stop == 2) // 不合理
     {

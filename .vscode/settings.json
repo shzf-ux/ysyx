@@ -63,6 +63,7 @@
     "riscv.h": "c",
     "*.def": "c",
     "condition_variable": "c",
-    "algorithm": "c"
+    "algorithm": "c",
+    "nvboard.h": "c"
   }
 }

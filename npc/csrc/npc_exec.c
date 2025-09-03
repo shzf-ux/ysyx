@@ -22,6 +22,9 @@ void npc_exec(uint64_t n)
     int batch_mode = (int)n == -1;
     while (flag_stop == 0 && (n--) > 0)
     {
+        #ifdef CONFIG_NVBoard
+        nvboard_update();
+        #endif
         if(sim_time==19){
             soc_top->reset = 0;
         }
@@ -80,16 +83,11 @@ void npc_exec(uint64_t n)
             #endif
         }
         //soc_top->eval();
-
         //vcd->dump(sim_time);
 
-        if(sim_time>10000000||sim_time<=2000000){
+        if(sim_time>100000){
            // vcd->dump(sim_time);
           
-            // return;
-        }
-        if(sim_time>10786000)
-        {
             // return;
         }
         sim_time++;

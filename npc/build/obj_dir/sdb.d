@@ -11,4 +11,6 @@ sdb.o: /home/zzy/ysyx-workbench/npc/csrc/sdb.c \
  /usr/local/share/verilator/include/verilated.h \
  /usr/local/share/verilator/include/verilated_trace.h \
  /usr/local/share/verilator/include/verilated_trace_defs.h \
- ../obj_dir/VysyxSoCFull.h
+ ../obj_dir/VysyxSoCFull.h \
+ /home/zzy/ysyx-workbench/nvboard/usr/include/nvboard.h \
+ /home/zzy/ysyx-workbench/nvboard/usr/include/pins.h VysyxSoCFull.h

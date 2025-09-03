@@ -19,4 +19,6 @@ config MTRACE
 config DIFFTEST
    bool "Enable DIFFTEST"
    default y
-   
+config NVBoard
+   bool "Enable NVBoard"
+   default y   

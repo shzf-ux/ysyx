@@ -5,7 +5,7 @@ void sdb_set_batch_mode();
 extern int sim_time;
 void init_disasm();
 void parse_elf(char *elf_file); // 传入一个elf文件
-
+void nvboard_bind_all_pins(VysyxSoCFull *soc_top);
 static char *img_file = NULL;
 static char *diff_so_file = NULL;
 static int difftest_port = 1234;
@@ -149,4 +149,9 @@ void init_monitor(int argc, char *argv[])
     init_rtl(argc, argv);
   
     init_difftest(diff_so_file, img_size, difftest_port);
+
+   #ifdef CONFIG_NVBoard
+    nvboard_bind_all_pins(soc_top);
+    nvboard_init();
+    #endif
 }
