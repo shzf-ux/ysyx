@@ -59,3 +59,9 @@ typedef struct
     int ie;       // 中断使能 
     int char_len; // 传输长度 
 } SPI_Config;
+
+//GPIO
+#define GPIO_BASE        0x10002000
+#define GPIO_LED        (GPIO_BASE)         //16位
+#define GPIO_SWITCH     (GPIO_BASE+0x4)     //16位
+#define GPIO_SEG        (GPIO_BASE+0x8)     //32位

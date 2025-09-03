@@ -64,6 +64,7 @@
     "*.def": "c",
     "condition_variable": "c",
     "algorithm": "c",
-    "nvboard.h": "c"
+    "nvboard.h": "c",
+    "memory": "c"
   }
 }

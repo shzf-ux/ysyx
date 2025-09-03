@@ -7,8 +7,8 @@
 
 extern int sim_time;
 extern int flag_stop;
-extern int  NPC_State;
-uint32_t pmem_read(uint32_t raddr,int len);
+extern int NPC_State;
+uint32_t pmem_read(uint32_t raddr, int len);
 typedef struct LogBuf
 {
     char logbuf[65535];
@@ -17,79 +17,97 @@ typedef struct LogBuf
 LogBuf *s;
 
 int max_exe = MAX_EXE;
+
+
+
+// 生成指令跟踪日志
+static void generate_itr_log(uint32_t pc, uint32_t inst_t)
+{
+    s = (LogBuf *)malloc(sizeof(LogBuf));
+    char *p = s->logbuf;
+    p += snprintf(p, sizeof(s->logbuf), "%08x:", pc);
+
+    int ilen = 4;
+    int i;
+    uint8_t *inst = (uint8_t *)&inst_t;
+
+    for (i = ilen - 1; i >= 0; i--)
+    {
+        p += snprintf(p, 4, " %02x", inst[i]);
+    }
+
+    int ilen_max = 4;
+    int space_len = ilen_max - ilen;
+    if (space_len < 0)
+        space_len = 0;
+    space_len = space_len * 3 + 1;
+    memset(p, ' ', space_len);
+    p += space_len;
+
+    void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+    disassemble(p, s->logbuf + sizeof(s->logbuf) - p, pc, (uint8_t *)&inst_t, ilen);
+
+    printf("%s\n", s->logbuf);
+    free(s);
+}
+
+// 处理指令跟踪逻辑
+static void handle_itr_cond(int batch_mode){
+    #ifdef CONFIG_ITRACE_COND
+    if (!batch_mode && top.valid&&top.ready)
+    {
+        generate_itr_log(top.pc, top.inst);
+    }
+    #endif
+}
+
+
+static void difftest()
+{
+    if (top.done) {
+    #ifdef CONFIG_DIFFTEST
+        difftest_step(top.pc);
+    #endif
+    }
+}
+static void reset()
+{
+    if (sim_time == 19)
+    {
+        soc_top->reset = 0;
+    }
+}
+
+static void single_cycle()
+{
+    reset(); // 处理复位逻辑
+    soc_top->clock = !soc_top->clock;
+    sim_time++;
+    soc_top->eval();
+    soc_top->clock = !soc_top->clock;
+    sim_time++;
+    soc_top->eval();
+}
+
 void npc_exec(uint64_t n)
-{  
+{
     int batch_mode = (int)n == -1;
+
     while (flag_stop == 0 && (n--) > 0)
     {
+       
+
+        single_cycle();             //模拟时钟周期
+
+
         #ifdef CONFIG_NVBoard
-        nvboard_update();
+        nvboard_update();           //nvboard等于cpu的时钟周期
         #endif
-        if(sim_time==19){
-            soc_top->reset = 0;
-        }
-        soc_top->clock = !soc_top->clock;
-        int is_rising_edge = (soc_top->clock == 1);//记录上升沿
-        //握手
-        int valid = top.valid;
-        int ready = top.ready;
-        int inst_fetch = valid && ready;
-        int inst_t = top.inst;
+    
+        handle_itr_cond(batch_mode);   //itrace 
 
-// printf("pc:%08x\n", top.pc);
-#ifdef CONFIG_ITRACE_COND
-       // printf("simtime:%d\n", sim_time);
-       // printf("pc:%08x\n", top.pc);
-       // printf("inst:%08x\n", top.inst);
-        if (is_rising_edge && !batch_mode && inst_fetch)
-        {
-            s = (LogBuf *)malloc(sizeof(LogBuf));
-        char *p = s->logbuf;
-        p += snprintf(p, sizeof(s->logbuf), "%08x:", top.pc);
-        int ilen =4;
-        int i;
-        uint8_t *inst = (uint8_t *)&inst_t; // 储存指令，并把指令分为四段
+        difftest();//difftest
 
-        for (i = ilen - 1; i >= 0; i--)
-        {
 
-            p += snprintf(p, 4, " %02x", inst[i]); // 把指令从右到左打印出来，并写入buf里面
-        }
-        
-        int ilen_max =  4;
-        int space_len = ilen_max - ilen;
-        if (space_len < 0)
-            space_len = 0;
-        space_len = space_len * 3 + 1;
-        memset(p, ' ', space_len);
-        
-        p += space_len;
-        void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-
-        disassemble(p, s->logbuf + sizeof(s->logbuf) - p, // 向buf加入反汇编后的内容
-                    top.pc, (uint8_t *)&inst_t, ilen);
-
-        printf("%s\n", s->logbuf);
-        free(s);
-        }
-       #endif
-        soc_top->eval();
-        if (is_rising_edge&&top.done)
-        {
-           //printf("simtime:%d\n", sim_time);
-          // printf("pc:%08x\n", top.pc);
-            #ifdef CONFIG_DIFFTEST
-            difftest_step(top.pc);
-            #endif
-        }
-        //soc_top->eval();
-        //vcd->dump(sim_time);
-
-        if(sim_time>100000){
-           // vcd->dump(sim_time);
-          
-            // return;
-        }
-        sim_time++;
-   }
+    }
 }
