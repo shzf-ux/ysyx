@@ -86,7 +86,7 @@ wave:
 
 run: $(BIN)
 	@echo "BIN: $(BIN)"
-	@echo "Running: $(BIN) $(ARGS) $(IMG)"
+	@echo "args: $(ARGS)"
 	@$(BIN) $(ARGS) $(IMG)
 
 clean:

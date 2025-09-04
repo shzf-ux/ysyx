@@ -7,6 +7,7 @@
 
 /* 数据寄存器*/
 #define UART_REG_RX (UART16550_BASE + 0x0) // 接收缓冲 (只读)
+
 #define UART_REG_TX (UART16550_BASE + 0x0) // 发送缓冲 (只写)
 
 /* 中断控制 */

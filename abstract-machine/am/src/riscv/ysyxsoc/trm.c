@@ -5,7 +5,7 @@
 #include <string.h>
 #include <riscv/riscv.h>
 //#define DIFFTEST_OPEN
-static const char mainargs[] = MAINARGS;
+static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 int main(const char *args);
 void _trm_init();
@@ -28,10 +28,12 @@ void putch(char ch)
   while ((inb(UART_REG_LS) & 0x20) == 0)
   {
   }
-    outb(UART_REG_TX, ch); 
-                          
-
+    outb(UART_REG_TX, ch);                       
 }
+
+
+
+
 __attribute__((noinline)) // 阻止内联，方便观察汇编
 void
 init_uart()
