@@ -124,9 +124,10 @@ void _trm_init()
   //show_id();
  // #endif
 
-  int ret = main(mainargs);
 
-  // 4. 程序终止
-  halt(ret);
+ int ret = main(mainargs);
+
+ // 4. 程序终止
+ halt(ret);
 }
 

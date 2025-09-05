@@ -108,7 +108,7 @@ void init_rtl(int argc, char *argv[])
     // 启用波形跟踪
     Verilated::traceEverOn(true);
   
-    soc_top->trace(vcd, 5);
+    soc_top->trace(vcd, 6);
     vcd->open("waveform.vcd");
 
     // 1. 初始化信号

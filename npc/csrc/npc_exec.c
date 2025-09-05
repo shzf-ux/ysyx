@@ -81,12 +81,35 @@ static void reset()
 static void single_cycle()
 {
     reset(); // 处理复位逻辑
+
+    if (sim_time > 95000000)
+    {
+      ///  flag_stop = 1;
+      //  return;
+    }
+
     soc_top->clock = !soc_top->clock;
     sim_time++;
     soc_top->eval();
+    if (sim_time > 91639347)
+    {
+      //  vcd->dump(sim_time);
+    }
+
     soc_top->clock = !soc_top->clock;
     sim_time++;
     soc_top->eval();
+    if (sim_time > 91639347)
+    {
+      //  vcd->dump(sim_time);
+    }
+
+}
+void test(){
+    printf("time :%d\n", sim_time);
+    if (sim_time){
+
+    }
 }
 
 void npc_exec(uint64_t n)
@@ -107,7 +130,6 @@ void npc_exec(uint64_t n)
         handle_itr_cond(batch_mode);   //itrace 
 
         difftest();//difftest
-
-
+       // test();
     }
 }

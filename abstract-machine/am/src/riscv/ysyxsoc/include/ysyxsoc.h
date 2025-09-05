@@ -66,3 +66,8 @@ typedef struct
 #define GPIO_LED        (GPIO_BASE)         //16位
 #define GPIO_SWITCH     (GPIO_BASE+0x4)     //16位
 #define GPIO_SEG        (GPIO_BASE+0x8)     //32位
+
+
+//Keyboard
+#define PS2_BASE        0x10011000
+#define PS2_CODE        PS2_BASE+0x0
