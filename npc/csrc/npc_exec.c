@@ -82,28 +82,29 @@ static void single_cycle()
 {
     reset(); // 处理复位逻辑
 
+    if (sim_time > 95000000+10000000)
+    {
+       
+        //flag_stop = 1;
+         // return;
+    }
+
+    soc_top->clock = !soc_top->clock;
+    sim_time++;
+    soc_top->eval();
     if (sim_time > 95000000)
     {
-      ///  flag_stop = 1;
-      //  return;
+       // printf("pc :%08x\n", top.pc);
+        //  vcd->dump(sim_time);
     }
 
     soc_top->clock = !soc_top->clock;
     sim_time++;
     soc_top->eval();
-    if (sim_time > 91639347)
-    {
-      //  vcd->dump(sim_time);
-    }
 
-    soc_top->clock = !soc_top->clock;
-    sim_time++;
-    soc_top->eval();
-    if (sim_time > 91639347)
-    {
-      //  vcd->dump(sim_time);
-    }
-
+       // printf("pc :%08x\n", top.pc);
+        //vcd->dump(sim_time);
+    
 }
 void test(){
     printf("time :%d\n", sim_time);

@@ -71,3 +71,8 @@ typedef struct
 //Keyboard
 #define PS2_BASE        0x10011000
 #define PS2_CODE        PS2_BASE+0x0
+
+// VGA 0x2100_0000~0x211f_ffff
+#define VGA_BASE        0x21000000
+#define VGA_FB          VGA_BASE
+#define VGA_SYNC        VGA_BASE+0x1ffff0
