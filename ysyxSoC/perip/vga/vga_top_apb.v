@@ -1,149 +1,118 @@
-module vga_top_apb (
+module vga_top_apb(
   input         clock,
   input         reset,
   input  [31:0] in_paddr,
   input         in_psel,
   input         in_penable,
-  input  [ 2:0] in_pprot,
+  input  [2:0]  in_pprot,
   input         in_pwrite,
-  input  [31:0] in_pwdata,
-  input  [ 3:0] in_pstrb,
+  input  [31:0] in_pwdata,    //上层模块提供的VGA颜色数据
+  input  [3:0]  in_pstrb,
   output        in_pready,
-  output [31:0] in_prdata,
+  output [31:0] in_prdata,    //提供给上层模块的当前扫描像素点坐标
   output        in_pslverr,
 
-  output [7:0] vga_r,
-  output [7:0] vga_g,
-  output [7:0] vga_b,
-  output       vga_hsync,
-  output       vga_vsync,
-  output       vga_valid
+  output [7:0]  vga_r,    // 红
+  output [7:0]  vga_g,    // 绿
+  output [7:0]  vga_b,    // 蓝
+  output        vga_hsync,  //行同步
+  output        vga_vsync,  //列同步
+  output        vga_valid   //有效
 );
-  localparam N = 2 ** 21;
-  reg [31:0] data[0:N-1];
-  integer i;
+  localparam  VSRAM_WIDTH=640*480;
+  reg [23:0] vsram[0:VSRAM_WIDTH-1];
+
+//640x480分辨率下的VGA参数设置
+  parameter    h_frontporch = 96;
+  parameter    h_active = 144;
+  parameter    h_backporch = 784;
+  parameter    h_total = 800;
+
+  parameter    v_frontporch = 2;
+  parameter    v_active = 35;
+  parameter    v_backporch = 515;
+  parameter    v_total = 525;
+
+  //像素计数值
+  reg [9:0]    x_cnt;
+  reg [9:0]    y_cnt;
+  wire         h_valid;
+  wire         v_valid;
+  wire [9:0]    h_addr;   
+  wire [9:0]    v_addr;
+
+  reg [18:0]   fb_ptr ;
+
   reg sync_reg;
 
-  localparam h_frontporch = 96;
-  localparam h_active = 144;
-  localparam h_backporch = 784;
-  localparam h_total = 800;
-  localparam v_frontporch = 2;
-  localparam v_active = 35;
-  localparam v_backporch = 515;
-  localparam v_total = 525;
+//     存储像素数据和同步寄存器数据
 
-  reg [9:0] x_cnt;
-  reg [9:0] y_cnt;
-  reg [20:0] counter;
-  wire h_valid;
-  wire v_valid;
-
-  always @(posedge clock) begin
-    if (reset == 1'b1) begin
-      x_cnt <= 0;
-    end else begin
-      if (x_cnt == h_total) begin
-        if (y_cnt == v_total) begin  //完成一次传输等待sync_reg
-          x_cnt <= 0;
-        end else begin
-          x_cnt <= 1;
-        end
-      end else if (x_cnt > 0) begin
-        x_cnt <= x_cnt + 1;
-      end else begin
-        if (sync_reg) begin
-          x_cnt <= 1;
-        end
-      end
-    end
+  always @(posedge reset or posedge clock) begin
+    if(in_psel&in_penable&in_pwrite)begin
+      if(in_paddr[20:0]==21'h1ffff0)
+        sync_reg<=in_pwdata[0];
+      end  
+      else begin
+        vsram[in_paddr[20:2]]<=in_pwdata[23:0];    
+      end 
   end
 
-  always @(posedge clock) begin
-    if (reset == 1'b1) begin
-      y_cnt <= 1;
-    end else begin
-      if (x_cnt == h_total) begin
-        if (y_cnt == v_total) begin
-          // $display("end");
-          y_cnt <= 1;
-        end else begin
-          y_cnt <= y_cnt + 1;
-        end
+
+  always @(posedge reset or posedge clock) begin//行像素计数,同步寄存器为1开始
+      if (reset == 1'b1)
+        x_cnt <= 1;
+      else if(sync_reg)begin
+        if (x_cnt == h_total)
+            x_cnt <= 1;
+        else
+            x_cnt <= x_cnt + 10'd1;
       end
-    end
   end
 
-  always @(posedge clock) begin
-    if (reset == 1'b1) begin
-      counter <= 0;
-    end else begin
-      if (y_cnt == v_total) begin
-        counter <= 0;
-      end else if (vga_valid) begin
-        counter <= counter + 1;
-      end else begin
-        counter <= counter;
+  always @(posedge clock)begin //列像素计数
+      if (reset == 1'b1)
+        y_cnt <= 1;
+      else begin
+        if (y_cnt == v_total & x_cnt == h_total)
+            y_cnt <= 1;
+        else if (x_cnt == h_total)
+            y_cnt <= y_cnt + 10'd1;
       end
-    end
   end
 
-  localparam VGA_STATE_WIDTH = 2;
-  reg [VGA_STATE_WIDTH-1:0] vga_apb_state;
-  localparam [VGA_STATE_WIDTH-1:0] VGA_APB_IDLE = 'd0;
-  localparam [VGA_STATE_WIDTH-1:0] VGA_APB_WRITE = 'd1;
-
-  assign in_pready  = (vga_apb_state == VGA_APB_WRITE) ? 1'b1 : 1'b0;
-  assign in_prdata  = 'd0;
-  assign in_pslverr = 1'b0;
-
-  always @(posedge clock) begin
-    if (reset) begin
-      vga_apb_state <= VGA_APB_IDLE;
-    end else begin
-      case (vga_apb_state)
-        VGA_APB_IDLE: begin
-          if (in_psel && in_pwrite) begin
-            vga_apb_state <= VGA_APB_WRITE;
-          end
-        end
-        VGA_APB_WRITE: begin
-          vga_apb_state <= VGA_APB_IDLE;
-        end
-        default: begin
-          vga_apb_state <= VGA_APB_IDLE;
-        end
-      endcase
-    end
+  always @(posedge clock)begin 
+      if (reset == 1'b1)
+        fb_ptr <= 1;
+      else if(vga_valid)begin
+        fb_ptr<=fb_ptr+1;
+      end
+      else if(y_cnt==v_total)begin
+        fb_ptr<=0;
+      end
   end
 
-  always @(posedge clock or posedge reset) begin
-    if (reset) begin
-      for (i = 0; i < N; i++) begin
-        data[i] = 'd0;
-      end
-      sync_reg <= 'd0;
-    end else begin
-      if (in_penable) begin
-        if (in_paddr == 32'h211FFFF0) begin
-          sync_reg <= in_pwdata[0];
-        end else begin
-          data[in_paddr[22:2]] <= in_pwdata;
-          sync_reg <= 'd0;
-        end
-      end
-    end
-  end
 
+
+  //生成同步信号
   assign vga_hsync = (x_cnt > h_frontporch);
   assign vga_vsync = (y_cnt > v_frontporch);
-
-  assign h_valid   = (x_cnt > h_active) & (x_cnt <= h_backporch);
-  assign v_valid   = (y_cnt > v_active) & (y_cnt <= v_backporch);
+  //生成消隐信号
+  assign h_valid = (x_cnt > h_active) & (x_cnt <= h_backporch);
+  assign v_valid = (y_cnt > v_active) & (y_cnt <= v_backporch);
   assign vga_valid = h_valid & v_valid;
 
-  assign vga_r     = vga_valid ? data[counter][23:16] : 8'h00;
-  assign vga_g     = vga_valid ? data[counter][15:8] : 8'h00;
-  assign vga_b     = vga_valid ? data[counter][7:0] : 8'h00;
+  //计算当前有效像素坐标
+  assign h_addr = h_valid ? (x_cnt - 10'd145) : {10{1'b0}};
+  assign v_addr = v_valid ? (y_cnt - 10'd36) : {10{1'b0}};
+  assign in_prdata={12'b0,h_addr,v_addr};
+
+  //设置输出的颜色值
+  assign vga_r =vga_valid?vsram[fb_ptr][23:16]:0;
+  assign vga_g =vga_valid?vsram[fb_ptr][15:8] :0;
+  assign vga_b =vga_valid?vsram[fb_ptr][7:0]  :0;
+
+  assign in_pready=1;
+
+
 
 endmodule
