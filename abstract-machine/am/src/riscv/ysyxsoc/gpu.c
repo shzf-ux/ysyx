@@ -10,6 +10,12 @@ static uint32_t Height = 480;
 
 void __am_gpu_init()
 {
+    uint32_t *fb = (uint32_t *)(uintptr_t)VGA_FB;
+    for (int i = 0; i < Width * Height; i++)
+    {
+        fb[i] = 0;
+    }
+    outl(VGA_SYNC, 1);
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg)
@@ -46,7 +52,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl)
     }
     else
     {
-        outl(VGA_SYNC, 0);
+        outl(VGA_SYNC, 1);
     }
 }
 
