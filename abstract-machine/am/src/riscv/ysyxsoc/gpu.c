@@ -52,7 +52,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl)
     }
     else
     {
-        outl(VGA_SYNC, 1);
+        outl(VGA_SYNC, 0);
     }
 }
 
