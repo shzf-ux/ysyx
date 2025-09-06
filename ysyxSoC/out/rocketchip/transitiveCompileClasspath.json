@@ -1,0 +1,14 @@
+{
+    "value": [
+        "ref:v0:c984eca8:/home/zzy/ysyx-workbench/ysyxSoC/rocket-chip/macros/compile-resources",
+        "ref:v0:fb98fd80:/home/zzy/ysyx-workbench/ysyxSoC/out/rocketchip/macros/compile.dest/classes",
+        "ref:v0:c984eca8:/home/zzy/ysyx-workbench/ysyxSoC/rocket-chip/dependencies/hardfloat/hardfloat/compile-resources",
+        "ref:v0:ffb8dcd0:/home/zzy/ysyx-workbench/ysyxSoC/out/rocketchip/hardfloat/compile.dest/classes",
+        "ref:v0:c984eca8:/home/zzy/ysyx-workbench/ysyxSoC/rocket-chip/dependencies/cde/cde/compile-resources",
+        "ref:v0:0df504b6:/home/zzy/ysyx-workbench/ysyxSoC/out/rocketchip/cde/compile.dest/classes",
+        "ref:v0:c984eca8:/home/zzy/ysyx-workbench/ysyxSoC/rocket-chip/dependencies/diplomacy/diplomacy/compile-resources",
+        "ref:v0:a435f3e6:/home/zzy/ysyx-workbench/ysyxSoC/out/rocketchip/diplomacy/compile.dest/classes"
+    ],
+    "valueHash": 1285251406,
+    "inputsHash": -1837445330
+}

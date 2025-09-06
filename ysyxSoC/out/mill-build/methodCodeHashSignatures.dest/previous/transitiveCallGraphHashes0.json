@@ -1,0 +1,954 @@
+[
+  [
+    "external java.lang.Object",
+    0
+  ],
+  [
+    "external scala.Equals",
+    0
+  ],
+  [
+    "external scala.Product",
+    0
+  ],
+  [
+    "external java.io.Serializable",
+    0
+  ],
+  [
+    "external mainargs.Leftover",
+    0
+  ],
+  [
+    "call mainargs.Leftover#value()scala.collection.immutable.Seq",
+    0
+  ],
+  [
+    "external scala.collection.generic.DefaultSerializable",
+    0
+  ],
+  [
+    "external scala.collection.IterableOnceOps",
+    0
+  ],
+  [
+    "external scala.collection.IterableOnce",
+    0
+  ],
+  [
+    "external scala.collection.IterableOps",
+    0
+  ],
+  [
+    "external scala.collection.SeqOps",
+    0
+  ],
+  [
+    "external scala.collection.immutable.SeqOps",
+    0
+  ],
+  [
+    "external scala.collection.StrictOptimizedIterableOps",
+    0
+  ],
+  [
+    "external scala.collection.StrictOptimizedSeqOps",
+    0
+  ],
+  [
+    "external scala.collection.immutable.StrictOptimizedSeqOps",
+    0
+  ],
+  [
+    "external scala.collection.LinearSeqOps",
+    0
+  ],
+  [
+    "external scala.collection.immutable.LinearSeqOps",
+    0
+  ],
+  [
+    "external scala.Function1",
+    0
+  ],
+  [
+    "external scala.PartialFunction",
+    0
+  ],
+  [
+    "external scala.collection.IterableFactoryDefaults",
+    0
+  ],
+  [
+    "external scala.collection.Iterable",
+    0
+  ],
+  [
+    "external scala.collection.Seq",
+    0
+  ],
+  [
+    "external scala.collection.LinearSeq",
+    0
+  ],
+  [
+    "external scala.collection.immutable.Iterable",
+    0
+  ],
+  [
+    "external scala.collection.immutable.Seq",
+    0
+  ],
+  [
+    "external scala.collection.immutable.LinearSeq",
+    0
+  ],
+  [
+    "external scala.collection.AbstractIterable",
+    0
+  ],
+  [
+    "external scala.collection.AbstractSeq",
+    0
+  ],
+  [
+    "external scala.collection.immutable.AbstractSeq",
+    0
+  ],
+  [
+    "external scala.collection.StrictOptimizedLinearSeqOps",
+    0
+  ],
+  [
+    "external scala.collection.immutable.List",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Seq#apply(int)java.lang.Object",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Seq.<clinit>()void",
+    0
+  ],
+  [
+    "call mainargs.Leftover.<clinit>()void",
+    0
+  ],
+  [
+    "call mill.eval.Evaluator.<clinit>()void",
+    0
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$7(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    896308786
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$10(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1212200041
+  ],
+  [
+    "def build_.package_$#millDiscover()mill.define.Discover",
+    -1835643361
+  ],
+  [
+    "external scala.runtime.ScalaRunTime$",
+    0
+  ],
+  [
+    "call scala.runtime.ScalaRunTime$#wrapRefArray(java.lang.Object[])scala.collection.immutable.ArraySeq",
+    0
+  ],
+  [
+    "call scala.package$.<clinit>()void",
+    0
+  ],
+  [
+    "external java.lang.Comparable",
+    0
+  ],
+  [
+    "external java.lang.CharSequence",
+    0
+  ],
+  [
+    "external java.lang.String",
+    0
+  ],
+  [
+    "external mill.main.RootModule$Info",
+    0
+  ],
+  [
+    "call mill.main.RootModule$Info!<init>(scala.collection.immutable.Seq,java.lang.String,java.lang.String,java.lang.String)void",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Vector$.<clinit>()void",
+    0
+  ],
+  [
+    "call mill.main.RootModule$Info.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.runtime.ScalaRunTime$.<clinit>()void",
+    0
+  ],
+  [
+    "external scala.package$",
+    0
+  ],
+  [
+    "call scala.package$#Vector()scala.collection.immutable.Vector$",
+    0
+  ],
+  [
+    "external scala.collection.IterableFactory",
+    0
+  ],
+  [
+    "external scala.collection.SeqFactory",
+    0
+  ],
+  [
+    "external scala.collection.StrictOptimizedSeqFactory",
+    0
+  ],
+  [
+    "external scala.collection.immutable.Vector$",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Vector$#apply(scala.collection.immutable.Seq)java.lang.Object",
+    0
+  ],
+  [
+    "call java.lang.String.<clinit>()void",
+    0
+  ],
+  [
+    "def build_.MillMiscInfo$#<init>()void",
+    -407065456
+  ],
+  [
+    "call build_.MillMiscInfo$!<init>()void",
+    -407065456
+  ],
+  [
+    "def build_.MillMiscInfo$.<clinit>()void",
+    1276555039
+  ],
+  [
+    "call build_.MillMiscInfo$.<clinit>()void",
+    1276555039
+  ],
+  [
+    "call mill.main.RootModule.<clinit>()void",
+    0
+  ],
+  [
+    "external sourcecode.SourceValue",
+    0
+  ],
+  [
+    "external sourcecode.File",
+    0
+  ],
+  [
+    "call sourcecode.File!<init>(java.lang.String)void",
+    0
+  ],
+  [
+    "external sourcecode.Line",
+    0
+  ],
+  [
+    "call sourcecode.Line!<init>(int)void",
+    0
+  ],
+  [
+    "call build_.MillMiscInfo$#millMiscInfo()mill.main.RootModule$Info",
+    0
+  ],
+  [
+    "call sourcecode.File.<clinit>()void",
+    0
+  ],
+  [
+    "call sourcecode.Line.<clinit>()void",
+    0
+  ],
+  [
+    "external sourcecode.Enclosing",
+    0
+  ],
+  [
+    "external mill.define.Module",
+    0
+  ],
+  [
+    "external mill.define.BaseModule0",
+    0
+  ],
+  [
+    "external mill.main.MainModule",
+    0
+  ],
+  [
+    "external mill.moduledefs.Cacher",
+    0
+  ],
+  [
+    "external mill.define.Cacher",
+    0
+  ],
+  [
+    "external mill.define.Module$BaseClass",
+    0
+  ],
+  [
+    "external mill.define.BaseModule",
+    0
+  ],
+  [
+    "external mill.main.RootModule",
+    0
+  ],
+  [
+    "call mill.main.RootModule!<init>(mill.main.RootModule$Info,sourcecode.Enclosing,sourcecode.Line,sourcecode.File)void",
+    0
+  ],
+  [
+    "call sourcecode.Enclosing.<clinit>()void",
+    0
+  ],
+  [
+    "call sourcecode.Enclosing!<init>(java.lang.String)void",
+    0
+  ],
+  [
+    "def build_.package_#<init>()void",
+    1080916305
+  ],
+  [
+    "call build_.package_!<init>()void",
+    1080916305
+  ],
+  [
+    "call build_.package_.<clinit>()void",
+    0
+  ],
+  [
+    "def build_.package_$#<init>()void",
+    -776383923
+  ],
+  [
+    "call build_.package_$!<init>()void",
+    -776383923
+  ],
+  [
+    "def build_.package_$.<clinit>()void",
+    -1623227226
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$4(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    1902743649
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$11(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    292041079
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$8(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    1905600655
+  ],
+  [
+    "external mainargs.main$",
+    0
+  ],
+  [
+    "call mainargs.main$#$lessinit$greater$default$1()java.lang.String",
+    0
+  ],
+  [
+    "external mainargs.arg$",
+    0
+  ],
+  [
+    "call mainargs.arg$#$lessinit$greater$default$6()boolean",
+    0
+  ],
+  [
+    "external mill.main.TokenReaders0",
+    0
+  ],
+  [
+    "external mill.api.JsonFormatters",
+    0
+  ],
+  [
+    "external mill.package$",
+    0
+  ],
+  [
+    "call mill.package$#millEvaluatorTokenReader()mainargs.TokensReader",
+    0
+  ],
+  [
+    "call mainargs.arg.<clinit>()void",
+    0
+  ],
+  [
+    "call mainargs.main$.<clinit>()void",
+    0
+  ],
+  [
+    "call mainargs.ArgSig$.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.collection.immutable.$colon$colon.<clinit>()void",
+    0
+  ],
+  [
+    "external scala.annotation.StaticAnnotation",
+    0
+  ],
+  [
+    "external scala.annotation.ConstantAnnotation",
+    0
+  ],
+  [
+    "external scala.annotation.ClassfileAnnotation",
+    0
+  ],
+  [
+    "external scala.annotation.Annotation",
+    0
+  ],
+  [
+    "external mainargs.arg",
+    0
+  ],
+  [
+    "call mainargs.arg!<init>(java.lang.String,char,java.lang.String,boolean,boolean,boolean)void",
+    0
+  ],
+  [
+    "external scala.Product3",
+    0
+  ],
+  [
+    "external scala.Tuple3",
+    0
+  ],
+  [
+    "call scala.Tuple3!<init>(java.lang.Object,java.lang.Object,java.lang.Object)void",
+    0
+  ],
+  [
+    "call mainargs.arg$#$lessinit$greater$default$2()char",
+    0
+  ],
+  [
+    "call mainargs.TokensReader$StringRead$.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.None$.<clinit>()void",
+    0
+  ],
+  [
+    "call mainargs.main$#$lessinit$greater$default$2()java.lang.String",
+    0
+  ],
+  [
+    "external scala.collection.immutable.$colon$colon",
+    0
+  ],
+  [
+    "call scala.collection.immutable.$colon$colon!<init>(java.lang.Object,scala.collection.immutable.List)void",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Nil$.<clinit>()void",
+    0
+  ],
+  [
+    "call mainargs.arg$#$lessinit$greater$default$4()boolean",
+    0
+  ],
+  [
+    "call mainargs.TokensReader$.<clinit>()void",
+    0
+  ],
+  [
+    "external mainargs.TokensReader",
+    0
+  ],
+  [
+    "external mainargs.TokensReader$Terminal",
+    0
+  ],
+  [
+    "external mainargs.TokensReader$ShortNamed",
+    0
+  ],
+  [
+    "external mainargs.TokensReader$Simple",
+    0
+  ],
+  [
+    "external mainargs.TokensReader$",
+    0
+  ],
+  [
+    "call mainargs.TokensReader$#LeftoverRead(mainargs.TokensReader$Simple)mainargs.TokensReader$Leftover",
+    0
+  ],
+  [
+    "call mainargs.arg$#$lessinit$greater$default$1()java.lang.String",
+    0
+  ],
+  [
+    "call mainargs.arg$.<clinit>()void",
+    0
+  ],
+  [
+    "external mainargs.main",
+    0
+  ],
+  [
+    "call mainargs.main!<init>(java.lang.String,java.lang.String)void",
+    0
+  ],
+  [
+    "external scala.Option",
+    0
+  ],
+  [
+    "external mainargs.ArgSig$",
+    0
+  ],
+  [
+    "call mainargs.ArgSig$#create(java.lang.String,mainargs.arg,scala.Option,mainargs.TokensReader)mainargs.ArgSig",
+    0
+  ],
+  [
+    "external scala.Function2",
+    0
+  ],
+  [
+    "external mainargs.MainData$",
+    0
+  ],
+  [
+    "call mainargs.MainData$#create(java.lang.String,mainargs.main,scala.collection.immutable.Seq,scala.Function2)mainargs.MainData",
+    0
+  ],
+  [
+    "call mainargs.arg$#$lessinit$greater$default$3()java.lang.String",
+    0
+  ],
+  [
+    "call mainargs.main.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.Tuple3.<clinit>()void",
+    0
+  ],
+  [
+    "call mainargs.MainData$.<clinit>()void",
+    0
+  ],
+  [
+    "call mill.package$.<clinit>()void",
+    0
+  ],
+  [
+    "call mainargs.arg$#$lessinit$greater$default$5()boolean",
+    0
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$14()scala.Tuple3",
+    1035983719
+  ],
+  [
+    "call build_.MillMiscInfo$#topLevelProjectRoot()os.Path",
+    0
+  ],
+  [
+    "def build_.MillMiscInfo.topLevelProjectRoot()os.Path",
+    -277443000
+  ],
+  [
+    "call build_.MillMiscInfo$#output()os.Path",
+    0
+  ],
+  [
+    "def build_.MillMiscInfo.output()os.Path",
+    450358181
+  ],
+  [
+    "def build_.MillMiscInfo.millMiscInfo()mill.main.RootModule$Info",
+    -1871225539
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$13(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -410502383
+  ],
+  [
+    "call scala.collection.immutable.List$.<clinit>()void",
+    0
+  ],
+  [
+    "external scala.collection.immutable.List$",
+    0
+  ],
+  [
+    "call scala.collection.immutable.List$#apply(scala.collection.immutable.Seq)java.lang.Object",
+    0
+  ],
+  [
+    "call mainargs.MainData.<clinit>()void",
+    0
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$1()scala.Tuple3",
+    1960718136
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$3(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1984266431
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$6(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -317481781
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$5(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -2089342716
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$1()scala.Tuple3",
+    1960718136
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$14()scala.Tuple3",
+    1035983719
+  ],
+  [
+    "def build_.package_$.$deserializeLambda$(java.lang.invoke.SerializedLambda)java.lang.Object",
+    923151774
+  ],
+  [
+    "call mill.define.Discover$.<clinit>()void",
+    0
+  ],
+  [
+    "external scala.Predef$ArrowAssoc$",
+    0
+  ],
+  [
+    "call scala.Predef$ArrowAssoc$#$minus$greater$extension(java.lang.Object,java.lang.Object)scala.Tuple2",
+    0
+  ],
+  [
+    "call scala.Predef$.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.Predef$ArrowAssoc$.<clinit>()void",
+    0
+  ],
+  [
+    "external scala.collection.MapFactory",
+    0
+  ],
+  [
+    "external scala.collection.immutable.Map$",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Map$#apply(scala.collection.immutable.Seq)java.lang.Object",
+    0
+  ],
+  [
+    "external scala.LowPriorityImplicits2",
+    0
+  ],
+  [
+    "external scala.LowPriorityImplicits",
+    0
+  ],
+  [
+    "external scala.Predef$",
+    0
+  ],
+  [
+    "call scala.Predef$#ArrowAssoc(java.lang.Object)java.lang.Object",
+    0
+  ],
+  [
+    "call scala.Tuple2.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Map.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.collection.immutable.Map$.<clinit>()void",
+    0
+  ],
+  [
+    "call scala.Function0.<clinit>()void",
+    0
+  ],
+  [
+    "external scala.collection.MapOps",
+    0
+  ],
+  [
+    "external scala.collection.MapFactoryDefaults",
+    0
+  ],
+  [
+    "external scala.collection.Map",
+    0
+  ],
+  [
+    "external scala.collection.immutable.MapOps",
+    0
+  ],
+  [
+    "external scala.collection.immutable.Map",
+    0
+  ],
+  [
+    "external mill.define.Discover$",
+    0
+  ],
+  [
+    "call mill.define.Discover$#apply2(scala.collection.immutable.Map)mill.define.Discover",
+    0
+  ],
+  [
+    "external scala.Function0",
+    0
+  ],
+  [
+    "call scala.Function0#apply()java.lang.Object",
+    0
+  ],
+  [
+    "def build_.package_$#millDiscover$lzycompute()mill.define.Discover",
+    -2011507747
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$9(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1164167771
+  ],
+  [
+    "call mill.main.SelectiveExecutionModule.<clinit>()void",
+    0
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$16(mill.main.SelectiveExecutionModule,scala.collection.immutable.Seq)mill.define.Command",
+    -1838199013
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$12(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1370676128
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$2(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    1735511863
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$15(mill.main.SelectiveExecutionModule,scala.collection.immutable.Seq)mill.define.Command",
+    1082022691
+  ],
+  [
+    "def build_.package_$.$anonfun$millDiscover$17(mill.main.SelectiveExecutionModule,scala.collection.immutable.Seq)mill.define.Command",
+    -606684747
+  ],
+  [
+    "call build_.MillMiscInfo$#enclosingClasspath()scala.collection.immutable.Seq",
+    0
+  ],
+  [
+    "def build_.MillMiscInfo.enclosingClasspath()scala.collection.immutable.Seq",
+    558071194
+  ],
+  [
+    "call build_.MillMiscInfo$#projectRoot()os.Path",
+    0
+  ],
+  [
+    "def build_.MillMiscInfo.projectRoot()os.Path",
+    582140805
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$8(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    1905600655
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$13(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -410502383
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$9(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1164167771
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$3(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1984266431
+  ],
+  [
+    "external mill.main.SelectiveExecutionModule",
+    0
+  ],
+  [
+    "external java.lang.AutoCloseable",
+    0
+  ],
+  [
+    "external mill.eval.Evaluator",
+    0
+  ],
+  [
+    "call mill.main.SelectiveExecutionModule#resolve(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$7(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    896308786
+  ],
+  [
+    "call build_.package_$#showNamed(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$#path(mill.eval.Evaluator,java.lang.String,java.lang.String)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$#visualizePlan(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call mill.main.SelectiveExecutionModule#run(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$#resolve(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$11(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    292041079
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$10(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1212200041
+  ],
+  [
+    "call build_.package_$!millDiscover$lzycompute()mill.define.Discover",
+    -2011507747
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$6(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -317481781
+  ],
+  [
+    "call build_.package_$#version()mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$2(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    1735511863
+  ],
+  [
+    "call build_.package_$#visualize(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$#inspect(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$#show(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$#init(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call mill.main.SelectiveExecutionModule#prepare(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$4(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    1902743649
+  ],
+  [
+    "call build_.package_$#shutdown()mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$17(mill.main.SelectiveExecutionModule,scala.collection.immutable.Seq)mill.define.Command",
+    -606684747
+  ],
+  [
+    "call build_.package_$#plan(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$#clean(mill.eval.Evaluator,scala.collection.immutable.Seq)mill.define.Command",
+    0
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$12(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -1370676128
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$15(mill.main.SelectiveExecutionModule,scala.collection.immutable.Seq)mill.define.Command",
+    1082022691
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$5(build_.package_$,scala.collection.immutable.Seq)mill.define.Command",
+    -2089342716
+  ],
+  [
+    "call build_.package_$.$anonfun$millDiscover$16(mill.main.SelectiveExecutionModule,scala.collection.immutable.Seq)mill.define.Command",
+    -1838199013
+  ],
+  [
+    "external mainargs.TokensReader$StringRead$",
+    0
+  ],
+  [
+    "external scala.Product2",
+    0
+  ],
+  [
+    "external scala.Tuple2",
+    0
+  ],
+  [
+    "external mainargs.MainData",
+    0
+  ],
+  [
+    "external scala.None$",
+    0
+  ],
+  [
+    "external scala.collection.immutable.Nil$",
+    0
+  ]
+]
