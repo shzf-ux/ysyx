@@ -15,7 +15,7 @@ void __am_gpu_init()
     {
         fb[i] = 0;
     }
-    outl(VGA_SYNC, 1);
+    outl(VGA_SYNC, 0);
 }
 
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg)
