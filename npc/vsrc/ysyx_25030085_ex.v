@@ -1,3 +1,4 @@
+import "DPI-C" function void ex_performance_cnt ( input bit R);
 module ysyx_25030085_ex(
     input               clock                 ,
     input               reset                 ,
@@ -93,56 +94,44 @@ module ysyx_25030085_ex(
     assign B=ALUSrc?imm:rs2_data;
     reg [31:0] Alu_Result;
 //计算延迟需要最小化（通常在一个时钟周期内完成）
-      // 组合逻辑计算
     always @(*) begin
         if(state==OUTPUT)begin
-        case (AluOp)
-            4'b0000: begin
-                Alu_Result = rs1_data + B;  // ADD
-            end
-            4'b1010: begin
-                Alu_Result = rs1_data - B;   // SUB
-            end
-            4'b0001: begin
-                Alu_Result = rs1_data << B[4:0];  // SLLI（逻辑左移）
-            end
-            4'b1001: begin
-                Alu_Result = pc + B;        // J型跳转地址（PC + 偏移）
-            end
-            4'b0010: begin
-                // SLTI（有符号比较）
-                Alu_Result = (rs1_data[31] != B[31]) ? 
-                             (rs1_data[31] ? 32'd1 : 32'd0) : 
-                             (rs1_data[30:0] < B[30:0] ? 32'd1 : 32'd0);
-            end
-            4'b0011: begin
-                Alu_Result = (rs1_data < B) ? 32'd1 : 32'd0;  // SLTIU（无符号比较）
-            end
-            4'b0101: begin
-                // SRAI（算术右移）
-                Alu_Result = ($signed(rs1_data) >>> B[4:0]);
-            end
-            4'b0110: begin
-                Alu_Result = rs1_data >> B[4:0];  // SRLI（逻辑右移）
-            end
-            4'b0100: begin
-                Alu_Result = rs1_data ^ B;  // XOR
-            end
-            4'b0111: begin
-                Alu_Result = rs1_data | B;   // OR
-            end
-            4'b1000: begin
-                Alu_Result = rs1_data & B;   // AND
-            end
-            default: begin
-                Alu_Result = 32'h0;          // 默认输出0
-            end
-        endcase
+            case (AluOp)
+                4'b0000: Alu_Result = rs1_data + B;  // ADD
+                4'b1010: Alu_Result = rs1_data - B;  // SUB
+                4'b0001: Alu_Result = rs1_data << B[4:0];  // SLLI
+                4'b1001: Alu_Result = pc + B;        // J型跳转地址
+                4'b0010: begin  // SLTI（有符号比较）
+                    Alu_Result = (rs1_data[31] != B[31]) ? 
+                                 (rs1_data[31] ? 32'd1 : 32'd0) : 
+                                 (rs1_data[30:0] < B[30:0] ? 32'd1 : 32'd0);
+                end
+                4'b0011: Alu_Result = (rs1_data < B) ? 32'd1 : 32'd0;  // SLTIU
+                4'b0101: Alu_Result = ($signed(rs1_data) >>> B[4:0]);  // SRAI
+                4'b0110: Alu_Result = rs1_data >> B[4:0];  // SRLI
+                4'b0100: Alu_Result = rs1_data ^ B;  // XOR
+                4'b0111: Alu_Result = rs1_data | B;  // OR
+                4'b1000: Alu_Result = rs1_data & B;  // AND
+                default: Alu_Result = 32'h0;
+            endcase
         end
         else begin
-           Alu_Result = 32'h0;  
+            Alu_Result = 32'h0;  
         end
     end
+
+
+
+
+wire exu_perf_cnt;
+assign exu_perf_cnt = state == OUTPUT;
+
+always @(*) begin
+     ex_performance_cnt(exu_perf_cnt);
+end
+
+
+
 ysyx_25030085_csr_regfile csr_regfile_init(
     .clock(clock),
     .reset(reset),

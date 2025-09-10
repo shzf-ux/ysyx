@@ -1,5 +1,6 @@
 
 `include "define.vh"
+import "DPI-C" function void if_performance_cnt ( input bit R);
 module ysyx_25030085_ifbiu_axi4_lite_master #(
     parameter MAX_DELAY  = 20,        // 随机延迟最大值
     parameter LFSR_WIDTH = 8
@@ -166,6 +167,13 @@ always @(posedge clock or negedge reset) begin
         biu_rresp  <=0;
     end
 end
+
+always @(*) begin
+    if_performance_cnt (R_active);
+end
+
+
+
 
 
 

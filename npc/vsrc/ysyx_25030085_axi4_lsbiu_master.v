@@ -1,6 +1,6 @@
 
 `include "define.vh"
-
+import "DPI-C" function void lsu_performance_cnt ( input bit R_active);
 module ysyx_25030085_lsbiu_axi4_lite_master #(
     parameter READ_MAX_DELAY  = 20,  // 随机延迟最大值
     parameter WRITE_MAX_DELAY = 20 , // 随机延迟最大值
@@ -302,6 +302,10 @@ end
 
 
 
+
+always @(*) begin
+    lsu_performance_cnt (R_active);
+end
 
 
 
