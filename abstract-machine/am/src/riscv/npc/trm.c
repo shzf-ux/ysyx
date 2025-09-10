@@ -1,27 +1,42 @@
 #include <am.h>
 #include <klib-macros.h>
+#include <riscv/riscv.h>
+#include "include/ysyxsoc.h"
 
 extern char _heap_start;
 int main(const char *args);
-static inline uint8_t inb(uintptr_t addr) { return *(volatile uint8_t *)addr; }
-static inline uint16_t inw(uintptr_t addr) { return *(volatile uint16_t *)addr; }
-static inline uint32_t inl(uintptr_t addr) { return *(volatile uint32_t *)addr; }
-// sw
-static inline void outb(uintptr_t addr, uint8_t data) { *(volatile uint8_t *)addr = data; }
-static inline void outw(uintptr_t addr, uint16_t data) { *(volatile uint16_t *)addr = data; }
-static inline void outl(uintptr_t addr, uint32_t data) { *(volatile uint32_t *)addr = data; }
+void _trm_init();
 extern char _pmem_start;
 #define PMEM_SIZE (128 * 1024 * 1024)
 #define PMEM_END  ((uintptr_t)&_pmem_start + PMEM_SIZE)
 
 Area heap = RANGE(&_heap_start, PMEM_END);
 static const char mainargs[MAINARGS_MAX_LEN] = TOSTRING(MAINARGS_PLACEHOLDER); // defined in CFLAGS
+void init_uart()
+{
 
-#define SERIAL_PORT 0xa00003f8
+  // 2. 启用DLAB访问除数寄存器
+  outb(UART_REG_LC, 0x83);
+
+  // 3. 写入除数
+  outb(UART_REG_DLM, 0);
+  outb(UART_REG_DLL, 1);
+  outb(UART_REG_LC, 0x03); // DLAB=0
+
+  // 5. 启用并清空FIFO
+  outb(UART_REG_FC, 0xC7);
+}
+
 void putch(char ch)
 {
-  outb(SERIAL_PORT, ch);
+
+  while ((inb(UART_REG_LS) & 0x20) == 0)
+  {
+  }
+  outb(UART_REG_TX, ch);
 }
+
+
 void halt(int code)
 {
   asm volatile("ebreak");
@@ -30,6 +45,7 @@ void halt(int code)
 }
 
 void _trm_init() {
+  init_uart();
   int ret = main(mainargs);
   halt(ret);
 }

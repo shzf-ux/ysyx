@@ -15,29 +15,41 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc);
 
 void init_difftest(char *ref_so_file, long img_size, int port)
 {
+    fprintf(stderr, "[DEBUG] ref_so_file=%s, img_size=%ld, port=%d\n",
+            ref_so_file, img_size, port);
+    fflush(stderr);
+
     if (!ref_so_file)
     {
-        fprintf(stderr, "ERROR: REF_SO_PATH environment variable not set!\n");
+        fprintf(stderr, "ERROR: REF_SO_PATH is NULL\n");
         exit(1);
     }
 
-        void *handle;
-        handle = dlopen(ref_so_file, RTLD_LAZY);
+    // 检查文件是否存在
+    if (access(ref_so_file, R_OK) != 0)
+    {
+        fprintf(stderr, "ERROR: Cannot access ref_so at %s (%s)\n",
+                ref_so_file, strerror(errno));
+        exit(1);
+    }
+    // ==================
+
+    void *handle = dlopen(ref_so_file, RTLD_LAZY);
         if (!handle)
         {
-            fprintf(stderr, "dlopen error: %s\n", dlerror()); // 打印错误
+            fprintf(stderr, "dlopen failed: %s\n", dlerror());
             exit(1);
         }
-
+     
         ref_difftest_memcpy = (void (*)(uint32_t, void *, size_t, bool))dlsym(handle, "difftest_memcpy");
         assert(ref_difftest_memcpy);
-
+       
         ref_difftest_regcpy = (void (*)(void *, bool))dlsym(handle, "difftest_regcpy");
         assert(ref_difftest_regcpy);
-
+        
         ref_difftest_exec = (void (*)(uint64_t))dlsym(handle, "difftest_exec");
         assert(ref_difftest_exec);
-
+   
         // ref_difftest_raise_intr = dlsym(handle, "difftest_raise_intr");
         // assert(ref_difftest_raise_intr);
 
@@ -53,19 +65,22 @@ void init_difftest(char *ref_so_file, long img_size, int port)
         ref_difftest_init(port);
         uint8_t *guest_to_host(uint32_t paddr);
         uint8_t *host_ptr = guest_to_host(RESET_VECTOR);
+       
         ref_difftest_memcpy(RESET_VECTOR, host_ptr, img_size, DIFFTEST_TO_REF);
         // ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
-    }
+}
 void difftest_step(uint32_t pc)
 {
   
      CPU ref_r;
+   
+     ref_difftest_exec(1);
+     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
 
-    ref_difftest_exec(1);
-    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
-
-    checkregs(&ref_r, pc);
+     checkregs(&ref_r, pc);
+    
 }
+
 extern int flag_stop;
 static int checkregs(CPU *ref, uint32_t pc)
 {
@@ -92,7 +107,7 @@ bool isa_difftest_checkregs(CPU *ref_r, uint32_t pc)
     int i = 0;
     for (i = 0; i < 32; i++)
     {
-      // printf("%s,%08x\n", rv_regs[i], CPU_state.gpr[i]);
+       // printf("%s,%08x\n", rv_regs[i], CPU_state.gpr[i]);
         if (CPU_state.gpr[i] != ref_r->gpr[i])
         {
             printf("标准：%s,%08x\n", rv_regs[i], ref_r->gpr[i]);

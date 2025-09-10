@@ -56,6 +56,8 @@
     "sdl.h": "c",
     "sdl_main.h": "c",
     "random": "c",
-    "stdarg.h": "c"
+    "stdarg.h": "c",
+    "riscv.h": "c",
+    "ysyxsoc.h": "c"
   }
 }

@@ -18,50 +18,97 @@
 #include <device/mmio.h>
 #include <isa.h>
 
+#define FLASH_SIZE 0x1000000 // 16MB Flash
+#define SRAM_SIZE 0x2000 // 8KB SRAM
+#define SDRAM_SIZE 0x2000000 // 32MB SRAM
+#define IS_FLASH(addr) (addr >= 0x30000000 && addr < 0x30000000 + FLASH_SIZE)
+#define IS_SDRAM(addr) (addr >= 0x80000000 && addr < 0x80000000 + SDRAM_SIZE)
+#define IS_SRAM(addr) (addr >= 0x0f000000 && addr < 0x0f000000 + SRAM_SIZE)
+#define IS_UART(addr) (addr >= 0x10000000 && addr < 0x10000000 + 0x1fff)
+
 void display_memory_write(uint32_t addr, uint32_t data);
 
 #if   defined(CONFIG_PMEM_MALLOC)
     static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
-    static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
+    static uint8_t flash[CONFIG_MSIZE] PG_ALIGN = {};//程序加载的地方
+    static uint8_t sram[CONFIG_MSIZE] PG_ALIGN = {}; // 程序运行加载的地方
+    static uint8_t sdram[CONFIG_MSIZE] PG_ALIGN = {}; // 程序运行加载的地方
 #endif
 
-uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
-paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
+
+uint8_t *guest_to_host(paddr_t paddr)
+{
+ // printf("diff:%x\n", paddr);
+  if (IS_FLASH(paddr))
+  {
+    uint32_t offset = paddr - 0x30000000;
+    return (offset < FLASH_SIZE) ? (flash + offset) : NULL;
+  }
+  else if (IS_SRAM(paddr))
+  {
+    uint32_t offset = paddr - 0x0f000000;
+    return (offset < SRAM_SIZE) ? (sram + offset) : NULL;
+  }
+  else if (IS_SDRAM(paddr))
+  {
+   // printf("%08x\n", paddr);
+    uint32_t offset = paddr - 0x80000000;
+    return (offset < SDRAM_SIZE) ? (sdram + offset) : NULL;
+  }
+
+  return NULL;
+}
+
+
+paddr_t host_to_guest(uint8_t *haddr) { return haddr - flash + CONFIG_MBASE; }
 
 static word_t pmem_read(paddr_t addr, int len) {
+ 
   word_t ret = host_read(guest_to_host(addr), len);
   return ret;
 }
 
 static void pmem_write(paddr_t addr, int len, word_t data) {
+  
   host_write(guest_to_host(addr), len, data);
 }
 
 static void out_of_bound(paddr_t addr) {
-  panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
+  panic("address = " FMT_PADDR " is out of bound of flash [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
       addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
 }
 
 void init_mem() {
 #if   defined(CONFIG_PMEM_MALLOC)
-  pmem = malloc(CONFIG_MSIZE);
-  assert(pmem);
+  flash = malloc(CONFIG_MSIZE);
+  assert(flash);
 #endif
-  IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
+  IFDEF(CONFIG_MEM_RANDOM, memset(flash, rand(), CONFIG_MSIZE));
   Log("physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
 word_t paddr_read(paddr_t addr, int len) {
-  
+
+  if (IS_UART(addr))
+  {
+    
+    return 0;
+  }
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
 }
 
+
+
 void paddr_write(paddr_t addr, int len, word_t data) {
-  
+   if (IS_UART(addr))
+  {
+   
+    return ;
+  }
 #ifdef CONFIG_MTRACE
   display_memory_write(addr, data);
 #endif

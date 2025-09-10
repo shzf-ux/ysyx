@@ -1,12 +1,9 @@
 #include "common.h" //不能用<>
 #include "difftest/dut.h"
+#include "paddr.h"
 void sdb_set_batch_mode();
-
 extern int sim_time;
 void init_disasm();
-uint32_t pmem_read(uint32_t raddr,int len);
-uint8_t *guest_to_host(uint32_t paddr);
-void init_mem();
 void parse_elf(char *elf_file); // 传入一个elf文件
 
 static char *img_file = NULL;
@@ -41,6 +38,7 @@ static long load_img()
         printf("%sNo image is given. Use the default build-in image.%s\n", ANSI_FG_BLUE, ANSI_NONE);
         return 4096; // built-in image size
     }
+    printf("bin %s\n", img_file);
 
     FILE *fp = fopen(img_file, "rb");
     if (fp == NULL)
@@ -52,7 +50,7 @@ static long load_img()
     long size = ftell(fp);
 
     printf("%sThe image is %s, size = %ld %s\n", ANSI_FG_BLUE, img_file, size, ANSI_NONE);
-
+   
     fseek(fp, 0, SEEK_SET);
     int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
     assert(ret == 1);
@@ -77,11 +75,11 @@ static int parse_args(int argc, char *argv[])
     int o;
     while ((o = getopt_long(argc, argv, "-bhl:d:p:e:", table, NULL)) != -1)
     {
-      
+
         switch (o)
         {
         case 'b':sdb_set_batch_mode();break; // 设置批处理模式
-        case 'd': diff_so_file = optarg;break;
+        case 'd': diff_so_file = optarg;;break;
         case 'e': elf_file = optarg;break;
         case 1:img_file = optarg;return 0;
         default:
@@ -111,29 +109,28 @@ void init_rtl(int argc, char *argv[])
     // 启用波形跟踪
     Verilated::traceEverOn(true);
   
-    top->trace(vcd, 5);
+    soc_top->trace(vcd, 6);
     vcd->open("waveform.vcd");
 
     // 1. 初始化信号
-    top->clk = 0;
-    top->rst = 1;
-    top->eval();
-    vcd->dump(sim_time); // 写入复位释放状态
+    soc_top->clock = 0;
+    soc_top->reset = 0;
+    soc_top->eval();
+    vcd->dump(sim_time); // 写入复位信号置位状态
     sim_time++;
+
     // 1.5 开始复位流程
-    top->clk = 1;
-    top->eval();
-
-
-    top->instruction = pmem_read(top->pc_out,4);
+    soc_top->clock = 1;
+    soc_top->reset = 1;
+    soc_top->eval();
+    
     vcd->dump(sim_time); // 写入复位信号置位状态
     sim_time++;
 
     // 3. 释放复位信号
-    top->rst = 0;
-    top->clk = 0;
-    top->instruction = pmem_read(top->pc_out,4);
-    top->eval();
+    soc_top->clock = 0;
+
+    soc_top->eval();
     vcd->dump(sim_time); // 写入复位释放状态
     sim_time++;
 }
@@ -144,16 +141,15 @@ void init_monitor(int argc, char *argv[])
     parse_args(argc, argv); // 解析命令行参数
     parse_elf(elf_file); // 传入一个elf文件
     init_mem();
-
     init_isa();
-    
+
     long img_size = load_img();
-
+   
     init_disasm();
-
-    init_rtl(argc, argv);
-
-
-    init_difftest(diff_so_file, img_size, difftest_port);
     
+    init_rtl(argc, argv);
+  
+    init_difftest(diff_so_file, img_size, difftest_port);
+
+
 }

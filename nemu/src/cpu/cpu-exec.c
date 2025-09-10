@@ -41,7 +41,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
 
-
   
     #ifdef CONFIG_WATCHPOINT//是否定义了监视点的检查,如果发现有改变就停止
     find_value_change();//进行比对
@@ -81,7 +80,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,//向buf加入反汇编后的内容
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
- 
 #endif
 }
 
@@ -107,12 +105,15 @@ static void statistic() {
 }
 
 void assert_fail_msg() {//检查程序是否出错
+
+
   isa_reg_display();
 #ifdef CONFIG_IRINGBUF//环形缓冲器
   void Display_inst();
   Display_inst();
 #endif
   statistic();
+  
 }
 
 /* Simulate how the CPU works. */

@@ -14,7 +14,7 @@ extern "C"
 void set_scope()
 {
 
-    svScope scope = svGetScopeFromName("TOP.ysyx_25030085_top.regfile");
+    svScope scope = svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.regfile");
     if (!scope)
     {
         fprintf(stderr, "Error: Regfile scope not found!\n");
@@ -27,9 +27,10 @@ void set_scope()
 
 static char *rl_gets()
 {
+   
     static char buffer[INPUT_MAX_LEN + 1]; // 静态缓冲区
     memset(buffer, 0, sizeof(buffer));     // 清空缓冲区
-
+    
     printf("(npc) "); // 手动打印提示符
     fflush(stdout);   // 确保立即显示
 
@@ -67,18 +68,19 @@ void display_register(int en)//打印寄存器
 {
     set_scope();
     info_register_en(1,en);
-    top->eval(); // 一定要更新,verilog里面的always的信号是否n更新n看这个
+    soc_top->eval(); // 一定要更新,verilog里面的always的信号是否n更新n看这个
     info_register_en(0,en);
-    top->eval();
+    soc_top->eval();
 }
 static int cmd_info(char *args)
-{ // 参数为r时，打印寄存器状态，参数为w打印监视点状态
+{
 
     display_register(1);//开启打印状态
     
 
     return 0;
 }
+
 static int cmd_s(char *args)
 {                     // 单步执行,参数为执行的步数
     if (flag_stop == 1)
@@ -89,14 +91,14 @@ static int cmd_s(char *args)
     char *num = strtok(NULL, " "); // 获取第二个参数
     if (num == NULL)
     {
-        npc_exec(2);
+        npc_exec(16);
         return 0;
     }
     int cnt = 0;
     sscanf(num, "%d", &cnt);
     for (int i = 0; i < cnt; i++)
     {
-       npc_exec(2);
+       npc_exec(14);
     }
     return 0;
 }
@@ -139,9 +141,9 @@ static struct
     /* TODO: Add more commands */
 
 };
-
-#define NR_CMD ARRLEN(cmd_table)
 #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
+#define NR_CMD ARRLEN(cmd_table)
+
 
 static int cmd_help(char *args)
 {
@@ -180,6 +182,7 @@ void sdb_set_batch_mode()
 
 void sdb_mainloop()
 {
+   
     if (is_batch_mode)
     {
         cmd_c(NULL);
@@ -188,6 +191,7 @@ void sdb_mainloop()
 
     for (char *str; (str = rl_gets()) != NULL;)
     {
+      
 
         char *str_end = str + strlen(str);
 

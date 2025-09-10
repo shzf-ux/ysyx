@@ -7,10 +7,13 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <time.h>
+#include "svdpi.h" // DPI 标准头文件
 #include <assert.h>
 #include <verilated.h>
 #include <verilated_vcd_c.h>
-#include "../obj_dir/Vysyx_25030085_top.h"
+#include "../obj_dir/VysyxSoCFull.h"
+
+#include <VysyxSoCFull.h>
 #define ANSI_FG_BLACK "\33[1;30m"
 #define ANSI_FG_RED "\33[1;31m"
 #define ANSI_FG_GREEN "\33[1;32m"
@@ -30,8 +33,8 @@
 #define ANSI_NONE "\33[0m"
 #define PG_ALIGN __attribute((aligned(4096)))
 #define CONFIG_MSIZE 0x8000000
-#define RESET_VECTOR 0x80000000
-#define CONFIG_MBASE 0x80000000
+#define RESET_VECTOR 0x30000000
+#define CONFIG_MBASE 0x30000000
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE
 #define MAX_SIM_TIME 655300
 extern unsigned char isa_logo[];
@@ -43,17 +46,33 @@ typedef struct
 } CPU;
 extern CPU CPU_state;
 
-class Vysyx_25030085_top; 
+class VysyxSoCFull;
 class VerilatedVcdC;
 
 // 声明全局可访问的指针
-extern Vysyx_25030085_top *top; 
+extern VysyxSoCFull *soc_top;
 extern VerilatedVcdC *vcd;
 
 #define SERIAL_ADDR 0xa00003f8
 #define UPTIME_ADDR 0xa0000048
 
-#endif
+
+// 定义共享数据结构，存储dpi_send_signals传递的所有值
+typedef struct
+{
+    uint32_t pc;         // PC值
+    uint32_t inst;       // 指令值
+    unsigned char valid; // 有效信号
+    unsigned char ready; // 就绪信号
+    unsigned char done;  // 完成信号
+} Top_Module;
+
+// 声明全局共享变量（extern表示在其他文件定义）
+extern Top_Module top;
+
+#endif // DPI_SHARED_H
+
+
 
 
 

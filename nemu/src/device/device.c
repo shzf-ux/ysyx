@@ -53,11 +53,10 @@ void device_update() {
         break;
 #ifdef CONFIG_HAS_KEYBOARD
       // If a key was pressed
-       
       case SDL_KEYDOWN:
       case SDL_KEYUP: {
-        uint8_t k = event.key.keysym.scancode;
-  
+        uint8_t k = event.key.keysym.scancode; // SDL捕获按键/获取物理扫描码
+
         bool is_keydown = (event.key.type == SDL_KEYDOWN);
         send_key(k, is_keydown);
         break;
