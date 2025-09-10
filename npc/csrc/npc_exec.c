@@ -94,7 +94,7 @@ static void single_cycle()
     soc_top->eval();
     if (sim_time > 95000000)
     {
-       // printf("pc :%08x\n", top.pc);
+       
         //  vcd->dump(sim_time);
     }
 
