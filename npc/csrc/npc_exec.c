@@ -102,7 +102,7 @@ static void single_cycle()
     sim_time++;
     soc_top->eval();
 
-       // printf("pc :%08x\n", top.pc);
+       
         //vcd->dump(sim_time);
     
 }
