@@ -2,6 +2,8 @@
 
 TOPNAME = ysyxSoCFull
 NXDC_FILES = constr/top.nxdc
+# syn
+SYN_TOP = ysyx_25030085_cpu
 #nvboard搜索路径
 INC_PATH ?=
 
@@ -88,6 +90,17 @@ run: $(BIN)
 	@echo "BIN: $(BIN)"
 	@echo "args: $(ARGS)"
 	@$(BIN) $(ARGS) $(IMG)
+
+syn: VERILOG_FLAGS += -DSYNTHESIS
+syn:
+	@echo "Synthesis NPC"
+	cd $(NPC_HOME)/../yosys-sta && make syn DESIGN=$(SYN_TOP) \
+	RTL_FILES="$(shell find $(NPC_HOME)/vsrc -name "*.v")" \
+	INCLUDE_PATH=$(NPC_HOME)/vsrc/include
+	cd $(NPC_HOME)
+
+
+
 
 clean:
 	rm -rf $(BUILD_DIR)

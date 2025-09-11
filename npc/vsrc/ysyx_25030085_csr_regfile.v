@@ -30,10 +30,9 @@ reg [31:0] mtvec    ;
 reg [31:0] mepc     ;
 reg [31:0] mcause   ;
 
-reg [31:0] mvendorid ;
-reg [31:0] marchid   ;
-assign mvendorid=`MVENDORID_VALUE;
-assign marchid  = `MARCHID_VALUE;
+
+localparam mvendorid=`MVENDORID_VALUE;
+localparam marchid  = `MARCHID_VALUE;
 
 assign mtvec_out=mtvec;
 assign mepc_out =mepc;

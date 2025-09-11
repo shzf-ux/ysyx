@@ -1,6 +1,5 @@
 
 `include "define.vh"
-import "DPI-C" function void if_performance_cnt ( input bit R);
 module ysyx_25030085_ifbiu_axi4_lite_master #(
     parameter MAX_DELAY  = 20,        // 随机延迟最大值
     parameter LFSR_WIDTH = 8
@@ -97,7 +96,7 @@ module ysyx_25030085_ifbiu_axi4_lite_master #(
 // 反馈多项式：x^8 + x^6 + x^5 + x^4 + 1（
 assign lfsr_feedback = lfsr[7] ^ lfsr[5] ^ lfsr[4] ^ lfsr[3];
 // LFSR更新逻辑
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin
         lfsr <= 8'b1;  // 初始值不能为全0，否则会锁定
     end else begin
@@ -116,7 +115,7 @@ wire [LFSR_WIDTH-1:0] rand_delay = `ifdef DISABLE_IF_DELAY
 
 
 // 读地址通道
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin
         M_AXI_ARADDR <= 32'h0;
         M_AXI_ARVALID <= 1'b0;
@@ -150,7 +149,7 @@ end
 
 
 // 读数据通道
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin
         M_AXI_RREADY <= 1'b0;
         biu_rdata <= 32'h0;
@@ -168,11 +167,14 @@ always @(posedge clock or negedge reset) begin
     end
 end
 
-always @(*) begin
-    if_performance_cnt (R_active);
-end
 
 
+
+`ifndef SYNTHESIS
+    always @(*) begin
+        if_performance_cnt (R_active);
+    end
+`endif
 
 
 

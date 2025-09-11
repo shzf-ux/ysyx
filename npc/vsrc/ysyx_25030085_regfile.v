@@ -1,5 +1,5 @@
-import "DPI-C"  function void info_register  (input int value,input bit en_display); 
-//import "DPI-C" context function void set_scope();
+
+
 module ysyx_25030085_regfile ( 
     input               clock          ,
     input               reset          ,
@@ -20,14 +20,37 @@ module ysyx_25030085_regfile (
     reg [4:0]       rs2             ;
     reg [4:0]       rd              ;
     reg [31:0]      register [0:31] ;
-    reg             is_info_register;
-    reg             is_en_display   ;
-// initial begin
-//   $display("Hierarchy path of regfile: %m"); 
-//   // %m 会打印当前作用域的完整层次路径，运行后根据输出调整 C 代码中的路径
-// end
 
     integer i; 
+
+
+
+   always @(posedge clock or posedge reset) begin
+    if (reset) begin
+        // 复位所有寄存器（x0 除外）
+        for (i = 1; i < 32; i++) begin
+            register[i] <= 0;
+        end
+    end else if (reg_wen && (reg_waddr != 0)&&in_valid) begin
+        register[reg_waddr] <= reg_wdata;  
+        w_resp<=1;
+    end
+    else begin
+        w_resp<=0;
+    end
+
+end
+
+    assign rs1_data=(reg_rs1_addr!=0)?register[reg_rs1_addr]:0;//根据rs1寄存器编码找到对于数据
+    assign rs2_data=(reg_rs2_addr!=0)?register[reg_rs2_addr]:0;
+    assign reg_a5 = register[15];
+
+
+
+
+`ifndef SYNTHESIS
+    reg             is_info_register;
+    reg             is_en_display   ;
     initial begin
         is_info_register=0;
     end
@@ -44,24 +67,9 @@ module ysyx_25030085_regfile (
         info_register(register[i],is_en_display);
         end
     end
+`endif
 
-   always @(posedge clock or posedge reset) begin
-    if (reset) begin
-        // 复位所有寄存器（x0 除外）
-        for (integer i = 1; i < 32; i++) begin
-            register[i] <= 0;
-        end
-    end else if (reg_wen && (reg_waddr != 0)&&in_valid) begin
-        register[reg_waddr] <= reg_wdata;  
-        w_resp<=1;
-    end
-    else begin
-        w_resp<=0;
-    end
 
-end
 
-    assign rs1_data=(reg_rs1_addr!=0)?register[reg_rs1_addr]:0;//根据rs1寄存器编码找到对于数据
-    assign rs2_data=(reg_rs2_addr!=0)?register[reg_rs2_addr]:0;
-    assign reg_a5 = register[15];
+
 endmodule

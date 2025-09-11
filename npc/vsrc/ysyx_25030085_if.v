@@ -1,10 +1,4 @@
-import "DPI-C" function void dpi_send_signals(
-    input int pc,       // 32位信号用 [31:0] 表示
-    input int inst,     // 32位指令
-    input        valid,     // 单比特用 input 表示（默认reg类型）
-    input        ready,
-    input        done
-);
+
 module ysyx_25030085_if (
     input               clock         ,
     input               reset         ,
@@ -18,7 +12,7 @@ module ysyx_25030085_if (
     output reg [31:0]   if_addr     ,
     output reg          if_req      ,
 
-    output              out_valid   ,       // 输出数据有效
+    output   reg           out_valid   ,       // 输出数据有效
     output  reg [31:0]  inst        ,     // 指令输出
     output  reg [31:0]  pc          ,       // PC 值输出
     input               out_ready         // 下游准备接收
@@ -28,15 +22,14 @@ module ysyx_25030085_if (
 
     reg [31:0]        current_pc;
     reg [31:0]        inst_reg;      // 用于暂存当前PC值
-    // 定义状态机状态
-    typedef enum reg [2:0] {
-        IDLE,       // 空闲状态
-        REQUEST,    // 请求状态
-        OUTPUT,       // 等待响应状态
-        WAIT      
-    } state_t;
+    reg [2:0]   state;
 
-    state_t state;
+
+localparam IDLE    = 3'd0;  
+localparam REQUEST = 3'd1;
+localparam OUTPUT  = 3'd2;
+localparam WAIT    = 3'd3;  
+
 
     
 

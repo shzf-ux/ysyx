@@ -1,4 +1,4 @@
-import "DPI-C" function void ex_performance_cnt ( input bit R);
+
 module ysyx_25030085_ex(
     input               clock                 ,
     input               reset                 ,
@@ -16,7 +16,7 @@ module ysyx_25030085_ex(
 
     output              out_valid           ,
     output [31:0]       out_next_pc         ,
-    output reg [31:0]   out_Alu_Result      ,
+    output [31:0]   out_Alu_Result      ,
     output [31:0]       out_rs2_data        ,
     output [20:0]       out_ctrl            ,
     output [31:0]       csr_data            ,
@@ -82,7 +82,7 @@ module ysyx_25030085_ex(
     assign pc_out =pc;
     assign rd_out=rd;
 
-    reg  [31:0] B;
+    wire  [31:0] B;
     wire [3:0]  AluOp   =ctrl[4:1];
     wire        ALUSrc  =ctrl[0];
     wire [1:0]  csr_wen =ctrl[20:19];
@@ -123,12 +123,6 @@ module ysyx_25030085_ex(
 
 
 
-wire exu_perf_cnt;
-assign exu_perf_cnt = state == OUTPUT;
-
-always @(*) begin
-     ex_performance_cnt(exu_perf_cnt);
-end
 
 
 
@@ -171,6 +165,14 @@ always @(*) begin
 end
 
 
+
+`ifndef SYNTHESIS
+    wire exu_perf_cnt;
+    assign exu_perf_cnt = state == OUTPUT;
+    always @(*) begin
+        ex_performance_cnt(exu_perf_cnt);
+    end
+`endif
 
 
 

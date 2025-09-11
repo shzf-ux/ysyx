@@ -1,5 +1,4 @@
-import "DPI-C" function void ebreak_instruction (input int inst) ;
-import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
+
 module ysyx_25030085_id (
     input               clock         ,
     input               reset         ,
@@ -82,11 +81,11 @@ module ysyx_25030085_id (
     reg [2:0] func3=inst[14:12];
     reg [6:0] func7=inst[31:25];
     reg [31:0] imm;
-    reg [31:0] immI;
-    reg [31:0] immJ;//最低位补0
-    reg [31:0] immU;
-    reg [31:0] immS;
-    reg [31:0] immB;
+    wire [31:0] immI;
+    wire [31:0] immJ;//最低位补0
+    wire [31:0] immU;
+    wire [31:0] immS;
+    wire [31:0] immB;
     wire [4:0] rd_addr=inst[11:7];
     assign rd_out=rd_addr;
 
@@ -348,6 +347,9 @@ always @(*) begin
         endcase
     end
 end
+
+
+`ifndef SYNTHESIS
 //系统类别的指令ebreak call
     always@(is_ebreak,invalid)begin
         if(is_ebreak)begin
@@ -356,6 +358,7 @@ end
         else if(invalid)begin
           invalid_inst(pc,inst);   
         end
-     
-    end   
+    end  
+`endif
+  
 endmodule

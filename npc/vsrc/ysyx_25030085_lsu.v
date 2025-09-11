@@ -32,8 +32,8 @@ module ysyx_25030085_lsu (//数据存储器
 
     //输出到biu模块
     output reg                  lsu_req     ,        // 请求信号
-    output reg                  lsu_wwe     ,        // 写使能
-    output reg                  lsu_rwe     ,        // 读使能
+    output                      lsu_wwe     ,        // 写使能
+    output                      lsu_rwe     ,        // 读使能
     output reg [31:0]           lsu_addr    ,       // 地址输出
     output reg [31:0]           lsu_wdata   ,      // 写数据输出
     output reg [3:0]            lsu_strb    ,       // 字节选通信号
@@ -91,7 +91,6 @@ module ysyx_25030085_lsu (//数据存储器
     assign imm_out      =   imm  ;
     assign rd_out       =   rd   ;
     //biu数据
-    assign lsu_wdata   =  wdata         ;
     assign lsu_wwe     =  MemWrite      ;
     assign lsu_rwe     =  MemRead       ;
 

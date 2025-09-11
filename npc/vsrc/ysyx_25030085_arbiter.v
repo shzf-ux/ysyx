@@ -41,7 +41,7 @@ module ysyx_25030085_arbiter#(
 
     // LS Write 通道
     input               ls_awvalid      ,  // 写地址有效
-    output reg          ls_awready      ,  // 写地址就绪
+    output              ls_awready      ,  // 写地址就绪
     input       [31:0]  ls_awaddr       ,  // 写地址
     input       [3:0]   ls_awid         ,  // 写事务ID
     input       [7:0]   ls_awlen        ,  // 突发长度
@@ -49,15 +49,15 @@ module ysyx_25030085_arbiter#(
     input       [1:0]   ls_awburst      ,  // 突发类型
     
     input               ls_wvalid       ,  // 写数据有效
-    output reg          ls_wready       ,  // 写数据就绪
-    input       [31:0]  ls_wdata        ,  // 写数据
-    input       [3:0]   ls_wstrb        ,  // 写字节选通
-    input               ls_wlast        ,  // 写最后一拍标记
+    output           ls_wready       ,  // 写数据就绪
+    input    [31:0]  ls_wdata        ,  // 写数据
+    input    [3:0]   ls_wstrb        ,  // 写字节选通
+    input            ls_wlast        ,  // 写最后一拍标记
     
-    output reg          ls_bvalid       ,  // 写响应有效
-    input               ls_bready       ,  // 写响应就绪
-    output reg [1:0]    ls_bresp        ,  // 写响应
-    output reg [3:0]    ls_bid          ,  // 写响应ID
+    output           ls_bvalid       ,  // 写响应有效
+    input            ls_bready       ,  // 写响应就绪
+    output  [1:0]    ls_bresp        ,  // 写响应
+    output  [3:0]    ls_bid          ,  // 写响应ID
     
     // XBAR 从设备侧（RTC）
     output reg  [31:0]  rtc_araddr      ,    // RTC读地址
@@ -76,24 +76,24 @@ module ysyx_25030085_arbiter#(
     output reg          rtc_rready      ,    // RTC读数据就绪
 
     // XBAR 从设备侧（SOC）
-    output reg  [31:0]  soc_awaddr      ,    // SOC写地址
-    output reg          soc_awvalid     ,    // SOC写地址有效
-    output reg  [3:0]   soc_awid        ,    // SOC写事务ID
-    output reg  [7:0]   soc_awlen       ,    // SOC突发长度
-    output reg  [2:0]   soc_awsize      ,    // SOC数据位宽
-    output reg  [1:0]   soc_awburst     ,    // SOC突发类型
+    output   [31:0]  soc_awaddr      ,    // SOC写地址
+    output           soc_awvalid     ,    // SOC写地址有效
+    output   [3:0]   soc_awid        ,    // SOC写事务ID
+    output   [7:0]   soc_awlen       ,    // SOC突发长度
+    output   [2:0]   soc_awsize      ,    // SOC数据位宽
+    output   [1:0]   soc_awburst     ,    // SOC突发类型
     input               soc_awready     ,    // SOC写地址就绪
 
-    output reg  [31:0]  soc_wdata       ,    // SOC写数据
-    output reg  [3:0]   soc_wstrb       ,    // SOC写字节选通
-    output reg          soc_wvalid      ,    // SOC写数据有效
-    output reg          soc_wlast       ,    // SOC最后一个写数据
+    output   [31:0]  soc_wdata       ,    // SOC写数据
+    output   [3:0]   soc_wstrb       ,    // SOC写字节选通
+    output           soc_wvalid      ,    // SOC写数据有效
+    output           soc_wlast       ,    // SOC最后一个写数据
     input               soc_wready      ,    // SOC写数据就绪
 
     input       [1:0]   soc_bresp       ,    // SOC写响应
     input               soc_bvalid      ,    // SOC写响应有效
     input       [3:0]   soc_bid         ,    // SOC响应ID
-    output reg          soc_bready      ,    // SOC写响应就绪
+    output           soc_bready      ,    // SOC写响应就绪
 
     output reg  [31:0]  soc_araddr      ,    // SOC读地址
     output reg          soc_arvalid     ,    // SOC读地址有效

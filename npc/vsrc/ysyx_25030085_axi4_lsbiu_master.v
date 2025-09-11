@@ -1,6 +1,6 @@
 
 `include "define.vh"
-import "DPI-C" function void lsu_performance_cnt ( input bit R_active);
+
 module ysyx_25030085_lsbiu_axi4_lite_master #(
     parameter READ_MAX_DELAY  = 20,  // 随机延迟最大值
     parameter WRITE_MAX_DELAY = 20 , // 随机延迟最大值
@@ -64,7 +64,7 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     output reg          M_AXI_WVALID    ,
     input               M_AXI_WREADY    ,
    //***********新增信号***************//  
-    output              M_AXI_WLAST     ,//发送数据的一方来确定last信号
+    output reg          M_AXI_WLAST     ,//发送数据的一方来确定last信号
 
     //写响应
     input       [1:0]   M_AXI_BRESP     ,
@@ -123,7 +123,7 @@ module ysyx_25030085_lsbiu_axi4_lite_master #(
     assign lfsrr_feedback = lfsr_addr[7] ^ lfsr_addr[5] ^ lfsr_addr[4] ^ lfsr_addr[3];
     assign lfsrw_feedback = lfsr_data[7] ^ lfsr_data[4] ^ lfsr_data[3] ^ lfsr_data[2];
     // LFSR更新逻辑
-    always @(posedge clock or negedge reset) begin
+    always @(posedge clock or posedge reset) begin
         if (reset) begin
             lfsr_addr <= 8'h01;  // 初始值不能为全0，否则会锁定
             lfsr_data <= 8'h02;
@@ -156,7 +156,7 @@ wire [LFSR_WIDTH-1:0] write_rand_delay =
 // 补充AR_active定义：地址通道握手成功（主设备有效且从设备就绪）
 assign AR_active = M_AXI_ARVALID && M_AXI_ARREADY;
 
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin  
         M_AXI_ARADDR  <= 32'h0;
         M_AXI_ARVALID <= 1'b0;
@@ -196,7 +196,7 @@ end
 
 
 // 读数据通道 
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin
         M_AXI_RREADY <= 1'b0;
         biu_rdata <= 32'h0;
@@ -213,7 +213,7 @@ always @(posedge clock or negedge reset) begin
 end
 
 // 写地址通道
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin
         M_AXI_AWADDR  <= 32'h0;
         M_AXI_AWVALID <= 1'b0;
@@ -250,7 +250,7 @@ end
 
 
 // 写数据通道
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin
         M_AXI_WDATA     <= 32'h0;
         M_AXI_WSTRB     <= 4'h0;
@@ -287,9 +287,10 @@ end
 
 
 
-always @(posedge clock or negedge reset) begin
+always @(posedge clock or posedge reset) begin
     if (reset) begin
-        M_AXI_BREADY <= 1'b0;      
+        M_AXI_BREADY <= 1'b0;
+        biu_wresp <=1'b0;      
     end 
     else begin        // 始终准备好接收响应,而不是valid置位才ready置，那1111                             
         M_AXI_BREADY <= 1'b1;  
@@ -303,9 +304,13 @@ end
 
 
 
-always @(*) begin
-    lsu_performance_cnt (R_active);
-end
+`ifndef SYNTHESIS
+    always @(*) begin
+        lsu_performance_cnt (R_active);
+    end
+`endif
+
+
 
 
 

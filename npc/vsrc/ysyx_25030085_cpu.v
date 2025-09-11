@@ -1,5 +1,21 @@
+`ifndef SYNTHESIS
 import "DPI-C" function void display_call_func (input int pc, input int dnpc);
 import "DPI-C" function void display_ret_func (input int pc, input int dnpc);
+import "DPI-C" function void if_performance_cnt ( input bit R);
+import "DPI-C" function void lsu_performance_cnt ( input bit R_active);
+import "DPI-C" function void ex_performance_cnt ( input bit R);
+import "DPI-C" function void ebreak_instruction (input int inst) ;
+import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
+import "DPI-C" function void info_register  (input int value,input bit en_display); 
+import "DPI-C" function void dpi_send_signals(
+    input int pc,       // 32位信号用 [31:0] 表示
+    input int inst,     // 32位指令
+    input        valid,     // 单比特用 input 表示（默认reg类型）
+    input        ready,
+    input        done
+);
+`endif
+
 module ysyx_25030085_cpu (
     input clock                     ,
     input reset                     ,
@@ -88,7 +104,9 @@ module ysyx_25030085_cpu (
 
 
 );
-    
+
+
+`ifndef SYNTHESIS
     reg [31:0] top_pc;
     reg [31:0] top_inst;
     reg  top_valid;
@@ -108,17 +126,36 @@ module ysyx_25030085_cpu (
             inst_done<=wb_valid;
         end
     end
-always @(*) begin
-   // $display("%08x",top_pc);
-        dpi_send_signals(
-            top_pc,        // 
-            top_inst,      
-            top_valid, 
-            top_ready, 
-            inst_done  
-    );
-end
+    always @(*) begin
+    // $display("%08x",top_pc);
+            dpi_send_signals(
+                top_pc,        // 
+                top_inst,      
+                top_valid, 
+                top_ready, 
+                inst_done  
+        );
+    end
 
+    //ftrace
+    wire is_jar_call;
+    wire is_jalr_call;
+    wire is_jalr_ret;
+
+    assign is_jar_call = (if_id_inst[11:7] == 5'd1) && (id_ex_ctrl[15:14] == 2'b01);  // JAL调用
+    assign is_jalr_call = (if_id_inst[11:7] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR调用
+    assign is_jalr_ret = (if_id_inst[11:7] == 5'd0) && (if_id_inst[19:15] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR返回
+
+    always @(posedge clock) begin
+        if ((is_jar_call || is_jalr_call)&&wb_done) begin
+            display_call_func(if_id_pc, next_pc);  // 函数调用追踪
+        end
+        if (is_jalr_ret&&wb_done) begin
+            display_ret_func(if_id_pc, next_pc);  // 函数返回追踪
+        end
+    end
+
+`endif
 
 
 
@@ -226,9 +263,7 @@ end
 
 
 
-    // ------------------------------
-    // xbar模块->clint
-    // ------------------------------
+
     wire [31:0]  rtc_araddr  ;  // RTC读地址
     wire         rtc_arvalid ;  // RTC读地址有效
     wire [3:0]   rtc_arid    ;  // RTC读事务ID
@@ -677,24 +712,6 @@ ysyx_25030085_wb wbu(
 
 
 
-
-//ftrace
-    wire is_jar_call;
-    wire is_jalr_call;
-    wire is_jalr_ret;
-
-    assign is_jar_call = (if_id_inst[11:7] == 5'd1) && (id_ex_ctrl[15:14] == 2'b01);  // JAL调用
-    assign is_jalr_call = (if_id_inst[11:7] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR调用
-    assign is_jalr_ret = (if_id_inst[11:7] == 5'd0) && (if_id_inst[19:15] == 5'd1) && (id_ex_ctrl[15:14] == 2'b10);  // JALR返回
-
-    always @(posedge clock) begin
-        if ((is_jar_call || is_jalr_call)&&wb_done) begin
-            display_call_func(if_id_pc, next_pc);  // 函数调用追踪
-        end
-        if (is_jalr_ret&&wb_done) begin
-            display_ret_func(if_id_pc, next_pc);  // 函数返回追踪
-        end
-    end
 
 
 
