@@ -1,4 +1,4 @@
-//Generate the verilog at 2025-09-12T11:44:28
+//Generate the verilog at 2025-09-12T20:27:47 by iSTA.
 module ysyx_25030085_cpu (
 clock,
 io_interrupt,

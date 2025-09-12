@@ -1,14 +1,14 @@
-Generate the report at 2025-09-12T11:44:28, GitVersion: aa25008b3778a76ae1975c839d4cc459f7f7b3b7.
+Generate the report at 2025-09-12T20:27:47, GitVersion: aa25008b3778a76ae1975c839d4cc459f7f7b3b7.
 Clock: core_clock
 +-------------------------+---------+-------+------+
 | Clock Pin               | Latency | Skew  |      |
 +-------------------------+---------+-------+------+
 | lsu/_2889_:CK (DFFR_X1) | 0.000   |       | rp-+ |
-| wbu/_2959_:CK (DFFR_X1) | 0.000   | 0.000 | rp-+ |
+| wbu/_2960_:CK (DFFR_X1) | 0.000   | 0.000 | rp-+ |
 | lsu/_2889_:CK (DFFR_X1) | 0.000   |       | rp-+ |
 | wbu/_2957_:CK (DFFR_X1) | 0.000   | 0.000 | rp-+ |
 | lsu/_2889_:CK (DFFR_X1) | 0.000   |       | rp-+ |
-| wbu/_2953_:CK (DFFR_X1) | 0.000   | 0.000 | rp-+ |
+| wbu/_2949_:CK (DFFR_X1) | 0.000   | 0.000 | rp-+ |
 +-------------------------+---------+-------+------+
 +------------------------------+--------+-------------+------------+------------+-------+--------+
 | Point                        | Fanout | Capacitance | Resistance | Transition | Incr  | Path   |
@@ -21,7 +21,7 @@ Clock: core_clock
 | clock core_clock (rise edge) |        |             |            | 2          | 2     |        |
 | clock (port)                 |        | 2.342       | 0.000      | 0.000      | 0.000 | 0.000r |
 | clock (net)                  | 2412   |             |            |            |       |        |
-| wbu/_2959_:CK (DFFR_X1)      |        | 0.001       | 0.000      | 0.000      | 0.000 | 0.000r |
+| wbu/_2960_:CK (DFFR_X1)      |        | 0.001       | 0.000      | 0.000      | 0.000 | 0.000r |
 |                              |        |             |            |            |       |        |
 | startpoint clock latency     |        |             |            |            | 0.000 |        |
 | endpoint clock latency       |        |             |            |            | 0.000 |        |
@@ -57,7 +57,7 @@ Clock: core_clock
 | clock core_clock (rise edge) |        |             |            | 2          | 2     |        |
 | clock (port)                 |        | 2.342       | 0.000      | 0.000      | 0.000 | 0.000r |
 | clock (net)                  | 2412   |             |            |            |       |        |
-| wbu/_2953_:CK (DFFR_X1)      |        | 0.001       | 0.000      | 0.000      | 0.000 | 0.000r |
+| wbu/_2949_:CK (DFFR_X1)      |        | 0.001       | 0.000      | 0.000      | 0.000 | 0.000r |
 |                              |        |             |            |            |       |        |
 | startpoint clock latency     |        |             |            |            | 0.000 |        |
 | endpoint clock latency       |        |             |            |            | 0.000 |        |
