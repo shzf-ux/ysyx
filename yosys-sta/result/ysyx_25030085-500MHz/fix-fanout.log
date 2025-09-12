@@ -1,0 +1,916 @@
+[Data config set] lib = /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib
+[Data config set] sdc = /home/zzy/ysyx-workbench/npc/top.sdc
+[Data config set] tech lef = /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lef/NangateOpenCellLibrary.tech.lef
+Read LEF file : /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lef/NangateOpenCellLibrary.tech.lef
+[Data config set] lef = /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lef/NangateOpenCellLibrary.macro.mod.lef
+Read LEF file : /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lef/NangateOpenCellLibrary.macro.mod.lef
+[Data config set] verilog = /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085-500MHz/ysyx_25030085.netlist.syn.v
+Read Verilog file success : /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085-500MHz/ysyx_25030085.netlist.syn.v
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I20250912 20:03:27.116915  3109 VerilogParserRustC.cc:41] load verilog file /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085-500MHz/ysyx_25030085.netlist.syn.v
+r str /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085-500MHz/ysyx_25030085.netlist.syn.v
+flatten module ysyx_25030085  start
+flatten module ysyx_25030085_ex inst ex
+flatten module ysyx_25030085_csr_regfile inst csr_regfile
+flatten module ysyx_25030085_id inst id
+flatten module ysyx_25030085_if inst ifu
+flatten module ysyx_25030085_lsu inst lsu
+flatten module ysyx_25030085_RegisterFile inst regfile
+flatten module ysyx_25030085_wb inst wb
+flatten module ysyx_25030085 end
+Processed 1000 pins...
+Processed 2000 pins...
+Processed 3000 pins...
+Processed 4000 pins...
+Processed 5000 pins...
+Processed 6000 pins...
+Processed 7000 pins...
+Processed 8000 pins...
+Processed 9000 pins...
+Processed 10000 pins...
+Processed 11000 pins...
+Processed 12000 pins...
+Processed 13000 pins...
+Processed 14000 pins...
+Processed 15000 pins...
+Processed 1000 nets...
+Processed 2000 nets...
+Processed 3000 nets...
+Processed 4000 nets...
+Processed 5000 nets...
+Processed 6000 nets...
+Processed 7000 nets...
+Processed 8000 nets...
+Processed 9000 nets...
+Processed 10000 nets...
+Processed 11000 nets...
+Processed 12000 nets...
+Processed 13000 nets...
+Processed 14000 nets...
+Processed 15000 nets...
+Processed 1000 components...
+Processed 2000 components...
+Processed 3000 components...
+Processed 4000 components...
+Processed 5000 components...
+Processed 6000 components...
+Processed 7000 components...
+Processed 8000 components...
+Processed 9000 components...
+Processed 10000 components...
+Processed 11000 components...
+Processed 12000 components...
+Processed 13000 components...
+I20250912 20:03:28.487402  3109 Sta.cc:309] load lib start
+I20250912 20:03:28.505116  3161 Sta.cc:287] read liberty /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib start 
+I20250912 20:03:28.506352  3161 LibParserRustC.cc:1285] load liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib
+rust read lib file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib
+I20250912 20:03:29.064507  3161 LibParserRustC.cc:1294] load liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib success.
+I20250912 20:03:29.064625  3161 Sta.cc:297] read liberty /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib end 
+I20250912 20:03:29.064872  3109 Sta.cc:328] load lib end
+I20250912 20:03:29.076686  3211 LibParserRustC.cc:1304] link liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib start.
+I20250912 20:03:29.078639  3211 LibParserRustC.cc:666] unkown attri name: technology in /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib line no 2
+I20250912 20:03:30.210734  3211 LibParserRustC.cc:1310] link liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib success.
+I20250912 20:03:30.211486  3109 TimingIDBAdapter.cc:744] core area width -0um height -0um
+I20250912 20:03:30.212330  3109 TimingIDBAdapter.cc:829] build inst num: 1
+I20250912 20:03:30.288141  3109 TimingIDBAdapter.cc:829] build inst num: 10001
+I20250912 20:03:30.313150  3109 TimingIDBAdapter.cc:907] build net num: 1
+I20250912 20:03:30.385555  3109 TimingIDBAdapter.cc:907] build net num: 10001
+I20250912 20:03:30.424651  3109 TimingIDBAdapter.cc:926] build instance num: 13289
+I20250912 20:03:30.424751  3109 TimingIDBAdapter.cc:927] build port num: 173
+I20250912 20:03:30.424786  3109 TimingIDBAdapter.cc:928] build net num: 15211
+I20250912 20:03:30.424818  3109 Sta.cc:181] read sdc /home/zzy/ysyx-workbench/npc/top.sdc start 
+I20250912 20:03:30.426529  3109 CmdCreateClock.cc:124] create clock core_clock for pin/port: clock
+I20250912 20:03:30.426595  3109 Sta.cc:198] read sdc /home/zzy/ysyx-workbench/npc/top.sdc end 
+I20250912 20:03:30.426653  3109 StaBuildGraph.cc:315] build graph start
+I20250912 20:03:30.572180  3109 StaBuildGraph.cc:332] build graph end
+I20250912 20:03:30.617215  3109 Sta.cc:2834] update timing start
+I20250912 20:03:30.620338  3109 StaApplySdc.cc:698] apply sdc start
+I20250912 20:03:30.620594  3109 StaApplySdc.cc:729] apply sdc end
+I20250912 20:03:30.620811  3109 StaClockPropagation.cc:324] ideal clock propagation start
+I20250912 20:03:30.620992  3109 StaClockPropagation.cc:354] clock propagation clock num: 1
+I20250912 20:03:30.621150  3109 StaClockPropagation.cc:203] clock propagate end to vertex ex/_2335_:CK
+I20250912 20:03:30.624647  3109 StaClockPropagation.cc:422] ideal clock propagation end
+I20250912 20:03:30.624939  3109 StaCheck.cc:129] found loop fwd start
+I20250912 20:03:30.634757  3109 StaCheck.cc:148] found loop fwd end
+I20250912 20:03:30.635044  3109 StaCheck.cc:150] found loop bwd start
+I20250912 20:03:30.645319  3109 StaCheck.cc:172] found loop bwd end
+I20250912 20:03:30.645685  3109 StaClockSlewDelayPropagation.cc:112] clock slew delay propagation start
+I20250912 20:03:30.645880  3109 StaClockSlewDelayPropagation.cc:130] propagating current clock queue vertexes number is 1
+I20250912 20:03:30.649624  3109 StaClockSlewDelayPropagation.cc:130] propagating current clock queue vertexes number is 1854
+I20250912 20:03:30.656664  3109 StaClockSlewDelayPropagation.cc:163] clock slew delay propagation end
+I20250912 20:03:30.657020  3109 StaClockSlewDelayPropagation.cc:166] clock slew delay propagation memory usage 0MB
+I20250912 20:03:30.657166  3109 StaClockSlewDelayPropagation.cc:169] clock slew delay propagation time elapsed 0.011482s
+I20250912 20:03:30.668706  3109 StaClockPropagation.cc:326] propagated(kNormal) clock propagation start
+I20250912 20:03:30.669019  3109 StaClockPropagation.cc:354] clock propagation clock num: 1
+I20250912 20:03:30.669096  3109 StaClockPropagation.cc:424] propagated(kNormal) clock propagation end
+I20250912 20:03:30.669130  3109 StaApplySdc.cc:698] apply sdc start
+I20250912 20:03:30.669162  3109 StaApplySdc.cc:729] apply sdc end
+I20250912 20:03:30.669220  3109 StaClockPropagation.cc:328] propagated(kGenerated) clock propagation start
+I20250912 20:03:30.669252  3109 StaClockPropagation.cc:354] clock propagation clock num: 1
+I20250912 20:03:30.669284  3109 StaClockPropagation.cc:426] propagated(kGenerated) clock propagation end
+I20250912 20:03:30.669315  3109 StaApplySdc.cc:698] apply sdc start
+I20250912 20:03:30.669348  3109 StaApplySdc.cc:729] apply sdc end
+I20250912 20:03:30.669379  3109 StaBuildPropTag.cc:325] build propagation tag start
+I20250912 20:03:30.669412  3109 StaDataPropagation.cc:676] data fwd propagation start
+I20250912 20:03:30.669520  3109 StaDataPropagationBFS.cc:166] data fwd propagation bfs start
+I20250912 20:03:30.673779  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1921
+I20250912 20:03:30.682114  3212 StaDataPropagationBFS.cc:82] Thread 133979839202880 date fwd propagate found start vertex.io_ifu_rdata[0]
+I20250912 20:03:30.683816  3242 StaDataPropagationBFS.cc:82] Thread 133979998664256 date fwd propagate found start vertex.io_ifu_rdata[4]
+I20250912 20:03:30.682351  3261 StaDataPropagationBFS.cc:82] Thread 133979805632064 date fwd propagate found start vertex.io_ifu_rdata[1]
+I20250912 20:03:30.683512  3214 StaDataPropagationBFS.cc:82] Thread 133979855988288 date fwd propagate found start vertex.io_ifu_rdata[3]
+[0;31mE20250912 20:03:30.689280  3241 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[mI20250912 20:03:30.683993  3218 StaDataPropagationBFS.cc:82] Thread 133980200089152 date fwd propagate found start vertex.io_ifu_rdata[9]
+[0;31mE20250912 20:03:30.689764  3241 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[mI20250912 20:03:30.683971  3236 StaDataPropagationBFS.cc:82] Thread 133980049020480 date fwd propagate found start vertex.io_ifu_rdata[8]
+[0;31mE20250912 20:03:30.689580  3245 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[m[0;31mE20250912 20:03:30.689666  3219 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[mI20250912 20:03:30.683856  3215 StaDataPropagationBFS.cc:82] Thread 133979864380992 date fwd propagate found start vertex.io_ifu_rdata[5]
+[0;31mE20250912 20:03:30.690186  3240 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[mI20250912 20:03:30.682847  3213 StaDataPropagationBFS.cc:82] Thread 133979847595584 date fwd propagate found start vertex.io_ifu_rdata[2]
+[0;31mE20250912 20:03:30.690308  3238 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[m[0;31mE20250912 20:03:30.689138  3253 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[m[0;31mE20250912 20:03:30.690376  3239 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[m[0;31mE20250912 20:03:30.690470  3237 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[mI20250912 20:03:30.683857  3212 StaDataPropagationBFS.cc:82] Thread 133979839202880 date fwd propagate found start vertex.io_ifu_rdata[6]
+I20250912 20:03:30.683938  3217 StaDataPropagationBFS.cc:82] Thread 133980208481856 date fwd propagate found start vertex.io_ifu_rdata[7]
+[0;31mE20250912 20:03:30.689754  3221 Lib.cc:181] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+[mI20250912 20:03:30.845489  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 2064
+I20250912 20:03:31.038475  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 2553
+I20250912 20:03:31.139451  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 2591
+I20250912 20:03:31.291673  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 7329
+I20250912 20:03:31.884677  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1306
+I20250912 20:03:32.002394  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1647
+I20250912 20:03:32.160538  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 942
+I20250912 20:03:32.252772  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1084
+I20250912 20:03:32.366331  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 485
+I20250912 20:03:32.428422  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1485
+I20250912 20:03:32.563818  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 819
+I20250912 20:03:32.641829  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 2006
+I20250912 20:03:32.832849  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1110
+I20250912 20:03:32.937748  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1939
+I20250912 20:03:33.114131  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 649
+I20250912 20:03:33.191622  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 860
+I20250912 20:03:33.279633  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 512
+I20250912 20:03:33.341542  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1367
+I20250912 20:03:33.440361  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1229
+I20250912 20:03:33.554813  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1299
+I20250912 20:03:33.668638  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1153
+I20250912 20:03:33.784322  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 1168
+I20250912 20:03:33.896816  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 202
+I20250912 20:03:33.927963  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 214
+I20250912 20:03:33.967088  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 176
+I20250912 20:03:33.995496  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 187
+I20250912 20:03:34.025439  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 145
+I20250912 20:03:34.055197  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 154
+I20250912 20:03:34.084194  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 114
+I20250912 20:03:34.110936  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 124
+I20250912 20:03:34.138641  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 85
+I20250912 20:03:34.163107  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 93
+I20250912 20:03:34.184145  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 65
+I20250912 20:03:34.201076  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 79
+I20250912 20:03:34.222836  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 36
+I20250912 20:03:34.238193  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 45
+I20250912 20:03:34.256935  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 40
+I20250912 20:03:34.273187  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 54
+I20250912 20:03:34.295683  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 44
+I20250912 20:03:34.313477  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 52
+I20250912 20:03:34.333248  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 40
+I20250912 20:03:34.351197  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 46
+I20250912 20:03:34.367220  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 36
+I20250912 20:03:34.384089  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 41
+I20250912 20:03:34.403223  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 37
+I20250912 20:03:34.423703  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 40
+I20250912 20:03:34.440282  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 32
+I20250912 20:03:34.458742  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 36
+I20250912 20:03:34.475430  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 25
+I20250912 20:03:34.494097  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 26
+I20250912 20:03:34.512579  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 18
+I20250912 20:03:34.527873  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 21
+I20250912 20:03:34.545928  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 14
+I20250912 20:03:34.561233  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 15
+I20250912 20:03:34.577863  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 9
+I20250912 20:03:34.593997  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 11
+I20250912 20:03:34.610813  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 8
+I20250912 20:03:34.626269  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 11
+I20250912 20:03:34.641366  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 8
+I20250912 20:03:34.658213  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 9
+I20250912 20:03:34.672616  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 7
+I20250912 20:03:34.688809  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 7
+I20250912 20:03:34.704974  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 5
+I20250912 20:03:34.733536  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 5
+I20250912 20:03:34.752846  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 4
+I20250912 20:03:34.767824  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 4
+I20250912 20:03:34.787060  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 3
+I20250912 20:03:34.801131  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 3
+I20250912 20:03:34.815034  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 2
+I20250912 20:03:34.831350  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 2
+I20250912 20:03:34.846428  3109 StaDataPropagationBFS.cc:229] data fwd propagation bfs end
+I20250912 20:03:34.846603  3109 StaDataPropagationBFS.cc:232] data fwd propagation bfs memory usage 1920.8MB
+I20250912 20:03:34.846649  3109 StaDataPropagationBFS.cc:234] data fwd propagation bfs time elapsed 4.17713s
+I20250912 20:03:34.846691  3109 StaDataPropagation.cc:695] data fwd propagation end
+I20250912 20:03:34.846726  3109 StaDataPropagation.cc:676] data fwd propagation start
+I20250912 20:03:34.846794  3109 StaDataPropagationBFS.cc:166] data fwd propagation bfs start
+I20250912 20:03:34.849440  3109 StaDataPropagationBFS.cc:190] propagating current data queue vertexes number is 0
+I20250912 20:03:34.863412  3109 StaDataPropagationBFS.cc:229] data fwd propagation bfs end
+I20250912 20:03:34.863576  3109 StaDataPropagationBFS.cc:232] data fwd propagation bfs memory usage 0.268MB
+I20250912 20:03:34.863622  3109 StaDataPropagationBFS.cc:234] data fwd propagation bfs time elapsed 0.016828s
+I20250912 20:03:34.863657  3109 StaDataPropagation.cc:695] data fwd propagation end
+I20250912 20:03:34.863691  3109 StaAnalyze.cc:557] analyze timing path start
+I20250912 20:03:34.863725  3109 StaAnalyze.cc:565] analyze timing path end vertex 1 total 2544 start
+[0;31mE20250912 20:03:34.863829  3109 StaAnalyze.cc:328] The output port io_ifu_addr[0] is not constrained
+[m[0;31mE20250912 20:03:34.863955  3109 StaAnalyze.cc:328] The output port io_ifu_addr[0] is not constrained
+[mI20250912 20:03:34.864025  3109 StaAnalyze.cc:599] analyze timing path end vertex 1 total 2544 end
+[0;31mE20250912 20:03:34.864058  3109 StaAnalyze.cc:328] The output port io_ifu_addr[1] is not constrained
+[m[0;31mE20250912 20:03:34.864125  3109 StaAnalyze.cc:328] The output port io_ifu_addr[1] is not constrained
+[m[0;31mE20250912 20:03:34.864194  3109 StaAnalyze.cc:328] The output port io_ifu_addr[2] is not constrained
+[m[0;31mE20250912 20:03:34.864274  3109 StaAnalyze.cc:328] The output port io_ifu_addr[2] is not constrained
+[m[0;31mE20250912 20:03:34.864344  3109 StaAnalyze.cc:328] The output port io_ifu_addr[3] is not constrained
+[m[0;31mE20250912 20:03:34.864413  3109 StaAnalyze.cc:328] The output port io_ifu_addr[3] is not constrained
+[m[0;31mE20250912 20:03:34.864481  3109 StaAnalyze.cc:328] The output port io_ifu_addr[4] is not constrained
+[m[0;31mE20250912 20:03:34.864549  3109 StaAnalyze.cc:328] The output port io_ifu_addr[4] is not constrained
+[mI20250912 20:03:34.864616  3109 StaAnalyze.cc:565] analyze timing path end vertex 11 total 2544 start
+I20250912 20:03:34.864648  3109 StaAnalyze.cc:599] analyze timing path end vertex 11 total 2544 end
+I20250912 20:03:34.864681  3109 StaAnalyze.cc:565] analyze timing path end vertex 21 total 2544 start
+I20250912 20:03:34.864711  3109 StaAnalyze.cc:599] analyze timing path end vertex 21 total 2544 end
+I20250912 20:03:34.864743  3109 StaAnalyze.cc:565] analyze timing path end vertex 31 total 2544 start
+I20250912 20:03:34.864773  3109 StaAnalyze.cc:599] analyze timing path end vertex 31 total 2544 end
+I20250912 20:03:34.864806  3109 StaAnalyze.cc:565] analyze timing path end vertex 41 total 2544 start
+I20250912 20:03:34.864836  3109 StaAnalyze.cc:599] analyze timing path end vertex 41 total 2544 end
+I20250912 20:03:34.864867  3109 StaAnalyze.cc:565] analyze timing path end vertex 51 total 2544 start
+I20250912 20:03:34.865483  3109 StaAnalyze.cc:599] analyze timing path end vertex 51 total 2544 end
+I20250912 20:03:34.865525  3109 StaAnalyze.cc:565] analyze timing path end vertex 61 total 2544 start
+I20250912 20:03:34.865556  3109 StaAnalyze.cc:599] analyze timing path end vertex 61 total 2544 end
+I20250912 20:03:34.865589  3109 StaAnalyze.cc:565] analyze timing path end vertex 71 total 2544 start
+I20250912 20:03:34.865620  3109 StaAnalyze.cc:599] analyze timing path end vertex 71 total 2544 end
+I20250912 20:03:34.865653  3109 StaAnalyze.cc:565] analyze timing path end vertex 81 total 2544 start
+I20250912 20:03:34.865684  3109 StaAnalyze.cc:599] analyze timing path end vertex 81 total 2544 end
+I20250912 20:03:34.865717  3109 StaAnalyze.cc:565] analyze timing path end vertex 91 total 2544 start
+I20250912 20:03:34.865749  3109 StaAnalyze.cc:599] analyze timing path end vertex 91 total 2544 end
+I20250912 20:03:34.865782  3109 StaAnalyze.cc:565] analyze timing path end vertex 101 total 2544 start
+I20250912 20:03:34.865872  3109 StaAnalyze.cc:599] analyze timing path end vertex 101 total 2544 end
+I20250912 20:03:34.866246  3109 StaAnalyze.cc:303] add path data num 2 to ex/_2345_:D
+I20250912 20:03:34.866302  3109 StaAnalyze.cc:565] analyze timing path end vertex 111 total 2544 start
+I20250912 20:03:34.866465  3109 StaAnalyze.cc:599] analyze timing path end vertex 111 total 2544 end
+I20250912 20:03:34.866540  3109 StaAnalyze.cc:565] analyze timing path end vertex 121 total 2544 start
+I20250912 20:03:34.866772  3109 StaAnalyze.cc:599] analyze timing path end vertex 121 total 2544 end
+I20250912 20:03:34.866839  3109 StaAnalyze.cc:565] analyze timing path end vertex 131 total 2544 start
+I20250912 20:03:34.866941  3109 StaAnalyze.cc:599] analyze timing path end vertex 131 total 2544 end
+I20250912 20:03:34.867000  3109 StaAnalyze.cc:565] analyze timing path end vertex 141 total 2544 start
+I20250912 20:03:34.867172  3109 StaAnalyze.cc:599] analyze timing path end vertex 141 total 2544 end
+I20250912 20:03:34.867383  3109 StaAnalyze.cc:565] analyze timing path end vertex 151 total 2544 start
+I20250912 20:03:34.867431  3109 StaAnalyze.cc:599] analyze timing path end vertex 151 total 2544 end
+I20250912 20:03:34.867652  3109 StaAnalyze.cc:303] add path data num 0 to ex/_2362_:RN
+I20250912 20:03:34.867712  3109 StaAnalyze.cc:565] analyze timing path end vertex 161 total 2544 start
+I20250912 20:03:34.867838  3109 StaAnalyze.cc:599] analyze timing path end vertex 161 total 2544 end
+I20250912 20:03:34.868180  3109 StaAnalyze.cc:565] analyze timing path end vertex 171 total 2544 start
+I20250912 20:03:34.868379  3109 StaAnalyze.cc:599] analyze timing path end vertex 171 total 2544 end
+I20250912 20:03:34.868649  3109 StaAnalyze.cc:565] analyze timing path end vertex 181 total 2544 start
+I20250912 20:03:34.868827  3109 StaAnalyze.cc:599] analyze timing path end vertex 181 total 2544 end
+I20250912 20:03:34.868932  3109 StaAnalyze.cc:565] analyze timing path end vertex 191 total 2544 start
+I20250912 20:03:34.869148  3109 StaAnalyze.cc:599] analyze timing path end vertex 191 total 2544 end
+I20250912 20:03:34.869202  3109 StaAnalyze.cc:565] analyze timing path end vertex 201 total 2544 start
+I20250912 20:03:34.869240  3109 StaAnalyze.cc:599] analyze timing path end vertex 201 total 2544 end
+I20250912 20:03:34.869283  3109 StaAnalyze.cc:303] add path data num 0 to ex/_2387_:RN
+I20250912 20:03:34.869460  3109 StaAnalyze.cc:565] analyze timing path end vertex 211 total 2544 start
+I20250912 20:03:34.869670  3109 StaAnalyze.cc:599] analyze timing path end vertex 211 total 2544 end
+I20250912 20:03:34.869742  3109 StaAnalyze.cc:565] analyze timing path end vertex 221 total 2544 start
+I20250912 20:03:34.869781  3109 StaAnalyze.cc:599] analyze timing path end vertex 221 total 2544 end
+I20250912 20:03:34.869992  3109 StaAnalyze.cc:565] analyze timing path end vertex 231 total 2544 start
+I20250912 20:03:34.870066  3109 StaAnalyze.cc:599] analyze timing path end vertex 231 total 2544 end
+I20250912 20:03:34.870117  3109 StaAnalyze.cc:565] analyze timing path end vertex 241 total 2544 start
+I20250912 20:03:34.870154  3109 StaAnalyze.cc:599] analyze timing path end vertex 241 total 2544 end
+I20250912 20:03:34.870203  3109 StaAnalyze.cc:565] analyze timing path end vertex 251 total 2544 start
+I20250912 20:03:34.870247  3109 StaAnalyze.cc:599] analyze timing path end vertex 251 total 2544 end
+I20250912 20:03:34.870290  3109 StaAnalyze.cc:303] add path data num 0 to ex/_2412_:RN
+I20250912 20:03:34.870335  3109 StaAnalyze.cc:565] analyze timing path end vertex 261 total 2544 start
+I20250912 20:03:34.870375  3109 StaAnalyze.cc:599] analyze timing path end vertex 261 total 2544 end
+I20250912 20:03:34.870427  3109 StaAnalyze.cc:565] analyze timing path end vertex 271 total 2544 start
+I20250912 20:03:34.870466  3109 StaAnalyze.cc:599] analyze timing path end vertex 271 total 2544 end
+I20250912 20:03:34.870522  3109 StaAnalyze.cc:565] analyze timing path end vertex 281 total 2544 start
+I20250912 20:03:34.870609  3109 StaAnalyze.cc:599] analyze timing path end vertex 281 total 2544 end
+I20250912 20:03:34.870663  3109 StaAnalyze.cc:565] analyze timing path end vertex 291 total 2544 start
+I20250912 20:03:34.870703  3109 StaAnalyze.cc:599] analyze timing path end vertex 291 total 2544 end
+I20250912 20:03:34.870754  3109 StaAnalyze.cc:565] analyze timing path end vertex 301 total 2544 start
+I20250912 20:03:34.870793  3109 StaAnalyze.cc:599] analyze timing path end vertex 301 total 2544 end
+I20250912 20:03:34.870836  3109 StaAnalyze.cc:303] add path data num 0 to ex/_2437_:RN
+I20250912 20:03:34.870949  3109 StaAnalyze.cc:565] analyze timing path end vertex 311 total 2544 start
+I20250912 20:03:34.870990  3109 StaAnalyze.cc:599] analyze timing path end vertex 311 total 2544 end
+I20250912 20:03:34.871042  3109 StaAnalyze.cc:565] analyze timing path end vertex 321 total 2544 start
+I20250912 20:03:34.871079  3109 StaAnalyze.cc:599] analyze timing path end vertex 321 total 2544 end
+I20250912 20:03:34.871131  3109 StaAnalyze.cc:565] analyze timing path end vertex 331 total 2544 start
+I20250912 20:03:34.871170  3109 StaAnalyze.cc:599] analyze timing path end vertex 331 total 2544 end
+I20250912 20:03:34.871222  3109 StaAnalyze.cc:565] analyze timing path end vertex 341 total 2544 start
+I20250912 20:03:34.871310  3109 StaAnalyze.cc:599] analyze timing path end vertex 341 total 2544 end
+I20250912 20:03:34.871361  3109 StaAnalyze.cc:565] analyze timing path end vertex 351 total 2544 start
+I20250912 20:03:34.871400  3109 StaAnalyze.cc:599] analyze timing path end vertex 351 total 2544 end
+I20250912 20:03:34.871497  3109 StaAnalyze.cc:303] add path data num 0 to ex/_2462_:RN
+I20250912 20:03:34.871543  3109 StaAnalyze.cc:565] analyze timing path end vertex 361 total 2544 start
+I20250912 20:03:34.871582  3109 StaAnalyze.cc:599] analyze timing path end vertex 361 total 2544 end
+I20250912 20:03:34.871634  3109 StaAnalyze.cc:565] analyze timing path end vertex 371 total 2544 start
+I20250912 20:03:34.871671  3109 StaAnalyze.cc:599] analyze timing path end vertex 371 total 2544 end
+I20250912 20:03:34.871721  3109 StaAnalyze.cc:565] analyze timing path end vertex 381 total 2544 start
+I20250912 20:03:34.871762  3109 StaAnalyze.cc:599] analyze timing path end vertex 381 total 2544 end
+I20250912 20:03:34.871810  3109 StaAnalyze.cc:565] analyze timing path end vertex 391 total 2544 start
+I20250912 20:03:34.871850  3109 StaAnalyze.cc:599] analyze timing path end vertex 391 total 2544 end
+I20250912 20:03:34.873145  3109 StaAnalyze.cc:565] analyze timing path end vertex 401 total 2544 start
+I20250912 20:03:34.873198  3109 StaAnalyze.cc:599] analyze timing path end vertex 401 total 2544 end
+I20250912 20:03:34.873241  3109 StaAnalyze.cc:303] add path data num 0 to id/_1178_:SN
+I20250912 20:03:34.873284  3109 StaAnalyze.cc:565] analyze timing path end vertex 411 total 2544 start
+I20250912 20:03:34.873322  3109 StaAnalyze.cc:599] analyze timing path end vertex 411 total 2544 end
+I20250912 20:03:34.873374  3109 StaAnalyze.cc:565] analyze timing path end vertex 421 total 2544 start
+I20250912 20:03:34.873410  3109 StaAnalyze.cc:599] analyze timing path end vertex 421 total 2544 end
+I20250912 20:03:34.873461  3109 StaAnalyze.cc:565] analyze timing path end vertex 431 total 2544 start
+I20250912 20:03:34.873498  3109 StaAnalyze.cc:599] analyze timing path end vertex 431 total 2544 end
+[0;31mE20250912 20:03:34.873550  3109 StaAnalyze.cc:306] end vertex ifu/_1015_:D has no clock data.
+[m[0;31mE20250912 20:03:34.873637  3109 StaAnalyze.cc:306] end vertex ifu/_1015_:D has no clock data.
+[m[0;31mE20250912 20:03:34.873704  3109 StaAnalyze.cc:306] end vertex ifu/_1016_:D has no clock data.
+[m[0;31mE20250912 20:03:34.874575  3109 StaAnalyze.cc:306] end vertex ifu/_1016_:D has no clock data.
+[mI20250912 20:03:34.874665  3109 StaAnalyze.cc:565] analyze timing path end vertex 441 total 2544 start
+[0;31mE20250912 20:03:34.874697  3109 StaAnalyze.cc:306] end vertex ifu/_1017_:D has no clock data.
+[m[0;31mE20250912 20:03:34.874766  3109 StaAnalyze.cc:306] end vertex ifu/_1017_:D has no clock data.
+[mI20250912 20:03:34.874835  3109 StaAnalyze.cc:599] analyze timing path end vertex 441 total 2544 end
+[0;31mE20250912 20:03:34.874866  3109 StaAnalyze.cc:306] end vertex ifu/_1018_:D has no clock data.
+[m[0;31mE20250912 20:03:34.874969  3109 StaAnalyze.cc:306] end vertex ifu/_1018_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875038  3109 StaAnalyze.cc:306] end vertex ifu/_1019_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875106  3109 StaAnalyze.cc:306] end vertex ifu/_1019_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875174  3109 StaAnalyze.cc:306] end vertex ifu/_1020_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875262  3109 StaAnalyze.cc:306] end vertex ifu/_1020_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875334  3109 StaAnalyze.cc:306] end vertex ifu/_1021_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875403  3109 StaAnalyze.cc:306] end vertex ifu/_1021_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875473  3109 StaAnalyze.cc:306] end vertex ifu/_1022_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875541  3109 StaAnalyze.cc:306] end vertex ifu/_1022_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875610  3109 StaAnalyze.cc:306] end vertex ifu/_1023_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875681  3109 StaAnalyze.cc:306] end vertex ifu/_1023_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875759  3109 StaAnalyze.cc:306] end vertex ifu/_1024_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875828  3109 StaAnalyze.cc:306] end vertex ifu/_1024_:D has no clock data.
+[m[0;31mE20250912 20:03:34.875929  3109 StaAnalyze.cc:306] end vertex ifu/_1025_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876049  3109 StaAnalyze.cc:306] end vertex ifu/_1025_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876118  3109 StaAnalyze.cc:306] end vertex ifu/_1026_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876187  3109 StaAnalyze.cc:306] end vertex ifu/_1026_:D has no clock data.
+[mI20250912 20:03:34.876263  3109 StaAnalyze.cc:565] analyze timing path end vertex 451 total 2544 start
+[0;31mE20250912 20:03:34.876297  3109 StaAnalyze.cc:306] end vertex ifu/_1027_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876367  3109 StaAnalyze.cc:306] end vertex ifu/_1027_:D has no clock data.
+[mI20250912 20:03:34.876437  3109 StaAnalyze.cc:599] analyze timing path end vertex 451 total 2544 end
+[0;31mE20250912 20:03:34.876469  3109 StaAnalyze.cc:306] end vertex ifu/_1028_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876539  3109 StaAnalyze.cc:306] end vertex ifu/_1028_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876609  3109 StaAnalyze.cc:306] end vertex ifu/_1029_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876677  3109 StaAnalyze.cc:306] end vertex ifu/_1029_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876746  3109 StaAnalyze.cc:306] end vertex ifu/_1030_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876816  3109 StaAnalyze.cc:306] end vertex ifu/_1030_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876919  3109 StaAnalyze.cc:306] end vertex ifu/_1031_:D has no clock data.
+[m[0;31mE20250912 20:03:34.876995  3109 StaAnalyze.cc:306] end vertex ifu/_1031_:D has no clock data.
+[mI20250912 20:03:34.877067  3109 StaAnalyze.cc:303] add path data num 0 to ifu/_1032_:D
+[0;31mE20250912 20:03:34.877100  3109 StaAnalyze.cc:306] end vertex ifu/_1032_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877171  3109 StaAnalyze.cc:306] end vertex ifu/_1032_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877240  3109 StaAnalyze.cc:306] end vertex ifu/_1033_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877310  3109 StaAnalyze.cc:306] end vertex ifu/_1033_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877377  3109 StaAnalyze.cc:306] end vertex ifu/_1034_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877444  3109 StaAnalyze.cc:306] end vertex ifu/_1034_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877512  3109 StaAnalyze.cc:306] end vertex ifu/_1035_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877581  3109 StaAnalyze.cc:306] end vertex ifu/_1035_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877650  3109 StaAnalyze.cc:306] end vertex ifu/_1036_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877719  3109 StaAnalyze.cc:306] end vertex ifu/_1036_:D has no clock data.
+[mI20250912 20:03:34.877789  3109 StaAnalyze.cc:565] analyze timing path end vertex 461 total 2544 start
+[0;31mE20250912 20:03:34.877821  3109 StaAnalyze.cc:306] end vertex ifu/_1037_:D has no clock data.
+[m[0;31mE20250912 20:03:34.877925  3109 StaAnalyze.cc:306] end vertex ifu/_1037_:D has no clock data.
+[mI20250912 20:03:34.877998  3109 StaAnalyze.cc:599] analyze timing path end vertex 461 total 2544 end
+[0;31mE20250912 20:03:34.878031  3109 StaAnalyze.cc:306] end vertex ifu/_1038_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878099  3109 StaAnalyze.cc:306] end vertex ifu/_1038_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878170  3109 StaAnalyze.cc:306] end vertex ifu/_1039_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878237  3109 StaAnalyze.cc:306] end vertex ifu/_1039_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878331  3109 StaAnalyze.cc:306] end vertex ifu/_1040_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878401  3109 StaAnalyze.cc:306] end vertex ifu/_1040_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878470  3109 StaAnalyze.cc:306] end vertex ifu/_1041_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878574  3109 StaAnalyze.cc:306] end vertex ifu/_1041_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878644  3109 StaAnalyze.cc:306] end vertex ifu/_1042_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878713  3109 StaAnalyze.cc:306] end vertex ifu/_1042_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878783  3109 StaAnalyze.cc:306] end vertex ifu/_1043_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878852  3109 StaAnalyze.cc:306] end vertex ifu/_1043_:D has no clock data.
+[m[0;31mE20250912 20:03:34.878952  3109 StaAnalyze.cc:306] end vertex ifu/_1044_:D has no clock data.
+[m[0;31mE20250912 20:03:34.879024  3109 StaAnalyze.cc:306] end vertex ifu/_1044_:D has no clock data.
+[m[0;31mE20250912 20:03:34.879092  3109 StaAnalyze.cc:306] end vertex ifu/_1045_:D has no clock data.
+[m[0;31mE20250912 20:03:34.879166  3109 StaAnalyze.cc:306] end vertex ifu/_1045_:D has no clock data.
+[m[0;31mE20250912 20:03:34.879235  3109 StaAnalyze.cc:306] end vertex ifu/_1046_:D has no clock data.
+[m[0;31mE20250912 20:03:34.879304  3109 StaAnalyze.cc:306] end vertex ifu/_1046_:D has no clock data.
+[mI20250912 20:03:34.879374  3109 StaAnalyze.cc:565] analyze timing path end vertex 471 total 2544 start
+I20250912 20:03:34.879424  3109 StaAnalyze.cc:599] analyze timing path end vertex 471 total 2544 end
+I20250912 20:03:34.879508  3109 StaAnalyze.cc:565] analyze timing path end vertex 481 total 2544 start
+I20250912 20:03:34.879547  3109 StaAnalyze.cc:599] analyze timing path end vertex 481 total 2544 end
+I20250912 20:03:34.879683  3109 StaAnalyze.cc:565] analyze timing path end vertex 491 total 2544 start
+I20250912 20:03:34.879721  3109 StaAnalyze.cc:599] analyze timing path end vertex 491 total 2544 end
+I20250912 20:03:34.879796  3109 StaAnalyze.cc:565] analyze timing path end vertex 501 total 2544 start
+I20250912 20:03:34.879835  3109 StaAnalyze.cc:599] analyze timing path end vertex 501 total 2544 end
+I20250912 20:03:34.879952  3109 StaAnalyze.cc:303] add path data num 2 to ex/csr_regfile/_1465_:D
+I20250912 20:03:34.880082  3109 StaAnalyze.cc:565] analyze timing path end vertex 511 total 2544 start
+I20250912 20:03:34.880173  3109 StaAnalyze.cc:599] analyze timing path end vertex 511 total 2544 end
+I20250912 20:03:34.880264  3109 StaAnalyze.cc:565] analyze timing path end vertex 521 total 2544 start
+I20250912 20:03:34.880304  3109 StaAnalyze.cc:599] analyze timing path end vertex 521 total 2544 end
+I20250912 20:03:34.880388  3109 StaAnalyze.cc:565] analyze timing path end vertex 531 total 2544 start
+I20250912 20:03:34.880434  3109 StaAnalyze.cc:599] analyze timing path end vertex 531 total 2544 end
+I20250912 20:03:34.880545  3109 StaAnalyze.cc:565] analyze timing path end vertex 541 total 2544 start
+I20250912 20:03:34.880586  3109 StaAnalyze.cc:599] analyze timing path end vertex 541 total 2544 end
+I20250912 20:03:34.880649  3109 StaAnalyze.cc:565] analyze timing path end vertex 551 total 2544 start
+I20250912 20:03:34.880688  3109 StaAnalyze.cc:599] analyze timing path end vertex 551 total 2544 end
+I20250912 20:03:34.880738  3109 StaAnalyze.cc:303] add path data num 0 to id/_1157_:RN
+I20250912 20:03:34.880781  3109 StaAnalyze.cc:565] analyze timing path end vertex 561 total 2544 start
+I20250912 20:03:34.880820  3109 StaAnalyze.cc:599] analyze timing path end vertex 561 total 2544 end
+I20250912 20:03:34.880957  3109 StaAnalyze.cc:565] analyze timing path end vertex 571 total 2544 start
+I20250912 20:03:34.881003  3109 StaAnalyze.cc:599] analyze timing path end vertex 571 total 2544 end
+I20250912 20:03:34.881057  3109 StaAnalyze.cc:565] analyze timing path end vertex 581 total 2544 start
+I20250912 20:03:34.881103  3109 StaAnalyze.cc:599] analyze timing path end vertex 581 total 2544 end
+I20250912 20:03:34.881292  3109 StaAnalyze.cc:565] analyze timing path end vertex 591 total 2544 start
+I20250912 20:03:34.881367  3109 StaAnalyze.cc:599] analyze timing path end vertex 591 total 2544 end
+I20250912 20:03:34.881434  3109 StaAnalyze.cc:565] analyze timing path end vertex 601 total 2544 start
+I20250912 20:03:34.881474  3109 StaAnalyze.cc:599] analyze timing path end vertex 601 total 2544 end
+I20250912 20:03:34.881525  3109 StaAnalyze.cc:303] add path data num 0 to id/_1202_:RN
+I20250912 20:03:34.881569  3109 StaAnalyze.cc:565] analyze timing path end vertex 611 total 2544 start
+I20250912 20:03:34.881609  3109 StaAnalyze.cc:599] analyze timing path end vertex 611 total 2544 end
+I20250912 20:03:34.881672  3109 StaAnalyze.cc:565] analyze timing path end vertex 621 total 2544 start
+I20250912 20:03:34.881712  3109 StaAnalyze.cc:599] analyze timing path end vertex 621 total 2544 end
+I20250912 20:03:34.881779  3109 StaAnalyze.cc:565] analyze timing path end vertex 631 total 2544 start
+I20250912 20:03:34.881825  3109 StaAnalyze.cc:599] analyze timing path end vertex 631 total 2544 end
+I20250912 20:03:34.881978  3109 StaAnalyze.cc:565] analyze timing path end vertex 641 total 2544 start
+I20250912 20:03:34.882027  3109 StaAnalyze.cc:599] analyze timing path end vertex 641 total 2544 end
+I20250912 20:03:34.882119  3109 StaAnalyze.cc:565] analyze timing path end vertex 651 total 2544 start
+I20250912 20:03:34.882158  3109 StaAnalyze.cc:599] analyze timing path end vertex 651 total 2544 end
+I20250912 20:03:34.882218  3109 StaAnalyze.cc:303] add path data num 2 to ifu/_0941_:D
+I20250912 20:03:34.882279  3109 StaAnalyze.cc:565] analyze timing path end vertex 661 total 2544 start
+I20250912 20:03:34.882360  3109 StaAnalyze.cc:599] analyze timing path end vertex 661 total 2544 end
+I20250912 20:03:34.882447  3109 StaAnalyze.cc:565] analyze timing path end vertex 671 total 2544 start
+I20250912 20:03:34.882491  3109 StaAnalyze.cc:599] analyze timing path end vertex 671 total 2544 end
+I20250912 20:03:34.882575  3109 StaAnalyze.cc:565] analyze timing path end vertex 681 total 2544 start
+I20250912 20:03:34.882653  3109 StaAnalyze.cc:599] analyze timing path end vertex 681 total 2544 end
+I20250912 20:03:34.882735  3109 StaAnalyze.cc:565] analyze timing path end vertex 691 total 2544 start
+I20250912 20:03:34.882773  3109 StaAnalyze.cc:599] analyze timing path end vertex 691 total 2544 end
+I20250912 20:03:34.882915  3109 StaAnalyze.cc:565] analyze timing path end vertex 701 total 2544 start
+I20250912 20:03:34.882954  3109 StaAnalyze.cc:599] analyze timing path end vertex 701 total 2544 end
+I20250912 20:03:34.883036  3109 StaAnalyze.cc:303] add path data num 0 to ifu/_0984_:RN
+I20250912 20:03:34.883081  3109 StaAnalyze.cc:565] analyze timing path end vertex 711 total 2544 start
+I20250912 20:03:34.883121  3109 StaAnalyze.cc:599] analyze timing path end vertex 711 total 2544 end
+I20250912 20:03:34.883183  3109 StaAnalyze.cc:565] analyze timing path end vertex 721 total 2544 start
+I20250912 20:03:34.883224  3109 StaAnalyze.cc:599] analyze timing path end vertex 721 total 2544 end
+I20250912 20:03:34.883288  3109 StaAnalyze.cc:565] analyze timing path end vertex 731 total 2544 start
+I20250912 20:03:34.883328  3109 StaAnalyze.cc:599] analyze timing path end vertex 731 total 2544 end
+I20250912 20:03:34.883392  3109 StaAnalyze.cc:565] analyze timing path end vertex 741 total 2544 start
+I20250912 20:03:34.883431  3109 StaAnalyze.cc:599] analyze timing path end vertex 741 total 2544 end
+I20250912 20:03:34.883491  3109 StaAnalyze.cc:565] analyze timing path end vertex 751 total 2544 start
+I20250912 20:03:34.883528  3109 StaAnalyze.cc:599] analyze timing path end vertex 751 total 2544 end
+I20250912 20:03:34.883579  3109 StaAnalyze.cc:303] add path data num 0 to ifu/_1009_:RN
+I20250912 20:03:34.883622  3109 StaAnalyze.cc:565] analyze timing path end vertex 761 total 2544 start
+I20250912 20:03:34.883719  3109 StaAnalyze.cc:599] analyze timing path end vertex 761 total 2544 end
+I20250912 20:03:34.883924  3109 StaAnalyze.cc:565] analyze timing path end vertex 771 total 2544 start
+I20250912 20:03:34.883966  3109 StaAnalyze.cc:599] analyze timing path end vertex 771 total 2544 end
+I20250912 20:03:34.884073  3109 StaAnalyze.cc:565] analyze timing path end vertex 781 total 2544 start
+I20250912 20:03:34.884135  3109 StaAnalyze.cc:599] analyze timing path end vertex 781 total 2544 end
+I20250912 20:03:34.884224  3109 StaAnalyze.cc:565] analyze timing path end vertex 791 total 2544 start
+I20250912 20:03:34.884269  3109 StaAnalyze.cc:599] analyze timing path end vertex 791 total 2544 end
+I20250912 20:03:34.884357  3109 StaAnalyze.cc:565] analyze timing path end vertex 801 total 2544 start
+I20250912 20:03:34.884397  3109 StaAnalyze.cc:599] analyze timing path end vertex 801 total 2544 end
+I20250912 20:03:34.884462  3109 StaAnalyze.cc:303] add path data num 2 to lsu/_2632_:D
+I20250912 20:03:34.884531  3109 StaAnalyze.cc:565] analyze timing path end vertex 811 total 2544 start
+I20250912 20:03:34.884569  3109 StaAnalyze.cc:599] analyze timing path end vertex 811 total 2544 end
+I20250912 20:03:34.884660  3109 StaAnalyze.cc:565] analyze timing path end vertex 821 total 2544 start
+I20250912 20:03:34.884698  3109 StaAnalyze.cc:599] analyze timing path end vertex 821 total 2544 end
+I20250912 20:03:34.884786  3109 StaAnalyze.cc:565] analyze timing path end vertex 831 total 2544 start
+I20250912 20:03:34.884833  3109 StaAnalyze.cc:599] analyze timing path end vertex 831 total 2544 end
+I20250912 20:03:34.884953  3109 StaAnalyze.cc:565] analyze timing path end vertex 841 total 2544 start
+I20250912 20:03:34.885047  3109 StaAnalyze.cc:599] analyze timing path end vertex 841 total 2544 end
+I20250912 20:03:34.885140  3109 StaAnalyze.cc:565] analyze timing path end vertex 851 total 2544 start
+I20250912 20:03:34.885242  3109 StaAnalyze.cc:599] analyze timing path end vertex 851 total 2544 end
+I20250912 20:03:34.885304  3109 StaAnalyze.cc:303] add path data num 2 to lsu/_2682_:D
+I20250912 20:03:34.885367  3109 StaAnalyze.cc:565] analyze timing path end vertex 861 total 2544 start
+I20250912 20:03:34.885406  3109 StaAnalyze.cc:599] analyze timing path end vertex 861 total 2544 end
+I20250912 20:03:34.885491  3109 StaAnalyze.cc:565] analyze timing path end vertex 871 total 2544 start
+I20250912 20:03:34.885536  3109 StaAnalyze.cc:599] analyze timing path end vertex 871 total 2544 end
+I20250912 20:03:34.885689  3109 StaAnalyze.cc:565] analyze timing path end vertex 881 total 2544 start
+I20250912 20:03:34.885730  3109 StaAnalyze.cc:599] analyze timing path end vertex 881 total 2544 end
+I20250912 20:03:34.886055  3109 StaAnalyze.cc:565] analyze timing path end vertex 891 total 2544 start
+I20250912 20:03:34.886195  3109 StaAnalyze.cc:599] analyze timing path end vertex 891 total 2544 end
+I20250912 20:03:34.886294  3109 StaAnalyze.cc:565] analyze timing path end vertex 901 total 2544 start
+I20250912 20:03:34.886341  3109 StaAnalyze.cc:599] analyze timing path end vertex 901 total 2544 end
+I20250912 20:03:34.886387  3109 StaAnalyze.cc:303] add path data num 0 to lsu/_2728_:RN
+I20250912 20:03:34.886435  3109 StaAnalyze.cc:565] analyze timing path end vertex 911 total 2544 start
+I20250912 20:03:34.886480  3109 StaAnalyze.cc:599] analyze timing path end vertex 911 total 2544 end
+I20250912 20:03:34.886541  3109 StaAnalyze.cc:565] analyze timing path end vertex 921 total 2544 start
+I20250912 20:03:34.886579  3109 StaAnalyze.cc:599] analyze timing path end vertex 921 total 2544 end
+I20250912 20:03:34.886636  3109 StaAnalyze.cc:565] analyze timing path end vertex 931 total 2544 start
+I20250912 20:03:34.886674  3109 StaAnalyze.cc:599] analyze timing path end vertex 931 total 2544 end
+I20250912 20:03:34.886734  3109 StaAnalyze.cc:565] analyze timing path end vertex 941 total 2544 start
+I20250912 20:03:34.886814  3109 StaAnalyze.cc:599] analyze timing path end vertex 941 total 2544 end
+I20250912 20:03:34.886878  3109 StaAnalyze.cc:565] analyze timing path end vertex 951 total 2544 start
+I20250912 20:03:34.886960  3109 StaAnalyze.cc:599] analyze timing path end vertex 951 total 2544 end
+I20250912 20:03:34.887215  3109 StaAnalyze.cc:303] add path data num 0 to lsu/_2753_:RN
+I20250912 20:03:34.887274  3109 StaAnalyze.cc:565] analyze timing path end vertex 961 total 2544 start
+I20250912 20:03:34.887331  3109 StaAnalyze.cc:599] analyze timing path end vertex 961 total 2544 end
+I20250912 20:03:34.887398  3109 StaAnalyze.cc:565] analyze timing path end vertex 971 total 2544 start
+I20250912 20:03:34.887501  3109 StaAnalyze.cc:599] analyze timing path end vertex 971 total 2544 end
+I20250912 20:03:34.887564  3109 StaAnalyze.cc:565] analyze timing path end vertex 981 total 2544 start
+I20250912 20:03:34.887604  3109 StaAnalyze.cc:599] analyze timing path end vertex 981 total 2544 end
+I20250912 20:03:34.887673  3109 StaAnalyze.cc:565] analyze timing path end vertex 991 total 2544 start
+I20250912 20:03:34.887771  3109 StaAnalyze.cc:599] analyze timing path end vertex 991 total 2544 end
+I20250912 20:03:34.887837  3109 StaAnalyze.cc:565] analyze timing path end vertex 1001 total 2544 start
+I20250912 20:03:34.887876  3109 StaAnalyze.cc:599] analyze timing path end vertex 1001 total 2544 end
+I20250912 20:03:34.887961  3109 StaAnalyze.cc:303] add path data num 0 to lsu/_2778_:RN
+I20250912 20:03:34.888006  3109 StaAnalyze.cc:565] analyze timing path end vertex 1011 total 2544 start
+I20250912 20:03:34.888116  3109 StaAnalyze.cc:599] analyze timing path end vertex 1011 total 2544 end
+I20250912 20:03:34.888222  3109 StaAnalyze.cc:565] analyze timing path end vertex 1021 total 2544 start
+I20250912 20:03:34.888283  3109 StaAnalyze.cc:599] analyze timing path end vertex 1021 total 2544 end
+I20250912 20:03:34.888350  3109 StaAnalyze.cc:565] analyze timing path end vertex 1031 total 2544 start
+I20250912 20:03:34.888389  3109 StaAnalyze.cc:599] analyze timing path end vertex 1031 total 2544 end
+I20250912 20:03:34.888453  3109 StaAnalyze.cc:565] analyze timing path end vertex 1041 total 2544 start
+I20250912 20:03:34.888491  3109 StaAnalyze.cc:599] analyze timing path end vertex 1041 total 2544 end
+I20250912 20:03:34.888607  3109 StaAnalyze.cc:565] analyze timing path end vertex 1051 total 2544 start
+I20250912 20:03:34.888686  3109 StaAnalyze.cc:599] analyze timing path end vertex 1051 total 2544 end
+I20250912 20:03:34.888733  3109 StaAnalyze.cc:303] add path data num 0 to lsu/_2803_:RN
+I20250912 20:03:34.888799  3109 StaAnalyze.cc:565] analyze timing path end vertex 1061 total 2544 start
+I20250912 20:03:34.888847  3109 StaAnalyze.cc:599] analyze timing path end vertex 1061 total 2544 end
+I20250912 20:03:34.888960  3109 StaAnalyze.cc:565] analyze timing path end vertex 1071 total 2544 start
+I20250912 20:03:34.889052  3109 StaAnalyze.cc:599] analyze timing path end vertex 1071 total 2544 end
+I20250912 20:03:34.889115  3109 StaAnalyze.cc:565] analyze timing path end vertex 1081 total 2544 start
+I20250912 20:03:34.889153  3109 StaAnalyze.cc:599] analyze timing path end vertex 1081 total 2544 end
+I20250912 20:03:34.889212  3109 StaAnalyze.cc:565] analyze timing path end vertex 1091 total 2544 start
+I20250912 20:03:34.889259  3109 StaAnalyze.cc:599] analyze timing path end vertex 1091 total 2544 end
+I20250912 20:03:34.889310  3109 StaAnalyze.cc:565] analyze timing path end vertex 1101 total 2544 start
+I20250912 20:03:34.889406  3109 StaAnalyze.cc:599] analyze timing path end vertex 1101 total 2544 end
+I20250912 20:03:34.889453  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2803_:RN
+I20250912 20:03:34.889521  3109 StaAnalyze.cc:565] analyze timing path end vertex 1111 total 2544 start
+I20250912 20:03:34.889564  3109 StaAnalyze.cc:599] analyze timing path end vertex 1111 total 2544 end
+I20250912 20:03:34.889626  3109 StaAnalyze.cc:565] analyze timing path end vertex 1121 total 2544 start
+I20250912 20:03:34.889664  3109 StaAnalyze.cc:599] analyze timing path end vertex 1121 total 2544 end
+I20250912 20:03:34.889724  3109 StaAnalyze.cc:565] analyze timing path end vertex 1131 total 2544 start
+I20250912 20:03:34.889765  3109 StaAnalyze.cc:599] analyze timing path end vertex 1131 total 2544 end
+I20250912 20:03:34.889824  3109 StaAnalyze.cc:565] analyze timing path end vertex 1141 total 2544 start
+I20250912 20:03:34.889863  3109 StaAnalyze.cc:599] analyze timing path end vertex 1141 total 2544 end
+I20250912 20:03:34.889966  3109 StaAnalyze.cc:565] analyze timing path end vertex 1151 total 2544 start
+I20250912 20:03:34.890007  3109 StaAnalyze.cc:599] analyze timing path end vertex 1151 total 2544 end
+I20250912 20:03:34.890107  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2828_:RN
+I20250912 20:03:34.890153  3109 StaAnalyze.cc:565] analyze timing path end vertex 1161 total 2544 start
+I20250912 20:03:34.890192  3109 StaAnalyze.cc:599] analyze timing path end vertex 1161 total 2544 end
+I20250912 20:03:34.890257  3109 StaAnalyze.cc:565] analyze timing path end vertex 1171 total 2544 start
+I20250912 20:03:34.890297  3109 StaAnalyze.cc:599] analyze timing path end vertex 1171 total 2544 end
+I20250912 20:03:34.890362  3109 StaAnalyze.cc:565] analyze timing path end vertex 1181 total 2544 start
+I20250912 20:03:34.890403  3109 StaAnalyze.cc:599] analyze timing path end vertex 1181 total 2544 end
+I20250912 20:03:34.890465  3109 StaAnalyze.cc:565] analyze timing path end vertex 1191 total 2544 start
+I20250912 20:03:34.890503  3109 StaAnalyze.cc:599] analyze timing path end vertex 1191 total 2544 end
+I20250912 20:03:34.890564  3109 StaAnalyze.cc:565] analyze timing path end vertex 1201 total 2544 start
+I20250912 20:03:34.890604  3109 StaAnalyze.cc:599] analyze timing path end vertex 1201 total 2544 end
+I20250912 20:03:34.890653  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2853_:RN
+I20250912 20:03:34.890699  3109 StaAnalyze.cc:565] analyze timing path end vertex 1211 total 2544 start
+I20250912 20:03:34.890744  3109 StaAnalyze.cc:599] analyze timing path end vertex 1211 total 2544 end
+I20250912 20:03:34.890794  3109 StaAnalyze.cc:565] analyze timing path end vertex 1221 total 2544 start
+I20250912 20:03:34.890839  3109 StaAnalyze.cc:599] analyze timing path end vertex 1221 total 2544 end
+I20250912 20:03:34.892261  3109 StaAnalyze.cc:565] analyze timing path end vertex 1231 total 2544 start
+I20250912 20:03:34.892370  3109 StaAnalyze.cc:599] analyze timing path end vertex 1231 total 2544 end
+I20250912 20:03:34.892838  3109 StaAnalyze.cc:565] analyze timing path end vertex 1241 total 2544 start
+I20250912 20:03:34.892918  3109 StaAnalyze.cc:599] analyze timing path end vertex 1241 total 2544 end
+I20250912 20:03:34.893009  3109 StaAnalyze.cc:565] analyze timing path end vertex 1251 total 2544 start
+I20250912 20:03:34.893047  3109 StaAnalyze.cc:599] analyze timing path end vertex 1251 total 2544 end
+I20250912 20:03:34.893108  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13113_:D
+I20250912 20:03:34.893177  3109 StaAnalyze.cc:565] analyze timing path end vertex 1261 total 2544 start
+I20250912 20:03:34.893280  3109 StaAnalyze.cc:599] analyze timing path end vertex 1261 total 2544 end
+I20250912 20:03:34.893373  3109 StaAnalyze.cc:565] analyze timing path end vertex 1271 total 2544 start
+I20250912 20:03:34.893419  3109 StaAnalyze.cc:599] analyze timing path end vertex 1271 total 2544 end
+I20250912 20:03:34.893508  3109 StaAnalyze.cc:565] analyze timing path end vertex 1281 total 2544 start
+I20250912 20:03:34.893558  3109 StaAnalyze.cc:599] analyze timing path end vertex 1281 total 2544 end
+I20250912 20:03:34.893651  3109 StaAnalyze.cc:565] analyze timing path end vertex 1291 total 2544 start
+I20250912 20:03:34.893689  3109 StaAnalyze.cc:599] analyze timing path end vertex 1291 total 2544 end
+I20250912 20:03:34.893779  3109 StaAnalyze.cc:565] analyze timing path end vertex 1301 total 2544 start
+I20250912 20:03:34.893818  3109 StaAnalyze.cc:599] analyze timing path end vertex 1301 total 2544 end
+I20250912 20:03:34.893879  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13163_:D
+I20250912 20:03:34.894032  3109 StaAnalyze.cc:565] analyze timing path end vertex 1311 total 2544 start
+I20250912 20:03:34.894069  3109 StaAnalyze.cc:599] analyze timing path end vertex 1311 total 2544 end
+I20250912 20:03:34.894153  3109 StaAnalyze.cc:565] analyze timing path end vertex 1321 total 2544 start
+I20250912 20:03:34.894199  3109 StaAnalyze.cc:599] analyze timing path end vertex 1321 total 2544 end
+I20250912 20:03:34.894374  3109 StaAnalyze.cc:565] analyze timing path end vertex 1331 total 2544 start
+I20250912 20:03:34.894413  3109 StaAnalyze.cc:599] analyze timing path end vertex 1331 total 2544 end
+I20250912 20:03:34.894497  3109 StaAnalyze.cc:565] analyze timing path end vertex 1341 total 2544 start
+I20250912 20:03:34.894536  3109 StaAnalyze.cc:599] analyze timing path end vertex 1341 total 2544 end
+I20250912 20:03:34.894701  3109 StaAnalyze.cc:565] analyze timing path end vertex 1351 total 2544 start
+I20250912 20:03:34.894742  3109 StaAnalyze.cc:599] analyze timing path end vertex 1351 total 2544 end
+I20250912 20:03:34.894804  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13213_:D
+I20250912 20:03:34.894866  3109 StaAnalyze.cc:565] analyze timing path end vertex 1361 total 2544 start
+I20250912 20:03:34.894933  3109 StaAnalyze.cc:599] analyze timing path end vertex 1361 total 2544 end
+I20250912 20:03:34.895021  3109 StaAnalyze.cc:565] analyze timing path end vertex 1371 total 2544 start
+I20250912 20:03:34.895061  3109 StaAnalyze.cc:599] analyze timing path end vertex 1371 total 2544 end
+I20250912 20:03:34.895144  3109 StaAnalyze.cc:565] analyze timing path end vertex 1381 total 2544 start
+I20250912 20:03:34.895190  3109 StaAnalyze.cc:599] analyze timing path end vertex 1381 total 2544 end
+I20250912 20:03:34.895275  3109 StaAnalyze.cc:565] analyze timing path end vertex 1391 total 2544 start
+I20250912 20:03:34.895313  3109 StaAnalyze.cc:599] analyze timing path end vertex 1391 total 2544 end
+I20250912 20:03:34.895397  3109 StaAnalyze.cc:565] analyze timing path end vertex 1401 total 2544 start
+I20250912 20:03:34.895437  3109 StaAnalyze.cc:599] analyze timing path end vertex 1401 total 2544 end
+I20250912 20:03:34.895498  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13263_:D
+I20250912 20:03:34.895576  3109 StaAnalyze.cc:565] analyze timing path end vertex 1411 total 2544 start
+I20250912 20:03:34.895617  3109 StaAnalyze.cc:599] analyze timing path end vertex 1411 total 2544 end
+I20250912 20:03:34.895756  3109 StaAnalyze.cc:565] analyze timing path end vertex 1421 total 2544 start
+I20250912 20:03:34.895803  3109 StaAnalyze.cc:599] analyze timing path end vertex 1421 total 2544 end
+I20250912 20:03:34.895923  3109 StaAnalyze.cc:565] analyze timing path end vertex 1431 total 2544 start
+I20250912 20:03:34.896031  3109 StaAnalyze.cc:599] analyze timing path end vertex 1431 total 2544 end
+I20250912 20:03:34.896121  3109 StaAnalyze.cc:565] analyze timing path end vertex 1441 total 2544 start
+I20250912 20:03:34.896162  3109 StaAnalyze.cc:599] analyze timing path end vertex 1441 total 2544 end
+I20250912 20:03:34.896250  3109 StaAnalyze.cc:565] analyze timing path end vertex 1451 total 2544 start
+I20250912 20:03:34.896291  3109 StaAnalyze.cc:599] analyze timing path end vertex 1451 total 2544 end
+I20250912 20:03:34.896351  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13313_:D
+I20250912 20:03:34.896410  3109 StaAnalyze.cc:565] analyze timing path end vertex 1461 total 2544 start
+I20250912 20:03:34.896449  3109 StaAnalyze.cc:599] analyze timing path end vertex 1461 total 2544 end
+I20250912 20:03:34.896579  3109 StaAnalyze.cc:565] analyze timing path end vertex 1471 total 2544 start
+I20250912 20:03:34.896625  3109 StaAnalyze.cc:599] analyze timing path end vertex 1471 total 2544 end
+I20250912 20:03:34.896709  3109 StaAnalyze.cc:565] analyze timing path end vertex 1481 total 2544 start
+I20250912 20:03:34.896749  3109 StaAnalyze.cc:599] analyze timing path end vertex 1481 total 2544 end
+I20250912 20:03:34.896837  3109 StaAnalyze.cc:565] analyze timing path end vertex 1491 total 2544 start
+I20250912 20:03:34.896965  3109 StaAnalyze.cc:599] analyze timing path end vertex 1491 total 2544 end
+I20250912 20:03:34.897081  3109 StaAnalyze.cc:565] analyze timing path end vertex 1501 total 2544 start
+I20250912 20:03:34.897122  3109 StaAnalyze.cc:599] analyze timing path end vertex 1501 total 2544 end
+I20250912 20:03:34.897189  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13363_:D
+I20250912 20:03:34.897269  3109 StaAnalyze.cc:565] analyze timing path end vertex 1511 total 2544 start
+I20250912 20:03:34.897307  3109 StaAnalyze.cc:599] analyze timing path end vertex 1511 total 2544 end
+I20250912 20:03:34.897395  3109 StaAnalyze.cc:565] analyze timing path end vertex 1521 total 2544 start
+I20250912 20:03:34.897440  3109 StaAnalyze.cc:599] analyze timing path end vertex 1521 total 2544 end
+I20250912 20:03:34.897583  3109 StaAnalyze.cc:565] analyze timing path end vertex 1531 total 2544 start
+I20250912 20:03:34.897626  3109 StaAnalyze.cc:599] analyze timing path end vertex 1531 total 2544 end
+I20250912 20:03:34.897716  3109 StaAnalyze.cc:565] analyze timing path end vertex 1541 total 2544 start
+I20250912 20:03:34.897756  3109 StaAnalyze.cc:599] analyze timing path end vertex 1541 total 2544 end
+I20250912 20:03:34.897846  3109 StaAnalyze.cc:565] analyze timing path end vertex 1551 total 2544 start
+I20250912 20:03:34.898444  3109 StaAnalyze.cc:599] analyze timing path end vertex 1551 total 2544 end
+I20250912 20:03:34.898525  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13413_:D
+I20250912 20:03:34.898591  3109 StaAnalyze.cc:565] analyze timing path end vertex 1561 total 2544 start
+I20250912 20:03:34.898629  3109 StaAnalyze.cc:599] analyze timing path end vertex 1561 total 2544 end
+I20250912 20:03:34.898721  3109 StaAnalyze.cc:565] analyze timing path end vertex 1571 total 2544 start
+I20250912 20:03:34.899078  3109 StaAnalyze.cc:599] analyze timing path end vertex 1571 total 2544 end
+I20250912 20:03:34.899176  3109 StaAnalyze.cc:565] analyze timing path end vertex 1581 total 2544 start
+I20250912 20:03:34.899269  3109 StaAnalyze.cc:599] analyze timing path end vertex 1581 total 2544 end
+I20250912 20:03:34.899426  3109 StaAnalyze.cc:565] analyze timing path end vertex 1591 total 2544 start
+I20250912 20:03:34.899510  3109 StaAnalyze.cc:599] analyze timing path end vertex 1591 total 2544 end
+I20250912 20:03:34.899608  3109 StaAnalyze.cc:565] analyze timing path end vertex 1601 total 2544 start
+I20250912 20:03:34.899649  3109 StaAnalyze.cc:599] analyze timing path end vertex 1601 total 2544 end
+I20250912 20:03:34.899730  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13463_:D
+I20250912 20:03:34.899794  3109 StaAnalyze.cc:565] analyze timing path end vertex 1611 total 2544 start
+I20250912 20:03:34.899840  3109 StaAnalyze.cc:599] analyze timing path end vertex 1611 total 2544 end
+I20250912 20:03:34.899958  3109 StaAnalyze.cc:565] analyze timing path end vertex 1621 total 2544 start
+I20250912 20:03:34.900032  3109 StaAnalyze.cc:599] analyze timing path end vertex 1621 total 2544 end
+I20250912 20:03:34.900120  3109 StaAnalyze.cc:565] analyze timing path end vertex 1631 total 2544 start
+I20250912 20:03:34.900159  3109 StaAnalyze.cc:599] analyze timing path end vertex 1631 total 2544 end
+I20250912 20:03:34.900254  3109 StaAnalyze.cc:565] analyze timing path end vertex 1641 total 2544 start
+I20250912 20:03:34.900293  3109 StaAnalyze.cc:599] analyze timing path end vertex 1641 total 2544 end
+I20250912 20:03:34.900446  3109 StaAnalyze.cc:565] analyze timing path end vertex 1651 total 2544 start
+I20250912 20:03:34.900485  3109 StaAnalyze.cc:599] analyze timing path end vertex 1651 total 2544 end
+I20250912 20:03:34.900718  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13513_:D
+I20250912 20:03:34.900770  3109 StaAnalyze.cc:565] analyze timing path end vertex 1661 total 2544 start
+I20250912 20:03:34.900808  3109 StaAnalyze.cc:599] analyze timing path end vertex 1661 total 2544 end
+I20250912 20:03:34.900919  3109 StaAnalyze.cc:565] analyze timing path end vertex 1671 total 2544 start
+I20250912 20:03:34.901014  3109 StaAnalyze.cc:599] analyze timing path end vertex 1671 total 2544 end
+I20250912 20:03:34.901108  3109 StaAnalyze.cc:565] analyze timing path end vertex 1681 total 2544 start
+I20250912 20:03:34.901147  3109 StaAnalyze.cc:599] analyze timing path end vertex 1681 total 2544 end
+I20250912 20:03:34.901232  3109 StaAnalyze.cc:565] analyze timing path end vertex 1691 total 2544 start
+I20250912 20:03:34.901270  3109 StaAnalyze.cc:599] analyze timing path end vertex 1691 total 2544 end
+I20250912 20:03:34.901379  3109 StaAnalyze.cc:565] analyze timing path end vertex 1701 total 2544 start
+I20250912 20:03:34.901427  3109 StaAnalyze.cc:599] analyze timing path end vertex 1701 total 2544 end
+I20250912 20:03:34.901484  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13563_:D
+I20250912 20:03:34.901592  3109 StaAnalyze.cc:565] analyze timing path end vertex 1711 total 2544 start
+I20250912 20:03:34.901633  3109 StaAnalyze.cc:599] analyze timing path end vertex 1711 total 2544 end
+I20250912 20:03:34.901721  3109 StaAnalyze.cc:565] analyze timing path end vertex 1721 total 2544 start
+I20250912 20:03:34.901759  3109 StaAnalyze.cc:599] analyze timing path end vertex 1721 total 2544 end
+I20250912 20:03:34.901846  3109 StaAnalyze.cc:565] analyze timing path end vertex 1731 total 2544 start
+I20250912 20:03:34.901919  3109 StaAnalyze.cc:599] analyze timing path end vertex 1731 total 2544 end
+I20250912 20:03:34.902006  3109 StaAnalyze.cc:565] analyze timing path end vertex 1741 total 2544 start
+I20250912 20:03:34.902045  3109 StaAnalyze.cc:599] analyze timing path end vertex 1741 total 2544 end
+I20250912 20:03:34.902128  3109 StaAnalyze.cc:565] analyze timing path end vertex 1751 total 2544 start
+I20250912 20:03:34.902215  3109 StaAnalyze.cc:599] analyze timing path end vertex 1751 total 2544 end
+I20250912 20:03:34.902276  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13613_:D
+I20250912 20:03:34.902335  3109 StaAnalyze.cc:565] analyze timing path end vertex 1761 total 2544 start
+I20250912 20:03:34.902374  3109 StaAnalyze.cc:599] analyze timing path end vertex 1761 total 2544 end
+I20250912 20:03:34.902516  3109 StaAnalyze.cc:565] analyze timing path end vertex 1771 total 2544 start
+I20250912 20:03:34.902555  3109 StaAnalyze.cc:599] analyze timing path end vertex 1771 total 2544 end
+I20250912 20:03:34.902642  3109 StaAnalyze.cc:565] analyze timing path end vertex 1781 total 2544 start
+I20250912 20:03:34.902735  3109 StaAnalyze.cc:599] analyze timing path end vertex 1781 total 2544 end
+I20250912 20:03:34.902848  3109 StaAnalyze.cc:565] analyze timing path end vertex 1791 total 2544 start
+I20250912 20:03:34.902961  3109 StaAnalyze.cc:599] analyze timing path end vertex 1791 total 2544 end
+I20250912 20:03:34.903049  3109 StaAnalyze.cc:565] analyze timing path end vertex 1801 total 2544 start
+I20250912 20:03:34.903095  3109 StaAnalyze.cc:599] analyze timing path end vertex 1801 total 2544 end
+I20250912 20:03:34.903151  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13663_:D
+I20250912 20:03:34.903211  3109 StaAnalyze.cc:565] analyze timing path end vertex 1811 total 2544 start
+I20250912 20:03:34.903249  3109 StaAnalyze.cc:599] analyze timing path end vertex 1811 total 2544 end
+I20250912 20:03:34.903334  3109 StaAnalyze.cc:565] analyze timing path end vertex 1821 total 2544 start
+I20250912 20:03:34.903373  3109 StaAnalyze.cc:599] analyze timing path end vertex 1821 total 2544 end
+I20250912 20:03:34.903460  3109 StaAnalyze.cc:565] analyze timing path end vertex 1831 total 2544 start
+I20250912 20:03:34.903496  3109 StaAnalyze.cc:599] analyze timing path end vertex 1831 total 2544 end
+I20250912 20:03:34.903591  3109 StaAnalyze.cc:565] analyze timing path end vertex 1841 total 2544 start
+I20250912 20:03:34.903631  3109 StaAnalyze.cc:599] analyze timing path end vertex 1841 total 2544 end
+I20250912 20:03:34.903715  3109 StaAnalyze.cc:565] analyze timing path end vertex 1851 total 2544 start
+I20250912 20:03:34.903759  3109 StaAnalyze.cc:599] analyze timing path end vertex 1851 total 2544 end
+I20250912 20:03:34.903822  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13713_:D
+I20250912 20:03:34.903935  3109 StaAnalyze.cc:565] analyze timing path end vertex 1861 total 2544 start
+I20250912 20:03:34.903975  3109 StaAnalyze.cc:599] analyze timing path end vertex 1861 total 2544 end
+I20250912 20:03:34.904063  3109 StaAnalyze.cc:565] analyze timing path end vertex 1871 total 2544 start
+I20250912 20:03:34.904102  3109 StaAnalyze.cc:599] analyze timing path end vertex 1871 total 2544 end
+I20250912 20:03:34.904207  3109 StaAnalyze.cc:565] analyze timing path end vertex 1881 total 2544 start
+I20250912 20:03:34.904247  3109 StaAnalyze.cc:599] analyze timing path end vertex 1881 total 2544 end
+I20250912 20:03:34.904330  3109 StaAnalyze.cc:565] analyze timing path end vertex 1891 total 2544 start
+I20250912 20:03:34.904377  3109 StaAnalyze.cc:599] analyze timing path end vertex 1891 total 2544 end
+I20250912 20:03:34.904465  3109 StaAnalyze.cc:565] analyze timing path end vertex 1901 total 2544 start
+I20250912 20:03:34.904505  3109 StaAnalyze.cc:599] analyze timing path end vertex 1901 total 2544 end
+I20250912 20:03:34.904567  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13763_:D
+I20250912 20:03:34.904628  3109 StaAnalyze.cc:565] analyze timing path end vertex 1911 total 2544 start
+I20250912 20:03:34.904666  3109 StaAnalyze.cc:599] analyze timing path end vertex 1911 total 2544 end
+I20250912 20:03:34.904748  3109 StaAnalyze.cc:565] analyze timing path end vertex 1921 total 2544 start
+I20250912 20:03:34.904786  3109 StaAnalyze.cc:599] analyze timing path end vertex 1921 total 2544 end
+I20250912 20:03:34.904870  3109 StaAnalyze.cc:565] analyze timing path end vertex 1931 total 2544 start
+I20250912 20:03:34.904994  3109 StaAnalyze.cc:599] analyze timing path end vertex 1931 total 2544 end
+I20250912 20:03:34.905076  3109 StaAnalyze.cc:565] analyze timing path end vertex 1941 total 2544 start
+I20250912 20:03:34.905120  3109 StaAnalyze.cc:599] analyze timing path end vertex 1941 total 2544 end
+I20250912 20:03:34.905203  3109 StaAnalyze.cc:565] analyze timing path end vertex 1951 total 2544 start
+I20250912 20:03:34.905242  3109 StaAnalyze.cc:599] analyze timing path end vertex 1951 total 2544 end
+I20250912 20:03:34.905304  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13813_:D
+I20250912 20:03:34.905424  3109 StaAnalyze.cc:565] analyze timing path end vertex 1961 total 2544 start
+I20250912 20:03:34.905463  3109 StaAnalyze.cc:599] analyze timing path end vertex 1961 total 2544 end
+I20250912 20:03:34.905565  3109 StaAnalyze.cc:565] analyze timing path end vertex 1971 total 2544 start
+I20250912 20:03:34.905606  3109 StaAnalyze.cc:599] analyze timing path end vertex 1971 total 2544 end
+I20250912 20:03:34.905699  3109 StaAnalyze.cc:565] analyze timing path end vertex 1981 total 2544 start
+I20250912 20:03:34.905737  3109 StaAnalyze.cc:599] analyze timing path end vertex 1981 total 2544 end
+I20250912 20:03:34.907197  3109 StaAnalyze.cc:565] analyze timing path end vertex 1991 total 2544 start
+I20250912 20:03:34.907290  3109 StaAnalyze.cc:599] analyze timing path end vertex 1991 total 2544 end
+I20250912 20:03:34.907387  3109 StaAnalyze.cc:565] analyze timing path end vertex 2001 total 2544 start
+I20250912 20:03:34.907425  3109 StaAnalyze.cc:599] analyze timing path end vertex 2001 total 2544 end
+I20250912 20:03:34.907492  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13863_:D
+I20250912 20:03:34.907578  3109 StaAnalyze.cc:565] analyze timing path end vertex 2011 total 2544 start
+I20250912 20:03:34.907620  3109 StaAnalyze.cc:599] analyze timing path end vertex 2011 total 2544 end
+I20250912 20:03:34.907713  3109 StaAnalyze.cc:565] analyze timing path end vertex 2021 total 2544 start
+I20250912 20:03:34.907753  3109 StaAnalyze.cc:599] analyze timing path end vertex 2021 total 2544 end
+I20250912 20:03:34.907847  3109 StaAnalyze.cc:565] analyze timing path end vertex 2031 total 2544 start
+I20250912 20:03:34.907944  3109 StaAnalyze.cc:599] analyze timing path end vertex 2031 total 2544 end
+I20250912 20:03:34.908036  3109 StaAnalyze.cc:565] analyze timing path end vertex 2041 total 2544 start
+I20250912 20:03:34.908075  3109 StaAnalyze.cc:599] analyze timing path end vertex 2041 total 2544 end
+I20250912 20:03:34.908160  3109 StaAnalyze.cc:565] analyze timing path end vertex 2051 total 2544 start
+I20250912 20:03:34.908200  3109 StaAnalyze.cc:599] analyze timing path end vertex 2051 total 2544 end
+I20250912 20:03:34.908262  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13913_:D
+I20250912 20:03:34.908350  3109 StaAnalyze.cc:565] analyze timing path end vertex 2061 total 2544 start
+I20250912 20:03:34.908389  3109 StaAnalyze.cc:599] analyze timing path end vertex 2061 total 2544 end
+I20250912 20:03:34.908480  3109 StaAnalyze.cc:565] analyze timing path end vertex 2071 total 2544 start
+I20250912 20:03:34.908520  3109 StaAnalyze.cc:599] analyze timing path end vertex 2071 total 2544 end
+I20250912 20:03:34.908609  3109 StaAnalyze.cc:565] analyze timing path end vertex 2081 total 2544 start
+I20250912 20:03:34.908721  3109 StaAnalyze.cc:599] analyze timing path end vertex 2081 total 2544 end
+I20250912 20:03:34.908807  3109 StaAnalyze.cc:565] analyze timing path end vertex 2091 total 2544 start
+I20250912 20:03:34.908851  3109 StaAnalyze.cc:599] analyze timing path end vertex 2091 total 2544 end
+I20250912 20:03:34.908999  3109 StaAnalyze.cc:565] analyze timing path end vertex 2101 total 2544 start
+I20250912 20:03:34.909040  3109 StaAnalyze.cc:599] analyze timing path end vertex 2101 total 2544 end
+I20250912 20:03:34.909106  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_13963_:D
+I20250912 20:03:34.909166  3109 StaAnalyze.cc:565] analyze timing path end vertex 2111 total 2544 start
+I20250912 20:03:34.909607  3109 StaAnalyze.cc:599] analyze timing path end vertex 2111 total 2544 end
+I20250912 20:03:34.909726  3109 StaAnalyze.cc:565] analyze timing path end vertex 2121 total 2544 start
+I20250912 20:03:34.909770  3109 StaAnalyze.cc:599] analyze timing path end vertex 2121 total 2544 end
+I20250912 20:03:34.909862  3109 StaAnalyze.cc:565] analyze timing path end vertex 2131 total 2544 start
+I20250912 20:03:34.909950  3109 StaAnalyze.cc:599] analyze timing path end vertex 2131 total 2544 end
+I20250912 20:03:34.910046  3109 StaAnalyze.cc:565] analyze timing path end vertex 2141 total 2544 start
+I20250912 20:03:34.910085  3109 StaAnalyze.cc:599] analyze timing path end vertex 2141 total 2544 end
+I20250912 20:03:34.910424  3109 StaAnalyze.cc:565] analyze timing path end vertex 2151 total 2544 start
+I20250912 20:03:34.910465  3109 StaAnalyze.cc:599] analyze timing path end vertex 2151 total 2544 end
+I20250912 20:03:34.910532  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_14013_:D
+I20250912 20:03:34.910598  3109 StaAnalyze.cc:565] analyze timing path end vertex 2161 total 2544 start
+I20250912 20:03:34.910638  3109 StaAnalyze.cc:599] analyze timing path end vertex 2161 total 2544 end
+I20250912 20:03:34.910727  3109 StaAnalyze.cc:565] analyze timing path end vertex 2171 total 2544 start
+I20250912 20:03:34.910773  3109 StaAnalyze.cc:599] analyze timing path end vertex 2171 total 2544 end
+I20250912 20:03:34.910861  3109 StaAnalyze.cc:565] analyze timing path end vertex 2181 total 2544 start
+I20250912 20:03:34.910935  3109 StaAnalyze.cc:599] analyze timing path end vertex 2181 total 2544 end
+I20250912 20:03:34.911022  3109 StaAnalyze.cc:565] analyze timing path end vertex 2191 total 2544 start
+I20250912 20:03:34.911060  3109 StaAnalyze.cc:599] analyze timing path end vertex 2191 total 2544 end
+I20250912 20:03:34.911150  3109 StaAnalyze.cc:565] analyze timing path end vertex 2201 total 2544 start
+I20250912 20:03:34.911849  3109 StaAnalyze.cc:599] analyze timing path end vertex 2201 total 2544 end
+I20250912 20:03:34.911996  3109 StaAnalyze.cc:303] add path data num 2 to regfile/_14063_:D
+I20250912 20:03:34.912063  3109 StaAnalyze.cc:565] analyze timing path end vertex 2211 total 2544 start
+I20250912 20:03:34.912102  3109 StaAnalyze.cc:599] analyze timing path end vertex 2211 total 2544 end
+I20250912 20:03:34.912192  3109 StaAnalyze.cc:565] analyze timing path end vertex 2221 total 2544 start
+I20250912 20:03:34.912240  3109 StaAnalyze.cc:599] analyze timing path end vertex 2221 total 2544 end
+I20250912 20:03:34.912417  3109 StaAnalyze.cc:565] analyze timing path end vertex 2231 total 2544 start
+I20250912 20:03:34.912462  3109 StaAnalyze.cc:599] analyze timing path end vertex 2231 total 2544 end
+I20250912 20:03:34.912564  3109 StaAnalyze.cc:565] analyze timing path end vertex 2241 total 2544 start
+I20250912 20:03:34.912629  3109 StaAnalyze.cc:599] analyze timing path end vertex 2241 total 2544 end
+I20250912 20:03:34.912726  3109 StaAnalyze.cc:565] analyze timing path end vertex 2251 total 2544 start
+I20250912 20:03:34.912768  3109 StaAnalyze.cc:599] analyze timing path end vertex 2251 total 2544 end
+I20250912 20:03:34.912833  3109 StaAnalyze.cc:303] add path data num 2 to wb/_2733_:D
+I20250912 20:03:34.912922  3109 StaAnalyze.cc:565] analyze timing path end vertex 2261 total 2544 start
+I20250912 20:03:34.912961  3109 StaAnalyze.cc:599] analyze timing path end vertex 2261 total 2544 end
+I20250912 20:03:34.913026  3109 StaAnalyze.cc:565] analyze timing path end vertex 2271 total 2544 start
+I20250912 20:03:34.913079  3109 StaAnalyze.cc:599] analyze timing path end vertex 2271 total 2544 end
+I20250912 20:03:34.913143  3109 StaAnalyze.cc:565] analyze timing path end vertex 2281 total 2544 start
+I20250912 20:03:34.913184  3109 StaAnalyze.cc:599] analyze timing path end vertex 2281 total 2544 end
+I20250912 20:03:34.913249  3109 StaAnalyze.cc:565] analyze timing path end vertex 2291 total 2544 start
+I20250912 20:03:34.913296  3109 StaAnalyze.cc:599] analyze timing path end vertex 2291 total 2544 end
+I20250912 20:03:34.913362  3109 StaAnalyze.cc:565] analyze timing path end vertex 2301 total 2544 start
+I20250912 20:03:34.913406  3109 StaAnalyze.cc:599] analyze timing path end vertex 2301 total 2544 end
+I20250912 20:03:34.913460  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2758_:RN
+I20250912 20:03:34.913503  3109 StaAnalyze.cc:565] analyze timing path end vertex 2311 total 2544 start
+I20250912 20:03:34.913542  3109 StaAnalyze.cc:599] analyze timing path end vertex 2311 total 2544 end
+I20250912 20:03:34.913614  3109 StaAnalyze.cc:565] analyze timing path end vertex 2321 total 2544 start
+I20250912 20:03:34.913663  3109 StaAnalyze.cc:599] analyze timing path end vertex 2321 total 2544 end
+I20250912 20:03:34.913722  3109 StaAnalyze.cc:565] analyze timing path end vertex 2331 total 2544 start
+I20250912 20:03:34.913866  3109 StaAnalyze.cc:599] analyze timing path end vertex 2331 total 2544 end
+I20250912 20:03:34.913961  3109 StaAnalyze.cc:565] analyze timing path end vertex 2341 total 2544 start
+I20250912 20:03:34.914001  3109 StaAnalyze.cc:599] analyze timing path end vertex 2341 total 2544 end
+I20250912 20:03:34.914062  3109 StaAnalyze.cc:565] analyze timing path end vertex 2351 total 2544 start
+I20250912 20:03:34.914101  3109 StaAnalyze.cc:599] analyze timing path end vertex 2351 total 2544 end
+I20250912 20:03:34.914145  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2783_:RN
+I20250912 20:03:34.914201  3109 StaAnalyze.cc:565] analyze timing path end vertex 2361 total 2544 start
+I20250912 20:03:34.914240  3109 StaAnalyze.cc:599] analyze timing path end vertex 2361 total 2544 end
+I20250912 20:03:34.914310  3109 StaAnalyze.cc:565] analyze timing path end vertex 2371 total 2544 start
+I20250912 20:03:34.914350  3109 StaAnalyze.cc:599] analyze timing path end vertex 2371 total 2544 end
+I20250912 20:03:34.914413  3109 StaAnalyze.cc:565] analyze timing path end vertex 2381 total 2544 start
+I20250912 20:03:34.914453  3109 StaAnalyze.cc:599] analyze timing path end vertex 2381 total 2544 end
+I20250912 20:03:34.914515  3109 StaAnalyze.cc:565] analyze timing path end vertex 2391 total 2544 start
+I20250912 20:03:34.914553  3109 StaAnalyze.cc:599] analyze timing path end vertex 2391 total 2544 end
+I20250912 20:03:34.914614  3109 StaAnalyze.cc:565] analyze timing path end vertex 2401 total 2544 start
+I20250912 20:03:34.914660  3109 StaAnalyze.cc:599] analyze timing path end vertex 2401 total 2544 end
+I20250912 20:03:34.914705  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2891_:RN
+I20250912 20:03:34.914783  3109 StaAnalyze.cc:565] analyze timing path end vertex 2411 total 2544 start
+I20250912 20:03:34.914832  3109 StaAnalyze.cc:599] analyze timing path end vertex 2411 total 2544 end
+I20250912 20:03:34.914925  3109 StaAnalyze.cc:565] analyze timing path end vertex 2421 total 2544 start
+I20250912 20:03:34.914984  3109 StaAnalyze.cc:599] analyze timing path end vertex 2421 total 2544 end
+I20250912 20:03:34.915047  3109 StaAnalyze.cc:565] analyze timing path end vertex 2431 total 2544 start
+I20250912 20:03:34.915105  3109 StaAnalyze.cc:599] analyze timing path end vertex 2431 total 2544 end
+I20250912 20:03:34.915174  3109 StaAnalyze.cc:565] analyze timing path end vertex 2441 total 2544 start
+I20250912 20:03:34.915215  3109 StaAnalyze.cc:599] analyze timing path end vertex 2441 total 2544 end
+I20250912 20:03:34.915277  3109 StaAnalyze.cc:565] analyze timing path end vertex 2451 total 2544 start
+I20250912 20:03:34.915316  3109 StaAnalyze.cc:599] analyze timing path end vertex 2451 total 2544 end
+I20250912 20:03:34.915369  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2916_:RN
+I20250912 20:03:34.915416  3109 StaAnalyze.cc:565] analyze timing path end vertex 2461 total 2544 start
+I20250912 20:03:34.915454  3109 StaAnalyze.cc:599] analyze timing path end vertex 2461 total 2544 end
+I20250912 20:03:34.915520  3109 StaAnalyze.cc:565] analyze timing path end vertex 2471 total 2544 start
+I20250912 20:03:34.915560  3109 StaAnalyze.cc:599] analyze timing path end vertex 2471 total 2544 end
+I20250912 20:03:34.915627  3109 StaAnalyze.cc:565] analyze timing path end vertex 2481 total 2544 start
+I20250912 20:03:34.915665  3109 StaAnalyze.cc:599] analyze timing path end vertex 2481 total 2544 end
+I20250912 20:03:34.915724  3109 StaAnalyze.cc:565] analyze timing path end vertex 2491 total 2544 start
+I20250912 20:03:34.915769  3109 StaAnalyze.cc:599] analyze timing path end vertex 2491 total 2544 end
+I20250912 20:03:34.915822  3109 StaAnalyze.cc:565] analyze timing path end vertex 2501 total 2544 start
+I20250912 20:03:34.915946  3109 StaAnalyze.cc:599] analyze timing path end vertex 2501 total 2544 end
+I20250912 20:03:34.915992  3109 StaAnalyze.cc:303] add path data num 0 to wb/_2941_:RN
+I20250912 20:03:34.916038  3109 StaAnalyze.cc:565] analyze timing path end vertex 2511 total 2544 start
+I20250912 20:03:34.916085  3109 StaAnalyze.cc:599] analyze timing path end vertex 2511 total 2544 end
+I20250912 20:03:34.916136  3109 StaAnalyze.cc:565] analyze timing path end vertex 2521 total 2544 start
+I20250912 20:03:34.916181  3109 StaAnalyze.cc:599] analyze timing path end vertex 2521 total 2544 end
+I20250912 20:03:34.916240  3109 StaAnalyze.cc:565] analyze timing path end vertex 2531 total 2544 start
+I20250912 20:03:34.916278  3109 StaAnalyze.cc:599] analyze timing path end vertex 2531 total 2544 end
+I20250912 20:03:34.916339  3109 StaAnalyze.cc:565] analyze timing path end vertex 2541 total 2544 start
+I20250912 20:03:34.916421  3109 StaAnalyze.cc:599] analyze timing path end vertex 2541 total 2544 end
+I20250912 20:03:34.916462  3109 StaAnalyze.cc:603] analyze timing path end
+I20250912 20:03:34.916497  3109 StaApplySdc.cc:698] apply sdc start
+I20250912 20:03:34.916530  3109 StaApplySdc.cc:729] apply sdc end
+I20250912 20:03:34.916563  3109 StaDataPropagation.cc:698] data bwd propagation start
+I20250912 20:03:34.926201  3109 StaDataPropagation.cc:249] propagate start vertex ex/_2345_:CK
+I20250912 20:03:34.926314  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.ex/_2345_:D
+I20250912 20:03:34.926379  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.lsu/_2759_:D
+I20250912 20:03:34.926433  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.ex/_2346_:D
+I20250912 20:03:34.926483  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.lsu/_2760_:D
+I20250912 20:03:34.926533  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.ex/_2347_:D
+I20250912 20:03:34.926574  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.lsu/_2761_:D
+I20250912 20:03:34.926620  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.ex/_2348_:D
+I20250912 20:03:34.926679  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.lsu/_2762_:D
+I20250912 20:03:34.926769  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.ex/_2349_:D
+I20250912 20:03:34.926816  3109 StaDataPropagation.cc:172] Thread 133980248920192 data bwd propagate found end vertex.lsu/_2763_:D
+I20250912 20:03:34.927361  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2451_:D has negative slack
+I20250912 20:03:34.927448  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2456_:D has negative slack
+I20250912 20:03:34.927520  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2461_:D has negative slack
+I20250912 20:03:34.927587  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2466_:D has negative slack
+I20250912 20:03:34.927652  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2471_:D has negative slack
+I20250912 20:03:34.927930  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2476_:D has negative slack
+I20250912 20:03:34.927999  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2481_:D has negative slack
+I20250912 20:03:34.928068  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2422_:D has negative slack
+I20250912 20:03:34.928177  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2427_:D has negative slack
+I20250912 20:03:34.928239  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2432_:D has negative slack
+I20250912 20:03:34.928303  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2437_:D has negative slack
+I20250912 20:03:34.928364  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2442_:D has negative slack
+I20250912 20:03:34.928736  3109 StaDataPropagation.cc:61] the endpoint vertex ex/_2447_:D has negative slack
+I20250912 20:03:34.942162  3109 StaDataPropagation.cc:249] propagate start vertex ex/csr_regfile/_1460_:CK
+I20250912 20:03:34.958436  3109 StaDataPropagation.cc:249] propagate start vertex lsu/_2611_:CK
+I20250912 20:03:34.962491  3109 StaDataPropagation.cc:249] propagate start vertex regfile/_13087_:CK
+I20250912 20:03:34.965839  3109 StaDataPropagation.cc:249] propagate start vertex regfile/_13204_:CK
+I20250912 20:03:34.968696  3109 StaDataPropagation.cc:249] propagate start vertex regfile/_13404_:CK
+I20250912 20:03:34.971550  3109 StaDataPropagation.cc:249] propagate start vertex regfile/_13604_:CK
+I20250912 20:03:34.974982  3109 StaDataPropagation.cc:249] propagate start vertex regfile/_13804_:CK
+I20250912 20:03:34.978370  3109 StaDataPropagation.cc:249] propagate start vertex regfile/_14004_:CK
+I20250912 20:03:34.986200  3109 StaDataPropagation.cc:249] propagate start vertex wb/_2907_:CK
+I20250912 20:03:34.991722  3109 StaDataPropagation.cc:703] data bwd propagation end
+I20250912 20:03:34.991837  3109 Sta.cc:2895] update timing end
+I20250912 20:03:34.991974  3109 Sta.cc:2898] update timing memory usage 1922.52MB
+I20250912 20:03:34.992019  3109 Sta.cc:2900] update timing time elapsed 4.37481s
+[1;31m
+  _____       _ _     _____        _         
+ |_   _|     (_) |   |  __ \      | |        
+   | |  _ __  _| |_  | |  | | __ _| |_ __ _  
+   | | | '_ \| | __| | |  | |/ _` | __/ _` | 
+  _| |_| | | | | |_  | |__| | (_| | || (_| | 
+ |_____|_| |_|_|\__| |_____/ \__,_|\__\__,_| 
+                                             
+[0m
+[1;35m
+  ______ _        ______                      _    
+ |  ____(_)      |  ____|                    | |   
+ | |__   ___  __ | |__ __ _ _ __   ___  _   _| |_  
+ |  __| | \ \/ / |  __/ _` | '_ \ / _ \| | | | __| 
+ | |    | |>  <  | | | (_| | | | | (_) | |_| | |_  
+ |_|    |_/_/\_\ |_|  \__,_|_| |_|\___/ \__,_|\__| 
+                                                   
+[0m
+I20250912 20:03:35.001690  3109 FixFanout.cpp:55] [Result: ] Find 19 Net with fanout violation.
+I20250912 20:03:35.001812  3109 FixFanout.cpp:56] [Result: ] Insert 77 Buffers.
+iNO fixfanout run successfully.
+I20250912 20:03:35.002133  3109 verilog_write.cpp:59] start write verilog file /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085-500MHz/ysyx_25030085.netlist.fixed.v
+I20250912 20:03:35.204990  3109 verilog_write.cpp:77] finish write verilog file /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085-500MHz/ysyx_25030085.netlist.fixed.v
