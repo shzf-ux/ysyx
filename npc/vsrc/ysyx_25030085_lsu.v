@@ -65,7 +65,7 @@ module ysyx_25030085_lsu (//数据存储器
     wire [1:0]  offset=addr[1:0];//获取偏移量
     wire [31:0] aligned_addr=addr&32'hFFFFFFFC;
 
-    wire unaligned_ac=addr[19:0]==20'h10000;
+    wire unaligned_ac = (addr[31:12]== 20'h10000)||(addr[31:24]== 8'h80);
 
 
     assign in_ready=state==IDLE;

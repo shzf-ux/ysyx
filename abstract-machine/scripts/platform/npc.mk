@@ -10,10 +10,10 @@ AM_SRCS := riscv/npc/start.S \
 
 CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
-LDFLAGS   += --defsym=_pmem_start=0x30000000 --defsym=_entry_offset=0x0
+LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 NPCFLAGS += -d $(NEMU_LIB_NAME)   # DiffTest库
-NPCFLAGS += -b                     # 批处理模式（无参数）
+NPCFLAGS +=                     # 批处理模式（无参数）
 NPCFLAGS += -e $(IMAGE).elf        # ELF文件路径
 NEMU_LIB_NAME := /home/zzy/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
 #$(abspath$(wildcard $(NEMU_HOME)/build/riscv32-nemu-interpreter-so))

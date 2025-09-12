@@ -2,6 +2,7 @@
 #include <klib-macros.h>
 #include <riscv/riscv.h>
 #include "include/ysyxsoc.h"
+#include <string.h>
 
 extern char _heap_start;
 int main(const char *args);
@@ -26,6 +27,24 @@ void init_uart()
   // 5. 启用并清空FIFO
   outb(UART_REG_FC, 0xC7);
 }
+// void init_section()
+// {
+//   /* 1. 复制所有初始化数据 */
+//   extern uint8_t _data_lma[], _data_vma[], _edata[];
+//   uint32_t data_size = _edata - _data_vma;
+//   if (data_size > 0)
+//   {
+//     memcpy(_data_vma, _data_lma, data_size);
+//   }
+
+//   /* 2. 清零.bss段 */
+//   extern uint8_t _bss_start[], _bss_end[];
+//   uint32_t bss_size = _bss_end - _bss_start;
+//   if (bss_size > 0)
+//   {
+//     memset(_bss_start, 0, bss_size);
+//   }
+// }
 
 void putch(char ch)
 {
@@ -45,7 +64,10 @@ void halt(int code)
 }
 
 void _trm_init() {
+  // init_section();
   init_uart();
+  ioe_init();
+
   int ret = main(mainargs);
   halt(ret);
 }

@@ -82,40 +82,35 @@ static void single_cycle()
 {
     reset(); // 处理复位逻辑
 
-    if (sim_time > 55000000+10000000)
-    {
-       
-      //  flag_stop = 1;
-        //  return;
-    }
-
-    soc_top->clock = !soc_top->clock;
-    sim_time++;
-    soc_top->eval();
-    if (sim_time < 3000000|sim_time>55000000)
-    {
-
-       // vcd->dump(sim_time);
-    }
-  
 
 
     soc_top->clock = !soc_top->clock;
     sim_time++;
     soc_top->eval();
-
-    if (sim_time < 3000000 | sim_time > 55000000)
+    if (sim_time >275000000)
     {
 
-      //  vcd->dump(sim_time);
+    // vcd->dump(sim_time);
     }
-}
-void test(){
-    printf("time :%d\n", sim_time);
-    if (sim_time){
+    if (sim_time %5000000==0)
+    {
+      // printf("time :%d\n", sim_time);
+        // flag_stop = 1;
+         // return;
+    }
+    //printf("time :%d\n", sim_time);
 
+    soc_top->clock = !soc_top->clock;
+    sim_time++;
+    soc_top->eval();
+   
+    if (sim_time > 275000000)
+    {
+
+    //  vcd->dump(sim_time);
     }
 }
+
 
 void npc_exec(uint64_t n)
 {

@@ -1,0 +1,250 @@
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I20250912 11:44:23.460832  8886 Sta.cc:375] read verilog file /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085_cpu-500MHz/ysyx_25030085_cpu.netlist.fixed.v start
+I20250912 11:44:23.461009  8886 VerilogParserRustC.cc:41] load verilog file /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085_cpu-500MHz/ysyx_25030085_cpu.netlist.fixed.v
+r str /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085_cpu-500MHz/ysyx_25030085_cpu.netlist.fixed.v
+I20250912 11:44:23.665288  8886 Sta.cc:379] read verilog end
+I20250912 11:44:23.665488  8886 Sta.cc:298] load lib start
+I20250912 11:44:23.671295  8890 LibParserRustC.cc:1269] load liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib
+rust read lib file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib
+I20250912 11:44:24.168331  8890 LibParserRustC.cc:1278] load liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib success.
+I20250912 11:44:24.169298  8886 Sta.cc:317] load lib end
+I20250912 11:44:24.169370  8886 Sta.cc:405] link design ysyx_25030085_cpu start
+I20250912 11:44:24.183861  8953 LibParserRustC.cc:1289] link liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib start.
+I20250912 11:44:24.555027  8953 LibParserRustC.cc:1295] link liberty file /home/zzy/ysyx-workbench/yosys-sta/scripts/../nangate45/lib/merged.lib success.
+I20250912 11:44:25.467089  8886 Sta.cc:790] link design ysyx_25030085_cpu end
+I20250912 11:44:25.474519  8886 Sta.cc:172] read sdc /home/zzy/ysyx-workbench/npc/top.sdc start 
+I20250912 11:44:25.475543  8886 CmdCreateClock.cc:116] create clock core_clock for pin/port: clock
+I20250912 11:44:25.475620  8886 Sta.cc:185] read sdc end
+I20250912 11:44:25.475666  8886 StaBuildGraph.cc:310] build graph start
+I20250912 11:44:26.456924  8886 StaBuildGraph.cc:327] build graph end
+I20250912 11:44:26.457033  8886 Sta.cc:2287] update timing start
+I20250912 11:44:26.467011  8886 StaApplySdc.cc:694] apply sdc start
+I20250912 11:44:26.467231  8886 StaApplySdc.cc:725] apply sdc end
+I20250912 11:44:26.467825  8886 StaClockPropagation.cc:320] ideal clock propagation start
+I20250912 11:44:26.467923  8886 StaClockPropagation.cc:203] clock propagate end to vertex arbiter/_1573_:CK
+I20250912 11:44:26.482069  8886 StaClockPropagation.cc:416] ideal clock propagation end
+I20250912 11:44:26.482161  8886 StaCheck.cc:129] found loop fwd start
+I20250912 11:44:26.505045  8886 StaCheck.cc:148] found loop fwd end
+I20250912 11:44:26.505142  8886 StaCheck.cc:150] found loop bwd start
+I20250912 11:44:26.526769  8886 StaCheck.cc:172] found loop bwd end
+I20250912 11:44:26.526880  8886 StaSlewPropagation.cc:266] slew propagation start
+E20250912 11:44:26.534428  8985 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.534590  8985 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.534626  8985 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.534931  8972 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.534960  8984 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.534982  8972 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.535004  8984 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.535022  8972 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.535043  8984 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+E20250912 11:44:26.538341  8985 Lib.cc:174] Warning: val outside table ranges:  val = 0; min_val = 0.00117378; max_val = 0.198535
+I20250912 11:44:26.831534  8886 StaSlewPropagation.cc:305] slew propagation end
+I20250912 11:44:26.831622  8886 StaDelayPropagation.cc:268] delay propagation start
+I20250912 11:44:27.061916  8886 StaDelayPropagation.cc:309] delay propagation end
+I20250912 11:44:27.062006  8886 StaClockPropagation.cc:322] propagated(kNormal) clock propagation start
+I20250912 11:44:27.062042  8886 StaClockPropagation.cc:418] propagated(kNormal) clock propagation end
+I20250912 11:44:27.062067  8886 StaApplySdc.cc:694] apply sdc start
+I20250912 11:44:27.062091  8886 StaApplySdc.cc:725] apply sdc end
+I20250912 11:44:27.062116  8886 StaClockPropagation.cc:324] propagated(kGenerated) clock propagation start
+I20250912 11:44:27.062139  8886 StaClockPropagation.cc:420] propagated(kGenerated) clock propagation end
+I20250912 11:44:27.062163  8886 StaApplySdc.cc:694] apply sdc start
+I20250912 11:44:27.062314  8886 StaApplySdc.cc:725] apply sdc end
+I20250912 11:44:27.081789  8886 StaBuildPropTag.cc:325] build propagation tag start
+I20250912 11:44:27.081910  8886 StaDataPropagation.cc:589] data fwd propagation start
+I20250912 11:44:27.088038  9049 StaDataPropagation.cc:529] Thread 133567438779968 date fwd propagate found start vertex.ifbiu/_819_:CK
+I20250912 11:44:27.088295  9049 StaDataPropagation.cc:529] Thread 133567438779968 date fwd propagate found start vertex.ifbiu/_818_:CK
+I20250912 11:44:27.088374  9049 StaDataPropagation.cc:529] Thread 133567438779968 date fwd propagate found start vertex.ifbiu/_821_:CK
+I20250912 11:44:27.088449  9049 StaDataPropagation.cc:529] Thread 133567438779968 date fwd propagate found start vertex.ifbiu/_820_:CK
+I20250912 11:44:27.088544  9049 StaDataPropagation.cc:529] Thread 133567438779968 date fwd propagate found start vertex.ifbiu/_815_:CK
+I20250912 11:44:27.089488  9049 StaDataPropagation.cc:529] Thread 133567438779968 date fwd propagate found start vertex.ifbiu/_814_:CK
+I20250912 11:44:27.089885  9043 StaDataPropagation.cc:529] Thread 133567522707008 date fwd propagate found start vertex.lsbiu/_2073_:CK
+I20250912 11:44:27.089931  9044 StaDataPropagation.cc:529] Thread 133567514314304 date fwd propagate found start vertex.lsbiu/_2074_:CK
+I20250912 11:44:27.090041  9045 StaDataPropagation.cc:529] Thread 133567505921600 date fwd propagate found start vertex.lsbiu/_2075_:CK
+I20250912 11:44:27.090133  9046 StaDataPropagation.cc:529] Thread 133567463958080 date fwd propagate found start vertex.lsbiu/_2076_:CK
+I20250912 11:44:27.355315  8886 StaDataPropagation.cc:632] data fwd propagation end
+I20250912 11:44:27.355403  8886 StaDataPropagation.cc:589] data fwd propagation start
+I20250912 11:44:27.614275  8886 StaDataPropagation.cc:632] data fwd propagation end
+I20250912 11:44:27.614363  8886 StaAnalyze.cc:539] analyze timing path start
+E20250912 11:44:27.614403  8886 StaAnalyze.cc:324] The output port io_master_araddr[24] is not constrained
+E20250912 11:44:27.614434  8886 StaAnalyze.cc:324] The output port io_master_araddr[24] is not constrained
+E20250912 11:44:27.614459  8886 StaAnalyze.cc:324] The output port io_master_araddr[25] is not constrained
+E20250912 11:44:27.614482  8886 StaAnalyze.cc:324] The output port io_master_araddr[25] is not constrained
+E20250912 11:44:27.614506  8886 StaAnalyze.cc:324] The output port io_master_araddr[26] is not constrained
+E20250912 11:44:27.614530  8886 StaAnalyze.cc:324] The output port io_master_araddr[26] is not constrained
+E20250912 11:44:27.614555  8886 StaAnalyze.cc:324] The output port io_master_araddr[27] is not constrained
+E20250912 11:44:27.614579  8886 StaAnalyze.cc:324] The output port io_master_araddr[27] is not constrained
+E20250912 11:44:27.614603  8886 StaAnalyze.cc:324] The output port io_master_araddr[28] is not constrained
+E20250912 11:44:27.614627  8886 StaAnalyze.cc:324] The output port io_master_araddr[28] is not constrained
+E20250912 11:44:27.634737  8886 StaAnalyze.cc:302] end vertex idu/_1783_:D has no clock data.
+E20250912 11:44:27.634835  8886 StaAnalyze.cc:302] end vertex idu/_1783_:D has no clock data.
+E20250912 11:44:27.634864  8886 StaAnalyze.cc:302] end vertex idu/_1784_:D has no clock data.
+E20250912 11:44:27.634888  8886 StaAnalyze.cc:302] end vertex idu/_1784_:D has no clock data.
+E20250912 11:44:27.634912  8886 StaAnalyze.cc:302] end vertex idu/_1785_:D has no clock data.
+E20250912 11:44:27.634936  8886 StaAnalyze.cc:302] end vertex idu/_1785_:D has no clock data.
+E20250912 11:44:27.634964  8886 StaAnalyze.cc:302] end vertex idu/_1786_:D has no clock data.
+E20250912 11:44:27.634990  8886 StaAnalyze.cc:302] end vertex idu/_1786_:D has no clock data.
+E20250912 11:44:27.635013  8886 StaAnalyze.cc:302] end vertex idu/_1787_:D has no clock data.
+E20250912 11:44:27.635037  8886 StaAnalyze.cc:302] end vertex idu/_1787_:D has no clock data.
+E20250912 11:44:27.635061  8886 StaAnalyze.cc:302] end vertex idu/_1788_:D has no clock data.
+E20250912 11:44:27.635084  8886 StaAnalyze.cc:302] end vertex idu/_1788_:D has no clock data.
+E20250912 11:44:27.635108  8886 StaAnalyze.cc:302] end vertex idu/_1789_:D has no clock data.
+E20250912 11:44:27.635131  8886 StaAnalyze.cc:302] end vertex idu/_1789_:D has no clock data.
+E20250912 11:44:27.635155  8886 StaAnalyze.cc:302] end vertex idu/_1790_:D has no clock data.
+E20250912 11:44:27.635214  8886 StaAnalyze.cc:302] end vertex idu/_1790_:D has no clock data.
+E20250912 11:44:27.635239  8886 StaAnalyze.cc:302] end vertex idu/_1791_:D has no clock data.
+E20250912 11:44:27.635262  8886 StaAnalyze.cc:302] end vertex idu/_1791_:D has no clock data.
+E20250912 11:44:27.635286  8886 StaAnalyze.cc:302] end vertex idu/_1792_:D has no clock data.
+E20250912 11:44:27.635310  8886 StaAnalyze.cc:302] end vertex idu/_1792_:D has no clock data.
+E20250912 11:44:27.635334  8886 StaAnalyze.cc:302] end vertex idu/_1793_:D has no clock data.
+E20250912 11:44:27.635358  8886 StaAnalyze.cc:302] end vertex idu/_1793_:D has no clock data.
+E20250912 11:44:27.635452  8886 StaAnalyze.cc:302] end vertex idu/_1794_:D has no clock data.
+E20250912 11:44:27.635475  8886 StaAnalyze.cc:302] end vertex idu/_1794_:D has no clock data.
+E20250912 11:44:27.635499  8886 StaAnalyze.cc:302] end vertex idu/_1795_:D has no clock data.
+E20250912 11:44:27.635524  8886 StaAnalyze.cc:302] end vertex idu/_1795_:D has no clock data.
+E20250912 11:44:27.635546  8886 StaAnalyze.cc:302] end vertex idu/_1796_:D has no clock data.
+E20250912 11:44:27.635571  8886 StaAnalyze.cc:302] end vertex idu/_1796_:D has no clock data.
+E20250912 11:44:27.635593  8886 StaAnalyze.cc:302] end vertex idu/_1797_:D has no clock data.
+E20250912 11:44:27.635617  8886 StaAnalyze.cc:302] end vertex idu/_1797_:D has no clock data.
+E20250912 11:44:27.635641  8886 StaAnalyze.cc:302] end vertex idu/_1798_:D has no clock data.
+E20250912 11:44:27.635664  8886 StaAnalyze.cc:302] end vertex idu/_1798_:D has no clock data.
+E20250912 11:44:27.635689  8886 StaAnalyze.cc:302] end vertex idu/_1799_:D has no clock data.
+E20250912 11:44:27.635711  8886 StaAnalyze.cc:302] end vertex idu/_1799_:D has no clock data.
+E20250912 11:44:27.635735  8886 StaAnalyze.cc:302] end vertex idu/_1800_:D has no clock data.
+E20250912 11:44:27.635758  8886 StaAnalyze.cc:302] end vertex idu/_1800_:D has no clock data.
+E20250912 11:44:27.635782  8886 StaAnalyze.cc:302] end vertex idu/_1801_:D has no clock data.
+E20250912 11:44:27.635804  8886 StaAnalyze.cc:302] end vertex idu/_1801_:D has no clock data.
+E20250912 11:44:27.635828  8886 StaAnalyze.cc:302] end vertex idu/_1802_:D has no clock data.
+E20250912 11:44:27.635850  8886 StaAnalyze.cc:302] end vertex idu/_1802_:D has no clock data.
+E20250912 11:44:27.635874  8886 StaAnalyze.cc:302] end vertex idu/_1803_:D has no clock data.
+E20250912 11:44:27.635896  8886 StaAnalyze.cc:302] end vertex idu/_1803_:D has no clock data.
+E20250912 11:44:27.635919  8886 StaAnalyze.cc:302] end vertex idu/_1804_:D has no clock data.
+E20250912 11:44:27.635942  8886 StaAnalyze.cc:302] end vertex idu/_1804_:D has no clock data.
+E20250912 11:44:27.635965  8886 StaAnalyze.cc:302] end vertex idu/_1805_:D has no clock data.
+E20250912 11:44:27.635989  8886 StaAnalyze.cc:302] end vertex idu/_1805_:D has no clock data.
+E20250912 11:44:27.636013  8886 StaAnalyze.cc:302] end vertex idu/_1806_:D has no clock data.
+E20250912 11:44:27.636035  8886 StaAnalyze.cc:302] end vertex idu/_1806_:D has no clock data.
+E20250912 11:44:27.636059  8886 StaAnalyze.cc:302] end vertex idu/_1807_:D has no clock data.
+E20250912 11:44:27.636083  8886 StaAnalyze.cc:302] end vertex idu/_1807_:D has no clock data.
+E20250912 11:44:27.636107  8886 StaAnalyze.cc:302] end vertex idu/_1808_:D has no clock data.
+E20250912 11:44:27.636130  8886 StaAnalyze.cc:302] end vertex idu/_1808_:D has no clock data.
+E20250912 11:44:27.636154  8886 StaAnalyze.cc:302] end vertex idu/_1809_:D has no clock data.
+E20250912 11:44:27.636211  8886 StaAnalyze.cc:302] end vertex idu/_1809_:D has no clock data.
+E20250912 11:44:27.636236  8886 StaAnalyze.cc:302] end vertex idu/_1810_:D has no clock data.
+E20250912 11:44:27.636260  8886 StaAnalyze.cc:302] end vertex idu/_1810_:D has no clock data.
+E20250912 11:44:27.636313  8886 StaAnalyze.cc:302] end vertex idu/_1811_:D has no clock data.
+E20250912 11:44:27.636355  8886 StaAnalyze.cc:302] end vertex idu/_1811_:D has no clock data.
+E20250912 11:44:27.636381  8886 StaAnalyze.cc:302] end vertex idu/_1812_:D has no clock data.
+E20250912 11:44:27.636405  8886 StaAnalyze.cc:302] end vertex idu/_1812_:D has no clock data.
+E20250912 11:44:27.636430  8886 StaAnalyze.cc:302] end vertex idu/_1813_:D has no clock data.
+E20250912 11:44:27.636454  8886 StaAnalyze.cc:302] end vertex idu/_1813_:D has no clock data.
+E20250912 11:44:27.636479  8886 StaAnalyze.cc:302] end vertex idu/_1814_:D has no clock data.
+E20250912 11:44:27.636503  8886 StaAnalyze.cc:302] end vertex idu/_1814_:D has no clock data.
+E20250912 11:44:27.642015  8886 StaAnalyze.cc:302] end vertex ifu/_1013_:D has no clock data.
+E20250912 11:44:27.642118  8886 StaAnalyze.cc:302] end vertex ifu/_1013_:D has no clock data.
+E20250912 11:44:27.642148  8886 StaAnalyze.cc:302] end vertex ifu/_1014_:D has no clock data.
+E20250912 11:44:27.642171  8886 StaAnalyze.cc:302] end vertex ifu/_1014_:D has no clock data.
+E20250912 11:44:27.642239  8886 StaAnalyze.cc:302] end vertex ifu/_1015_:D has no clock data.
+E20250912 11:44:27.642262  8886 StaAnalyze.cc:302] end vertex ifu/_1015_:D has no clock data.
+E20250912 11:44:27.642287  8886 StaAnalyze.cc:302] end vertex ifu/_1016_:D has no clock data.
+E20250912 11:44:27.642310  8886 StaAnalyze.cc:302] end vertex ifu/_1016_:D has no clock data.
+E20250912 11:44:27.642334  8886 StaAnalyze.cc:302] end vertex ifu/_1017_:D has no clock data.
+E20250912 11:44:27.642359  8886 StaAnalyze.cc:302] end vertex ifu/_1017_:D has no clock data.
+E20250912 11:44:27.642382  8886 StaAnalyze.cc:302] end vertex ifu/_1018_:D has no clock data.
+E20250912 11:44:27.642405  8886 StaAnalyze.cc:302] end vertex ifu/_1018_:D has no clock data.
+E20250912 11:44:27.642429  8886 StaAnalyze.cc:302] end vertex ifu/_1019_:D has no clock data.
+E20250912 11:44:27.642453  8886 StaAnalyze.cc:302] end vertex ifu/_1019_:D has no clock data.
+E20250912 11:44:27.642477  8886 StaAnalyze.cc:302] end vertex ifu/_1020_:D has no clock data.
+E20250912 11:44:27.642500  8886 StaAnalyze.cc:302] end vertex ifu/_1020_:D has no clock data.
+E20250912 11:44:27.642524  8886 StaAnalyze.cc:302] end vertex ifu/_1021_:D has no clock data.
+E20250912 11:44:27.642620  8886 StaAnalyze.cc:302] end vertex ifu/_1021_:D has no clock data.
+E20250912 11:44:27.642645  8886 StaAnalyze.cc:302] end vertex ifu/_1022_:D has no clock data.
+E20250912 11:44:27.642668  8886 StaAnalyze.cc:302] end vertex ifu/_1022_:D has no clock data.
+E20250912 11:44:27.642692  8886 StaAnalyze.cc:302] end vertex ifu/_1023_:D has no clock data.
+E20250912 11:44:27.642716  8886 StaAnalyze.cc:302] end vertex ifu/_1023_:D has no clock data.
+E20250912 11:44:27.642740  8886 StaAnalyze.cc:302] end vertex ifu/_1024_:D has no clock data.
+E20250912 11:44:27.642763  8886 StaAnalyze.cc:302] end vertex ifu/_1024_:D has no clock data.
+E20250912 11:44:27.642787  8886 StaAnalyze.cc:302] end vertex ifu/_1025_:D has no clock data.
+E20250912 11:44:27.642812  8886 StaAnalyze.cc:302] end vertex ifu/_1025_:D has no clock data.
+E20250912 11:44:27.642835  8886 StaAnalyze.cc:302] end vertex ifu/_1026_:D has no clock data.
+E20250912 11:44:27.642858  8886 StaAnalyze.cc:302] end vertex ifu/_1026_:D has no clock data.
+E20250912 11:44:27.642881  8886 StaAnalyze.cc:302] end vertex ifu/_1027_:D has no clock data.
+E20250912 11:44:27.642903  8886 StaAnalyze.cc:302] end vertex ifu/_1027_:D has no clock data.
+E20250912 11:44:27.642927  8886 StaAnalyze.cc:302] end vertex ifu/_1028_:D has no clock data.
+E20250912 11:44:27.642951  8886 StaAnalyze.cc:302] end vertex ifu/_1028_:D has no clock data.
+E20250912 11:44:27.642973  8886 StaAnalyze.cc:302] end vertex ifu/_1029_:D has no clock data.
+E20250912 11:44:27.642997  8886 StaAnalyze.cc:302] end vertex ifu/_1029_:D has no clock data.
+E20250912 11:44:27.643296  8886 StaAnalyze.cc:302] end vertex ifu/_1030_:D has no clock data.
+E20250912 11:44:27.643546  8886 StaAnalyze.cc:302] end vertex ifu/_1030_:D has no clock data.
+E20250912 11:44:27.643584  8886 StaAnalyze.cc:302] end vertex ifu/_1031_:D has no clock data.
+E20250912 11:44:27.643606  8886 StaAnalyze.cc:302] end vertex ifu/_1031_:D has no clock data.
+E20250912 11:44:27.643630  8886 StaAnalyze.cc:302] end vertex ifu/_1032_:D has no clock data.
+E20250912 11:44:27.643653  8886 StaAnalyze.cc:302] end vertex ifu/_1032_:D has no clock data.
+E20250912 11:44:27.643793  8886 StaAnalyze.cc:302] end vertex ifu/_1033_:D has no clock data.
+E20250912 11:44:27.643821  8886 StaAnalyze.cc:302] end vertex ifu/_1033_:D has no clock data.
+E20250912 11:44:27.643844  8886 StaAnalyze.cc:302] end vertex ifu/_1034_:D has no clock data.
+E20250912 11:44:27.643867  8886 StaAnalyze.cc:302] end vertex ifu/_1034_:D has no clock data.
+E20250912 11:44:27.643890  8886 StaAnalyze.cc:302] end vertex ifu/_1035_:D has no clock data.
+E20250912 11:44:27.643913  8886 StaAnalyze.cc:302] end vertex ifu/_1035_:D has no clock data.
+E20250912 11:44:27.643936  8886 StaAnalyze.cc:302] end vertex ifu/_1036_:D has no clock data.
+E20250912 11:44:27.643959  8886 StaAnalyze.cc:302] end vertex ifu/_1036_:D has no clock data.
+E20250912 11:44:27.643982  8886 StaAnalyze.cc:302] end vertex ifu/_1037_:D has no clock data.
+E20250912 11:44:27.644006  8886 StaAnalyze.cc:302] end vertex ifu/_1037_:D has no clock data.
+E20250912 11:44:27.644028  8886 StaAnalyze.cc:302] end vertex ifu/_1038_:D has no clock data.
+E20250912 11:44:27.644052  8886 StaAnalyze.cc:302] end vertex ifu/_1038_:D has no clock data.
+E20250912 11:44:27.644074  8886 StaAnalyze.cc:302] end vertex ifu/_1039_:D has no clock data.
+E20250912 11:44:27.644097  8886 StaAnalyze.cc:302] end vertex ifu/_1039_:D has no clock data.
+E20250912 11:44:27.644121  8886 StaAnalyze.cc:302] end vertex ifu/_1040_:D has no clock data.
+E20250912 11:44:27.644145  8886 StaAnalyze.cc:302] end vertex ifu/_1040_:D has no clock data.
+E20250912 11:44:27.644167  8886 StaAnalyze.cc:302] end vertex ifu/_1041_:D has no clock data.
+E20250912 11:44:27.644246  8886 StaAnalyze.cc:302] end vertex ifu/_1041_:D has no clock data.
+E20250912 11:44:27.644272  8886 StaAnalyze.cc:302] end vertex ifu/_1042_:D has no clock data.
+E20250912 11:44:27.644295  8886 StaAnalyze.cc:302] end vertex ifu/_1042_:D has no clock data.
+E20250912 11:44:27.644320  8886 StaAnalyze.cc:302] end vertex ifu/_1043_:D has no clock data.
+E20250912 11:44:27.644343  8886 StaAnalyze.cc:302] end vertex ifu/_1043_:D has no clock data.
+E20250912 11:44:27.644621  8886 StaAnalyze.cc:302] end vertex ifu/_1044_:D has no clock data.
+E20250912 11:44:27.644735  8886 StaAnalyze.cc:302] end vertex ifu/_1044_:D has no clock data.
+I20250912 11:44:27.693368  8886 StaAnalyze.cc:577] analyze timing path end
+I20250912 11:44:27.693459  8886 StaApplySdc.cc:694] apply sdc start
+I20250912 11:44:27.693490  8886 StaApplySdc.cc:725] apply sdc end
+I20250912 11:44:27.693516  8886 StaDataPropagation.cc:635] data bwd propagation start
+I20250912 11:44:27.699684  9083 StaDataPropagation.cc:171] Thread 133567480743488 data bwd propagate found end vertex.ifbiu/_757_:D
+I20250912 11:44:27.699683  9082 StaDataPropagation.cc:171] Thread 133567472350784 data bwd propagate found end vertex.ifbiu/_756_:D
+I20250912 11:44:27.699877  9083 StaDataPropagation.cc:171] Thread 133567480743488 data bwd propagate found end vertex.lsbiu/_2126_:D
+I20250912 11:44:27.699888  9084 StaDataPropagation.cc:171] Thread 133567489136192 data bwd propagate found end vertex.ifbiu/_758_:D
+I20250912 11:44:27.699942  9083 StaDataPropagation.cc:171] Thread 133567480743488 data bwd propagate found end vertex.clint/_663_:D
+I20250912 11:44:27.699985  9084 StaDataPropagation.cc:171] Thread 133567489136192 data bwd propagate found end vertex.lsbiu/_2127_:D
+I20250912 11:44:27.700011  9083 StaDataPropagation.cc:171] Thread 133567480743488 data bwd propagate found end vertex.ifbiu/_759_:D
+I20250912 11:44:27.700070  9083 StaDataPropagation.cc:171] Thread 133567480743488 data bwd propagate found end vertex.lsbiu/_2128_:D
+I20250912 11:44:27.700050  9084 StaDataPropagation.cc:171] Thread 133567489136192 data bwd propagate found end vertex.clint/_664_:D
+I20250912 11:44:27.699899  9082 StaDataPropagation.cc:171] Thread 133567472350784 data bwd propagate found end vertex.lsbiu/_2029_:D
+I20250912 11:44:27.768736  8886 StaDataPropagation.cc:670] data bwd propagation end
+I20250912 11:44:27.768819  8886 Sta.cc:2316] update timing end
+I20250912 11:44:27.770714  8886 Sta.cc:2410] start write sta report.
+I20250912 11:44:27.770768  8886 Sta.cc:2411] output sta report path: /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085_cpu-500MHz
+I20250912 11:44:27.777627  8886 StaReport.cc:188] report the clock group core_clock 3 timing paths.
+I20250912 11:44:27.784356  8886 StaReport.cc:188] report the clock group core_clock 3 timing paths.
+I20250912 11:44:27.790552  8886 StaReport.cc:188] report the clock group core_clock 1 timing paths.
+I20250912 11:44:27.793919  8886 StaReport.cc:188] report the clock group core_clock 3 timing paths.
+I20250912 11:44:27.797770  8886 StaReport.cc:188] report the clock group core_clock 3 timing paths.
+I20250912 11:44:27.804968  8886 StaReport.cc:188] report the clock group core_clock 1 timing paths.
+I20250912 11:44:27.805059  8886 Sta.cc:1390] 
++---------------+-------------+------------+------------+---------------+-------+-------+-----------+
+| Endpoint      | Clock Group | Delay Type | Path Delay | Path Required | CPPR  | Slack | Freq(MHz) |
++---------------+-------------+------------+------------+---------------+-------+-------+-----------+
+| exu/_6838_:D  | core_clock  | max        | 1.248f     | 1.961         | 0.000 | 0.713 | 776.850   |
+| exu/_6838_:D  | core_clock  | max        | 1.240r     | 1.967         | 0.000 | 0.727 | 785.797   |
+| lsu/_2759_:D  | core_clock  | max        | 1.135f     | 1.961         | 0.000 | 0.826 | 851.731   |
+| clint/_702_:D | core_clock  | min        | 0.066r     | 0.006         | 0.000 | 0.060 | NA        |
+| clint/_702_:D | core_clock  | min        | 0.065f     | 0.003         | 0.000 | 0.062 | NA        |
+| wbu/_2736_:D  | core_clock  | min        | 0.087f     | 0.003         | 0.000 | 0.084 | NA        |
++---------------+-------------+------------+------------+---------------+-------+-------+-----------+
+I20250912 11:44:27.805233  8886 Sta.cc:1391] 
++------------+------------+-------+
+| Clock      | Delay Type | TNS   |
++------------+------------+-------+
+| core_clock | max        | 0.000 |
+| core_clock | min        | 0.000 |
++------------+------------+-------+
+I20250912 11:44:28.099493  8886 NetlistWriter.cc:52] start write verilog file /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085_cpu-500MHz/ysyx_25030085_cpu.v
+I20250912 11:44:28.239931  8886 NetlistWriter.cc:71] finish write verilog file /home/zzy/ysyx-workbench/yosys-sta/result/ysyx_25030085_cpu-500MHz/ysyx_25030085_cpu.v
+I20250912 11:44:28.240061  8886 Sta.cc:2495] The timing engine run success.

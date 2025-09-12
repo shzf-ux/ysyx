@@ -5,53 +5,98 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-int printf(const char *fmt, ...) {
+int printf(const char *fmt, ...)
+{
   char sprint_buf[1024];
-  va_list arg;        // 遍历可变参数列表
-  va_start(arg, fmt); // 第二个参数为最后一个固定参数名字
+  va_list arg;
+  va_start(arg, fmt);
   int len = vsprintf(sprint_buf, fmt, arg);
   va_end(arg);
-  putstr(sprint_buf);//不断调用putch
-  return len; //  返回值是写入的字符个数
+  putstr(sprint_buf);
+  return len;
 }
-static void num_to_str(char *buf, int *index, int num)
+
+static void num_to_str(char *buf, int *index, int num, int width, char pad)
 {
+  char temp[32];
+  int i = 0;
+  int is_negative = 0;
+
   if (num < 0)
   {
-    buf[(*index)++] = '-';
+    is_negative = 1;
     num = -num;
   }
 
-  char temp[32];
-  int i = 0;
-  do
+  // 处理0的特殊情况
+  if (num == 0)
   {
-    temp[i++] = '0' + (num % 10);
-    num /= 10;
-  } while (num > 0);
+    temp[i++] = '0';
+  }
+  else
+  {
+    while (num > 0)
+    {
+      temp[i++] = '0' + (num % 10);
+      num /= 10;
+    }
+  }
 
+  // 计算需要的填充字符数
+  int total_digits = i + (is_negative ? 1 : 0);
+  int padding = width > total_digits ? width - total_digits : 0;
+
+  // 添加填充字符
+  while (padding-- > 0)
+  {
+    buf[(*index)++] = pad;
+  }
+
+  // 添加负号
+  if (is_negative)
+  {
+    buf[(*index)++] = '-';
+  }
+
+  // 添加数字
   while (--i >= 0)
   {
     buf[(*index)++] = temp[i];
   }
 }
 
-// 辅助函数：将十六进制数转换为字符串
-static void hex_to_str(char *buf, int *index, uint32_t num, int uppercase)
+static void hex_to_str(char *buf, int *index, uint32_t num, int uppercase, int width)
 {
   const char *digits = uppercase ? "0123456789ABCDEF" : "0123456789abcdef";
-  buf[(*index)++] = '0';
-  buf[(*index)++] = uppercase ? 'X' : 'x';
+  char temp[32];
+  int i = 0;
 
-  int shift = 28;
-  while (shift >= 0)
+  if (num == 0)
   {
-    char c = digits[(num >> shift) & 0xF];
-    if (c != '0' || shift == 0)
-    { // 跳过前导零
-      buf[(*index)++] = c;
+    temp[i++] = '0';
+  }
+  else
+  {
+    while (num > 0)
+    {
+      temp[i++] = digits[num & 0xF];
+      num >>= 4;
     }
-    shift -= 4;
+  }
+
+  // 计算需要的填充字符数
+  int padding = width > i ? width - i : 0;
+
+  // 添加填充字符
+  while (padding-- > 0)
+  {
+    buf[(*index)++] = '0';
+  }
+
+  // 添加数字
+  while (--i >= 0)
+  {
+    buf[(*index)++] = temp[i];
   }
 }
 
@@ -63,12 +108,38 @@ int vsprintf(char *out, const char *fmt, va_list ap)
     if (*fmt == '%')
     {
       fmt++; // 跳过%
+
+      // 解析格式修饰符
+      int width = 0;
+      char pad = ' ';
+
+      // 检查是否有宽度指定
+      if (*fmt >= '0' && *fmt <= '9')
+      {
+        // 解析宽度
+        width = 0;
+        while (*fmt >= '0' && *fmt <= '9')
+        {
+          width = width * 10 + (*fmt - '0');
+          fmt++;
+        }
+      }
+
+      // 检查是否有 'l' 修饰符（long 类型）
+      int is_long = 0;
+      if (*fmt == 'l')
+      {
+        is_long = 1;
+        fmt++;
+      }
+
       switch (*fmt)
       {
       case 'd':
+      case 'i':
       { // 十进制整数
-        int num = va_arg(ap, int);
-        num_to_str(out, &index, num);
+        long num = is_long ? va_arg(ap, long) : va_arg(ap, int);
+        num_to_str(out, &index, num, width, pad);
         break;
       }
       case 'c':
@@ -90,6 +161,18 @@ int vsprintf(char *out, const char *fmt, va_list ap)
         }
         else
         {
+          int len = 0;
+          const char *p = s;
+          while (*p++)
+            len++;
+
+          // 添加前导空格以满足宽度要求
+          int padding = width > len ? width - len : 0;
+          while (padding-- > 0)
+          {
+            out[index++] = ' ';
+          }
+
           while (*s)
           {
             out[index++] = *s++;
@@ -100,8 +183,10 @@ int vsprintf(char *out, const char *fmt, va_list ap)
       case 'x': // 小写十六进制
       case 'X':
       { // 大写十六进制
-        uint32_t num = va_arg(ap, uint32_t);
-        hex_to_str(out, &index, num, (*fmt == 'X'));
+        uint32_t num = is_long ? va_arg(ap, unsigned long) : va_arg(ap, uint32_t);
+        out[index++] = '0';
+        out[index++] = (*fmt == 'X') ? 'X' : 'x';
+        hex_to_str(out, &index, num, (*fmt == 'X'), width);
         break;
       }
       case 'p':
@@ -109,7 +194,7 @@ int vsprintf(char *out, const char *fmt, va_list ap)
         void *ptr = va_arg(ap, void *);
         out[index++] = '0';
         out[index++] = 'x';
-        hex_to_str(out, &index, (uintptr_t)ptr, 0);
+        hex_to_str(out, &index, (uintptr_t)ptr, 0, 0);
         break;
       }
       case '%':
@@ -134,22 +219,22 @@ int vsprintf(char *out, const char *fmt, va_list ap)
   out[index] = '\0'; // 终止符
   return index;
 }
-
-int sprintf(char *out, const char *fmt, ...) // sprintf(buffer, "Name: %s, Age: %d, Symbol, "Alice", 25, 'A');
-{                                              
-  // panic("Not implemented");
-  va_list arg;        // 遍历可变参数列表
-  va_start(arg, fmt); // 第二个参数为最后一个固定参数名字
+int sprintf(char *out, const char *fmt, ...)
+{
+  va_list arg;
+  va_start(arg, fmt);
   int len = vsprintf(out, fmt, arg);
   va_end(arg);
-  return len; //  返回值是写入的字符个数
+  return len;
 }
 
-int snprintf(char *out, size_t n, const char *fmt, ...) {
+int snprintf(char *out, size_t n, const char *fmt, ...)
+{
   panic("Not implemented");
 }
 
-int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
+int vsnprintf(char *out, size_t n, const char *fmt, va_list ap)
+{
   panic("Not implemented");
 }
 

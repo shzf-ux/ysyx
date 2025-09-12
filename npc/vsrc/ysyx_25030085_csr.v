@@ -28,8 +28,8 @@ assign marchid  = 32'd25030085;
 always @(*) begin
     if(csr_wen)begin
     case (csr_addr)
-        12'hc00: csr_rdata = mcycle ;
-        12'hc80: csr_rdata = mcycleh;
+        12'hb00: csr_rdata = mcycle ;
+        12'hb80: csr_rdata = mcycleh;
         12'hf11: csr_rdata = mvendorid;
         12'hf12: csr_rdata = marchid ;
         default: csr_rdata = 32'h0;

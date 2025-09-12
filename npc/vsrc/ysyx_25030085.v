@@ -85,7 +85,7 @@ wire [4:0] ex_mem_rd;    // 传递目标寄存器地址
 wire [31:0] ex_mem_alu;  // ALU运算结果（用于访存地址/写回数据）
 wire [31:0] ex_mem_rs2;  // 源寄存器2数据（用于存储指令的写数据）
 wire [31:0] ex_mem_npc;  // 下一条PC（正常/分支跳转后）
-wire [31:0] ex_mem_csr;  // CSR寄存器数据（若涉及CSR指令）
+wire [31:0] csr_rdata;
 
 // -------------------------- MEM-WB 阶段寄存器 --------------------------
 wire mem_wb_valid;       // MEM阶段输出有效
@@ -192,7 +192,7 @@ ysyx_25030085_ex ex(
     .out_Alu_Result  (ex_mem_alu),
     .out_rs2_data    (ex_mem_rs2),
     .out_ctrl        (ex_mem_ctrl),
-    .csr_data        (ex_mem_csr),
+    .csr_data        (csr_rdata),
     .rd_out          (ex_mem_rd),
     .imm_out         (ex_mem_imm),
     .pc_out          (ex_mem_pc),
@@ -208,6 +208,7 @@ ysyx_25030085_lsu lsu(
     .in_valid       (ex_mem_valid),
     .in_ctrl        (ex_mem_ctrl),
     .in_rd          (ex_mem_rd),
+
     .in_imm         (ex_mem_imm),
     .in_npc         (ex_mem_npc),
     .in_pc          (ex_mem_pc),
@@ -255,7 +256,7 @@ ysyx_25030085_wb wb(
     .in_pc          (mem_wb_pc),
     .in_imm         (mem_wb_imm),
     .in_ctrl        (mem_wb_ctrl),
-    .in_csr_rdata   (mem_wb_csr),
+    .in_csr_rdata   (csr_rdata),
     .rd_addr        (mem_wb_rd),
     .in_ready       (wb_mem_ready),  // 反馈给MEM阶段：WB准备接收
 

@@ -46,7 +46,7 @@ VERILATOR_FLAGS += --cc --exe --build --trace \
 NEMU_LIB_NAME := /home/zzy/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
 NPCFLAGS += -d $(NEMU_LIB_NAME) 
 ARGS += $(NPCFLAGS)
-ARGS +=/home/zzy/ysyx-workbench/ysyxSoC/ready-to-run/D-stage/hello-minirv-ysyxsoc.bin
+ARGS +=/home/zzy/ysyx-workbench/ysyxSoC/ready-to-run/D-stage/new.bin
 IMG :=  # 仿真镜像路径（可在运行时指定）
 
 # 创建输出目录
@@ -65,15 +65,29 @@ wave:
 	@gtkwave waveform.vcd &
 
 
-
+ALL:=dummy
+mainargs:=
 run: compile
+	rm -f $(NPC_HOME)/../ysyxSoC/ready-to-run/D-stage/new.bin
+ifeq ($(ALL), hello)
+	cd ../am-kernels/kernels/hello && make ARCH=minirv-npc ALL=$(ALL)
+	cd $(NPC_HOME)/../ysyxSoC/ready-to-run/D-stage &&  bash gen.sh $(NPC_HOME)/../am-kernels/kernels/hello/build/$(ALL)-minirv-npc.elf
+else ifeq ($(ALL), clock)
+	cd ../am-kernels/tests/am-tests && make ARCH=minirv-npc ALL=$(ALL) mainargs=$(mainargs)
+	cd $(NPC_HOME)/../ysyxSoC/ready-to-run/D-stage &&  bash gen.sh $(NPC_HOME)/../am-kernels/tests/am-tests/build/amtest-minirv-npc.elf
+else
+	cd ../am-kernels/tests/cpu-tests && make ARCH=minirv-npc ALL=$(ALL)
+	cd $(NPC_HOME)/../ysyxSoC/ready-to-run/D-stage &&  bash gen.sh $(NPC_HOME)/../am-kernels/tests/cpu-tests/build/$(ALL)-minirv-npc.elf
+endif
 	@echo $(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
 	$(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
 
 
-
 clean:
-	rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR)
+	@rm -rf ../abstract-machine/build
+	@rm -rf ../am-kernels/tests/cpu-tests/build
+	@rm -rf ../am-kernels/tests/am-tests/build
 
 # 配置菜单（Kconfig相关，保持不变）
 CONF   := $(NPC_HOME)/$(CSRC_DIR)/tools/Kconfig/conf
