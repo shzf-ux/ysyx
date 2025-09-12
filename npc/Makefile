@@ -94,12 +94,15 @@ run: $(BIN)
 syn: VERILOG_FLAGS += -DSYNTHESIS
 syn:
 	@echo "Synthesis NPC"
-	cd $(NPC_HOME)/../yosys-sta && make syn DESIGN=$(SYN_TOP) \
+	@cd $(NPC_HOME)/../yosys-sta && make sta DESIGN=$(SYN_TOP) \
+	SDC_FILE=$(NPC_HOME)/top.sdc		\
 	RTL_FILES="$(shell find $(NPC_HOME)/vsrc -name "*.v")" \
 	INCLUDE_PATH=$(NPC_HOME)/vsrc/include
+	@cd $(NPC_HOME)
+
+clean-syn:
+	cd $(NPC_HOME)/../yosys-sta && make clean
 	cd $(NPC_HOME)
-
-
 
 
 clean:
