@@ -1,3 +1,15 @@
+`ifndef SYNTHESIS
+import "DPI-C" function void dpi_send_signals(
+    input int pc,       // 32位信号用 [31:0] 表示
+    input int inst,     // 32位指令
+    input        valid,     // 单比特用 input 表示（默认reg类型）
+    input        ready,
+    input        done
+);
+import "DPI-C" function void ebreak_instruction (input int inst) ;
+import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
+import "DPI-C"  function void info_register  (input int value,input bit en_display); 
+`endif
 module ysyx_25030085 (
     input         clock,
     input         reset,
@@ -17,7 +29,7 @@ module ysyx_25030085 (
     input [31:0]  io_lsu_rdata
 );
 
-
+`ifndef SYNTHESIS
     reg [31:0] top_pc;
     reg [31:0] top_inst;
     reg  top_valid;
@@ -47,25 +59,21 @@ always @(*) begin
             inst_done  
     );
 end
+`endif
 
 
-// ============================================================================
-// 1. 全局参数与类型定义（解决寄存器文件数据宽度匹配问题）
-// ============================================================================
 localparam DATA_WIDTH = 32;  // RISC-V 32位架构
 localparam REG_ADDR_WIDTH = 5;  // 32个通用寄存器（x0-x31）
 
 
-// ============================================================================
-// 2. 流水线寄存器：连接各阶段的中间信号（IF-ID → ID-EX → EX-MEM → MEM-WB）
-// ============================================================================
-// -------------------------- IF-ID 阶段寄存器 --------------------------
+
+
 wire if_id_valid;  // IF阶段输出有效
 wire id_if_ready;  // ID阶段准备接收
 wire [31:0] if_id_inst;  // IF阶段取出的指令
 wire [31:0] if_id_pc;    // IF阶段的程序计数器
 
-// -------------------------- ID-EX 阶段寄存器 --------------------------
+
 wire id_ex_valid;        // ID阶段输出有效
 wire ex_id_ready;        // EX阶段准备接收
 wire [31:0] id_ex_pc;    // 传递PC（用于分支计算、AUIPC等）

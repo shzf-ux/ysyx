@@ -30,7 +30,7 @@ module ysyx_25030085_lsu (//数据存储器
 
 
     output reg                  lsu_reqValid     ,        // 请求信号
-    output reg                  lsu_wen     ,        // 写使能
+    output                   lsu_wen     ,        // 写使能
 
     output reg [31:0]           lsu_addr    ,       // 地址输出
     output reg [31:0]           lsu_wdata   ,      // 写数据输出

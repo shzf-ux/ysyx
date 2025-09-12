@@ -13,7 +13,7 @@ module ysyx_25030085_ex(
 
     output              out_valid           ,
     output [31:0]       next_pc         ,
-    output reg [31:0]   out_Alu_Result      ,
+    output [31:0]   out_Alu_Result      ,
     output [31:0]       out_rs2_data        ,
     output [11:0]       out_ctrl            ,
     output [31:0]       csr_data            ,
@@ -76,7 +76,7 @@ module ysyx_25030085_ex(
     assign pc_out =pc;
     assign rd_out=rd;
 
-    reg  [31:0] B;
+    wire  [31:0] B;
     wire   ALUSrc  =ctrl[0];
     wire   csr_wen =ctrl[11];
     wire   Jump    =ctrl[9];

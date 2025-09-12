@@ -1,6 +1,5 @@
 
 
-import "DPI-C"  function void info_register  (input int value,input bit en_display); 
 module ysyx_25030085_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
   input clk,
   //写数据
@@ -26,6 +25,7 @@ module ysyx_25030085_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
 
 
 
+`ifndef SYNTHESIS
     reg is_info_register;
     reg is_en_display;
     integer i; 
@@ -44,6 +44,8 @@ module ysyx_25030085_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
         info_register(rf[i],is_en_display);
         end
     end
+`endif
+
 endmodule
 
 

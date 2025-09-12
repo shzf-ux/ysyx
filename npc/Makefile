@@ -4,6 +4,7 @@ VSRC_DIR   := vsrc
 CSRC_DIR   := csrc
 TARGET     := VysyxSoCFull  # 目标名称（Verilator生成，V+顶层模块名）
 TOP_MODULE := ysyxSoCFull   # 顶层模块名
+SYN_TOP = ysyx_25030085
 
 # 添加包含路径（保持不变）
 INCLUDE_DIR := $(abspath ./include)
@@ -81,6 +82,19 @@ else
 endif
 	@echo $(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
 	$(OBJ_DIR)/$(TARGET) $(ARGS) $(IMG)
+
+
+
+
+syn: VERILOG_FLAGS += -DSYNTHESIS
+syn:
+	@echo "Synthesis NPC"
+	@cd $(NPC_HOME)/../yosys-sta && make sta DESIGN=$(SYN_TOP) \
+	SDC_FILE=$(NPC_HOME)/top.sdc		\
+	RTL_FILES="$(shell find $(NPC_HOME)/vsrc -name "*.v")" \
+	INCLUDE_PATH=$(NPC_HOME)/vsrc/include
+	@cd $(NPC_HOME)
+
 
 
 clean:

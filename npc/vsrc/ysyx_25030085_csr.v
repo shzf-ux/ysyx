@@ -14,13 +14,12 @@ module ysyx_25030085_csr_regfile (
 );
 
 
-reg [31:0] mvendorid ;
-reg [31:0] marchid   ;
+
 reg [31:0] mcycle   ;
 reg [31:0] mcycleh  ;
 
-assign mvendorid=32'h79737978 ;
-assign marchid  = 32'd25030085;  
+localparam mvendorid=32'h79737978 ;
+localparam marchid  = 32'd25030085;  
 
 
 

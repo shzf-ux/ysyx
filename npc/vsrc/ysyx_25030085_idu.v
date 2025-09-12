@@ -1,5 +1,4 @@
-import "DPI-C" function void ebreak_instruction (input int inst) ;
-import "DPI-C" function void invalid_inst   (input int pc,input int inst);   
+
 
 module ysyx_25030085_id (
     input               clock         ,
@@ -73,12 +72,12 @@ module ysyx_25030085_id (
   // 指令解析相关信号
   reg invalid;            
   reg is_ebreak;          
-  reg [6:0] opcode;       
-  reg [2:0] func3;        
+  wire [6:0] opcode;       
+  wire [2:0] func3;        
   reg [31:0] imm;         
-  reg [31:0] immI;        
-  reg [31:0] immU;        
-  reg [31:0] immS;        
+  wire [31:0] immI;        
+  wire [31:0] immU;        
+  wire [31:0] immS;        
 
   // 立即数计算（仅保留所需类型）
   assign immI = {{20{inst[31]}}, inst[31:20]};  // I型立即数（符号扩展）
@@ -258,6 +257,7 @@ module ysyx_25030085_id (
   end
 
 
+`ifndef SYNTHESIS
   always @(is_ebreak, invalid) begin
     if (is_ebreak) begin
       ebreak_instruction(inst);   // 触发ebreak回调
@@ -265,5 +265,7 @@ module ysyx_25030085_id (
      // invalid_inst(pc, inst);     // 触发无效指令回调
     end
   end   
+`endif
+
 
 endmodule
