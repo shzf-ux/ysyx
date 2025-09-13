@@ -9,7 +9,7 @@ module ysyx_25030085_lsu (//数据存储器
     
     input                       in_valid    ,
     input [11:0]                in_ctrl     ,
-    input [4:0]                 in_rd       ,
+    input [3:0]                 in_rd       ,
     input [31:0]                in_imm      ,
     input [31:0]                in_npc      ,
     input [31:0]                in_pc       ,
@@ -24,7 +24,7 @@ module ysyx_25030085_lsu (//数据存储器
     output [31:0]               imm_out     ,
     output [31:0]               npc_out     ,
     output [31:0]               pc_out      ,
-    output [4:0]                rd_out      ,
+    output [3:0]                rd_out      ,
     output [31:0]               alu_result  ,
     input                       out_ready   ,
 
@@ -54,7 +54,7 @@ module ysyx_25030085_lsu (//数据存储器
 
     reg [1:0]           state;
     reg [11:0]          ctrl;
-    reg [4:0]           rd;
+    reg [3:0]           rd;
     reg [31:0]          wdata,addr,pc,imm,npc;
     
 

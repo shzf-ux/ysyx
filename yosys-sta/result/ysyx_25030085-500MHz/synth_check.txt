@@ -100,7 +100,6 @@ Warning: Wire ysyx_25030085_csr_regfile.\csr_rdata [2] is used but has no driver
 Warning: Wire ysyx_25030085_csr_regfile.\csr_rdata [1] is used but has no driver.
 Warning: Wire ysyx_25030085_csr_regfile.\csr_rdata [0] is used but has no driver.
 checking module ysyx_25030085_ex..
-Warning: Wire ysyx_25030085_ex.\rd_out [4] is used but has no driver.
 Warning: Wire ysyx_25030085_ex.\rd_out [3] is used but has no driver.
 Warning: Wire ysyx_25030085_ex.\rd_out [2] is used but has no driver.
 Warning: Wire ysyx_25030085_ex.\rd_out [1] is used but has no driver.
@@ -281,17 +280,14 @@ Warning: Wire ysyx_25030085_ex.\imm_out [2] is used but has no driver.
 Warning: Wire ysyx_25030085_ex.\imm_out [1] is used but has no driver.
 Warning: Wire ysyx_25030085_ex.\imm_out [0] is used but has no driver.
 checking module ysyx_25030085_id..
-Warning: Wire ysyx_25030085_id.\rs2_addr [4] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs2_addr [3] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs2_addr [2] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs2_addr [1] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs2_addr [0] is used but has no driver.
-Warning: Wire ysyx_25030085_id.\rs1_addr [4] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs1_addr [3] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs1_addr [2] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs1_addr [1] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rs1_addr [0] is used but has no driver.
-Warning: Wire ysyx_25030085_id.\rd_out [4] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rd_out [3] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rd_out [2] is used but has no driver.
 Warning: Wire ysyx_25030085_id.\rd_out [1] is used but has no driver.
@@ -538,7 +534,6 @@ Warning: Wire ysyx_25030085_if.\ifu_addr [2] is used but has no driver.
 Warning: Wire ysyx_25030085_if.\ifu_addr [1] is used but has no driver.
 Warning: Wire ysyx_25030085_if.\ifu_addr [0] is used but has no driver.
 checking module ysyx_25030085_lsu..
-Warning: Wire ysyx_25030085_lsu.\rd_out [4] is used but has no driver.
 Warning: Wire ysyx_25030085_lsu.\rd_out [3] is used but has no driver.
 Warning: Wire ysyx_25030085_lsu.\rd_out [2] is used but has no driver.
 Warning: Wire ysyx_25030085_lsu.\rd_out [1] is used but has no driver.
@@ -823,7 +818,6 @@ Warning: Wire ysyx_25030085_wb.\reg_wdata [3] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\reg_wdata [2] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\reg_wdata [1] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\reg_wdata [0] is used but has no driver.
-Warning: Wire ysyx_25030085_wb.\reg_waddr [4] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\reg_waddr [3] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\reg_waddr [2] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\reg_waddr [1] is used but has no driver.
@@ -862,4 +856,4 @@ Warning: Wire ysyx_25030085_wb.\next_pc [2] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\next_pc [1] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\next_pc [0] is used but has no driver.
 Warning: Wire ysyx_25030085_wb.\in_ready is used but has no driver.
-found and reported 854 problems.
+found and reported 848 problems.

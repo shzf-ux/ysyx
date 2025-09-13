@@ -9,8 +9,8 @@ module ysyx_25030085_id (
     input       [31:0]  in_pc         ,
     output              in_ready      ,
 
-    output      [4:0]   rs1_addr      ,
-    output      [4:0]   rs2_addr      ,
+    output      [3:0]   rs1_addr      ,
+    output      [3:0]   rs2_addr      ,
     input       [31:0]  rs1_data      ,
     input       [31:0]  rs2_data      ,
 
@@ -20,7 +20,7 @@ module ysyx_25030085_id (
     output      [31:0]  out_rs2_data  ,
     output      [11:0]  ctrl_out      ,
     output      [31:0]  imm_out       ,
-    output      [4:0]   rd_out        ,
+    output      [3:0]   rd_out        ,
     input               out_ready     
 );
   localparam IDLE = 0;
@@ -65,9 +65,9 @@ module ysyx_25030085_id (
   assign out_rs1_data = rs1_data;
   assign out_rs2_data = rs2_data;
   assign ctrl_out = ctrl_bus;
-  assign rs1_addr = inst[19:15]; // rs1地址固定为inst[19:15]
-  assign rs2_addr = inst[24:20]; // rs2地址固定为inst[24:20]
-  assign rd_out = inst[11:7];    // rd地址固定为inst[11:7]
+  assign rs1_addr = inst[18:15]; // rs1地址固定为inst[19:15]
+  assign rs2_addr = inst[23:20]; // rs2地址固定为inst[24:20]
+  assign rd_out = inst[10:7];    // rd地址固定为inst[11:7]
 
   // 指令解析相关信号
   reg invalid;            

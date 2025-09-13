@@ -7,7 +7,7 @@ module ysyx_25030085_ex(
     input [31:0]        in_rs2_data         ,
     input [11:0]        in_ctrl             ,
     input [31:0]        in_imm              ,
-    input [4:0]         in_rd               ,
+    input [3:0]         in_rd               ,
     input [31:0]        in_pc               ,
     output              in_ready            ,
 
@@ -17,7 +17,7 @@ module ysyx_25030085_ex(
     output [31:0]       out_rs2_data        ,
     output [11:0]       out_ctrl            ,
     output [31:0]       csr_data            ,
-    output [4:0]        rd_out              ,
+    output [3:0]        rd_out              ,
     output [31:0]       imm_out             ,
     output [31:0]       pc_out              ,
 
@@ -27,7 +27,7 @@ module ysyx_25030085_ex(
     localparam OUTPUT=1;
     localparam WAIT=2;
     reg [1:0] state;
-    reg [4:0] rd;
+    reg [3:0] rd;
     reg [31:0] rs1_data,rs2_data,pc,imm;
     reg [11:0] ctrl;
  
@@ -35,12 +35,14 @@ module ysyx_25030085_ex(
     assign out_valid=(state==OUTPUT);
     always @(posedge clock or posedge reset) begin
         if(reset)begin
-            ctrl<=0;
+            ctrl<=12'b0;
             rs1_data<=0;
             rs2_data<=0;
             pc<=32'h3000_0000;
             imm<=0;
+            rd<=0;
             state<=IDLE;
+            
         end
         else begin
             case(state)

@@ -3,6 +3,7 @@
 #include <riscv/riscv.h>
 #include "include/ysyxsoc.h"
 #include <string.h>
+#include<stdio.h>
 
 extern char _heap_start;
 int main(const char *args);
@@ -62,11 +63,28 @@ void halt(int code)
   while (1)
     ;
 }
+void show_id()
+{
+  uint32_t mvendorid, marchid;
 
+  // 读取CSR寄存器的值
+  // csrr指令格式：csrr 目标寄存器, CSR名称
+  asm volatile("csrrw %0, mvendorid,x0" : "=r"(mvendorid)); // 读mvendorid
+  asm volatile("csrrw %0, marchid,x0" : "=r"(marchid));     // 读marchid
+
+  // 输出结果
+  printf("mvendorid: %08x \n", mvendorid);
+  printf("marchid: %d \n", marchid);
+}
 void _trm_init() {
   // init_section();
   init_uart();
+  show_id();
   ioe_init();
+
+
+
+
 
   int ret = main(mainargs);
   halt(ret);

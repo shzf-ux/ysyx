@@ -2,7 +2,7 @@
 #include "difftest/dut.h"
 #include "paddr.h"
 void sdb_set_batch_mode();
-extern int sim_time;
+extern uint64_t sim_time;
 void init_disasm();
 void parse_elf(char *elf_file); // 传入一个elf文件
 

@@ -12,7 +12,7 @@ module ysyx_25030085_if (
     output reg [31:0]   ifu_addr      ,
     output reg          ifu_reqValid  ,
 
-    output   reg           out_valid   ,       // 输出数据有效
+    output  reg         out_valid   ,       // 输出数据有效
     output  reg [31:0]  inst        ,     // 指令输出
     output  reg [31:0]  pc          ,       // PC 值输出
     input               out_ready         // 下游准备接收

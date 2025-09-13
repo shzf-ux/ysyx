@@ -5,7 +5,7 @@
 #define MAX_EXE 1000000
 #define MAX_VCD 300000
 
-extern int sim_time;
+extern uint64_t sim_time;
 extern int flag_stop;
 extern int NPC_State;
 uint32_t pmem_read(uint32_t raddr, int len);
@@ -92,9 +92,9 @@ static void single_cycle()
 
     // vcd->dump(sim_time);
     }
-    if (sim_time %5000000==0)
+    if (sim_time %100000000==0)
     {
-      // printf("time :%d\n", sim_time);
+       printf("time :%ld\n", sim_time);
         // flag_stop = 1;
          // return;
     }

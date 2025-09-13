@@ -1,11 +1,11 @@
-Generate the report at 2025-09-12T20:03:40, GitVersion: aa25008b3778a76ae1975c839d4cc459f7f7b3b7.
+Generate the report at 2025-09-13T14:54:37, GitVersion: aa25008b3778a76ae1975c839d4cc459f7f7b3b7.
 +-------------------+-----------+--------+-------------+-------------+------+
 | Net / Pin         | MaxFanout | Fanout | FanoutSlack | LibCellPort | Note |
 +-------------------+-----------+--------+-------------+-------------+------+
-| wb/_0887_         |           |        |             |             |      |
-| wb/_1782_:ZN      | NA        | 1      | NA          | OAI21_X1/ZN |      |
-| regfile/rf[26][8] |           |        |             |             |      |
-| regfile/_13760_:Q | NA        | 1      | NA          | DFF_X1/Q    |      |
-| regfile/_04957_   |           |        |             |             |      |
-| regfile/_12429_:Z | NA        | 3      | NA          | BUF_X1/Z    |      |
+| wb/_0221_         |           |        |             |             |      |
+| wb/_2236_:Z       | NA        | 1      | NA          | BUF_X1/Z    |      |
+| regfile/_2222_    |           |        |             |             |      |
+| regfile/_4993_:Z  | NA        | 1      | NA          | MUX2_X1/Z   |      |
+| regfile/_2225_    |           |        |             |             |      |
+| regfile/_4997_:ZN | NA        | 1      | NA          | OR2_X1/ZN   |      |
 +-------------------+-----------+--------+-------------+-------------+------+

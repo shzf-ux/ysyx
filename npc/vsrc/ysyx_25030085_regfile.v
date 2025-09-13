@@ -1,6 +1,6 @@
 
 
-module ysyx_25030085_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
+module ysyx_25030085_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
   input clk,
   //写数据
   input [DATA_WIDTH-1:0] wdata,
@@ -13,11 +13,11 @@ module ysyx_25030085_RegisterFile #(ADDR_WIDTH = 5, DATA_WIDTH = 32) (
   output [DATA_WIDTH-1:0] rdata1,
   output [DATA_WIDTH-1:0] rdata2
 );
-  reg [DATA_WIDTH-1:0] rf [2**ADDR_WIDTH-1:0];
+  reg [DATA_WIDTH-1:0] rf [0:15];
 
 //写
   always @(posedge clk) begin
-    if (wen) rf[waddr] <=(waddr!=5'b0) ? wdata : 0;
+    if (wen) rf[waddr] <=(waddr!=4'b0) ? wdata : 0;
   end
 //读
     assign rdata1=rf[arrs1];

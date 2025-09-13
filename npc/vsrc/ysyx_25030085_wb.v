@@ -10,13 +10,13 @@ module  ysyx_25030085_wb (
     input       [31:0]  in_imm      ,
     input       [11:0]  in_ctrl     ,
     input       [31:0]  in_csr_rdata,
-    input       [4:0]   rd_addr     ,
+    input       [3:0]   rd_addr     ,
     output              in_ready    ,
 
     output reg          out_valid   ,
     output      [31:0]  next_pc     ,
     output              reg_wen     ,
-    output      [4:0]   reg_waddr   ,
+    output      [3:0]   reg_waddr   ,
     output      [31:0]  reg_wdata   
 
 );
@@ -28,7 +28,7 @@ module  ysyx_25030085_wb (
 
 reg [1:0]state;
 reg [11:0]ctrl;
-reg [4:0] rd;
+reg [3:0] rd;
 reg [31:0]npc,pc,imm,csr_rdata,mem_rdata,alu_result;
 
 //输出数据

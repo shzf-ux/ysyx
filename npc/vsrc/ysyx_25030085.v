@@ -63,7 +63,7 @@ end
 
 
 localparam DATA_WIDTH = 32;  // RISC-V 32位架构
-localparam REG_ADDR_WIDTH = 5;  // 32个通用寄存器（x0-x31）
+localparam REG_ADDR_WIDTH = 4;  // 32个通用寄存器（x0-x31）
 
 
 
@@ -74,42 +74,42 @@ wire [31:0] if_id_inst;  // IF阶段取出的指令
 wire [31:0] if_id_pc;    // IF阶段的程序计数器
 
 
-wire id_ex_valid;        // ID阶段输出有效
-wire ex_id_ready;        // EX阶段准备接收
-wire [31:0] id_ex_pc;    // 传递PC（用于分支计算、AUIPC等）
-wire [11:0] id_ex_ctrl;  // 控制信号（ALU操作、访存类型、写回使能等）
-wire [31:0] id_ex_imm;   // 译码生成的立即数
-wire [4:0] id_ex_rd;     // 目标寄存器地址（rd）
-wire [31:0] id_ex_rs1;   // 源寄存器1数据（rs1）
-wire [31:0] id_ex_rs2;   // 源寄存器2数据（rs2）
+wire id_ex_valid;        
+wire ex_id_ready;        
+wire [31:0] id_ex_pc;    
+wire [11:0] id_ex_ctrl;  
+wire [31:0] id_ex_imm;   
+wire [3:0] id_ex_rd;     
+wire [31:0] id_ex_rs1;   
+wire [31:0] id_ex_rs2;   
 
-// -------------------------- EX-MEM 阶段寄存器 --------------------------
-wire ex_mem_valid;       // EX阶段输出有效
-wire mem_ex_ready;       // MEM阶段准备接收
-wire [31:0] ex_mem_pc;   // 传递PC
-wire [11:0] ex_mem_ctrl; // 精简控制信号（仅保留访存、写回相关）
-wire [31:0] ex_mem_imm;  // 传递立即数
-wire [4:0] ex_mem_rd;    // 传递目标寄存器地址
-wire [31:0] ex_mem_alu;  // ALU运算结果（用于访存地址/写回数据）
-wire [31:0] ex_mem_rs2;  // 源寄存器2数据（用于存储指令的写数据）
-wire [31:0] ex_mem_npc;  // 下一条PC（正常/分支跳转后）
+
+wire ex_mem_valid;     
+wire mem_ex_ready;     
+wire [31:0] ex_mem_pc; 
+wire [11:0] ex_mem_ctrl;
+wire [31:0] ex_mem_imm;
+wire [3:0] ex_mem_rd;  
+wire [31:0] ex_mem_alu;
+wire [31:0] ex_mem_rs2;
+wire [31:0] ex_mem_npc;
 wire [31:0] csr_rdata;
 
-// -------------------------- MEM-WB 阶段寄存器 --------------------------
-wire mem_wb_valid;       // MEM阶段输出有效
-wire wb_mem_ready;       // WB阶段准备接收
-wire [31:0] mem_wb_pc;   // 传递PC
-wire [11:0] mem_wb_ctrl; // 精简控制信号（仅保留写回相关）
-wire [31:0] mem_wb_imm;  // 传递立即数
-wire [4:0] mem_wb_rd;    // 传递目标寄存器地址
-wire [31:0] mem_wb_alu;  // 传递ALU结果
-wire [31:0] mem_wb_mem;  // 访存读取的数据（Load指令）
-wire [31:0] mem_wb_npc;  // 传递下一条PC（用于JAL/JALR写回）
-wire [31:0] mem_wb_csr;  // 传递CSR数据（用于CSR指令写回）
 
-// -------------------------- WB阶段反馈信号 --------------------------
-wire wb_done;            // WB阶段完成（反馈给IF阶段，用于流水线同步）
-wire [31:0] wb_next_pc;  // WB阶段最终确定的下一条PC（反馈给IF阶段取指）
+wire mem_wb_valid;      
+wire wb_mem_ready;      
+wire [31:0] mem_wb_pc;  
+wire [11:0] mem_wb_ctrl;
+wire [31:0] mem_wb_imm; 
+wire [3:0] mem_wb_rd;   
+wire [31:0] mem_wb_alu; 
+wire [31:0] mem_wb_mem; 
+wire [31:0] mem_wb_npc; 
+wire [31:0] mem_wb_csr; 
+
+
+wire wb_done;            
+wire [31:0] wb_next_pc;  
 
 
 ysyx_25030085_if ifu(
@@ -133,8 +133,7 @@ ysyx_25030085_if ifu(
     .out_ready      (id_if_ready)  // 接收ID阶段的准备信号
 );
 
-// -------------------------- 3.2 译码阶段（ID）：ysyx_25030085_id --------------------------
-// ID阶段需要的寄存器文件接口信号
+
 wire [REG_ADDR_WIDTH-1:0] id_reg_rs1_addr;  // rs1地址（译码生成）
 wire [REG_ADDR_WIDTH-1:0] id_reg_rs2_addr;  // rs2地址（译码生成）
 wire [DATA_WIDTH-1:0] id_reg_rs1_data;      // rs1数据（来自寄存器文件）
@@ -144,13 +143,11 @@ ysyx_25030085_id id(
     .clock         (clock),
     .reset         (reset),
 
-    // 输入来自IF-ID寄存器
     .in_valid      (if_id_valid),
     .in_inst       (if_id_inst),
     .in_pc         (if_id_pc),
     .in_ready      (id_if_ready),  // 反馈给IF阶段：ID准备接收
 
-    // 寄存器文件接口（读操作）
     .rs1_addr      (id_reg_rs1_addr),
     .rs2_addr      (id_reg_rs2_addr),
     .rs1_data      (id_reg_rs1_data),
@@ -246,10 +243,10 @@ ysyx_25030085_lsu lsu(
     .lsu_rdata      (io_lsu_rdata)
 );
 
-// -------------------------- 3.6 写回阶段（WB）：ysyx_25030085_wb --------------------------
-// WB阶段输出到寄存器文件的信号
+
+
 wire wb_reg_wen;          // 寄存器写使能
-wire [4:0] wb_reg_waddr;  // 寄存器写地址
+wire [3:0] wb_reg_waddr;  // 寄存器写地址
 wire [31:0] wb_reg_wdata; // 寄存器写数据
 
 ysyx_25030085_wb wb(
