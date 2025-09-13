@@ -1,60 +1,39 @@
-
-
-//csrrw 读取指定 CSR寄存器值由立即数定位地址到目标寄存器 rd，将通用寄存器 rs1 的值写入 CSR,既读又写
-//csrrs 同上 将 CSR 的值与 rs1 按位或（OR）后写回
-
 module ysyx_25030085_csr_regfile (
-    input clock,
-    input reset,
-
-    input         csr_wen, //控制信号
-    input [11:0]  csr_addr, //寻址地址，11位立即数
-    output reg [31:0] csr_rdata   // 读出寄存器的数据
-
+    input         clock,
+    input         reset,
+    input         csr_wen,     
+    input [11:0]  csr_addr,     
+    output [31:0] csr_rdata     
 );
 
+reg [31:0] mcycle;    // 低32位计数器
+reg [31:0] mcycleh;   // 高32位计数器
+
+// 常量定义（直接用于组合逻辑输出，不占用寄存器资源）
+localparam MVID = 32'h79737978;  // mvendorid
+localparam MARCHID = 32'd25030085; // marchid
 
 
-reg [31:0] mcycle   ;
-reg [31:0] mcycleh  ;
 
-localparam mvendorid=32'h79737978 ;
-localparam marchid  = 32'd25030085;  
+// - 用三目运算符替代case语句，减少MUX层级
+// - 合并csr_wen判断，避免冗余逻辑
+assign csr_rdata = csr_wen ? (
+    csr_addr == 12'hb00 ? mcycle :
+    csr_addr == 12'hb80 ? mcycleh :
+    csr_addr == 12'hf11 ? MVID :
+    csr_addr == 12'hf12 ? MARCHID :
+    32'h0
+) : 32'h0;
 
 
-
-// 读操作
-always @(*) begin
-    if(csr_wen)begin
-    case (csr_addr)
-        12'hb00: csr_rdata = mcycle ;
-        12'hb80: csr_rdata = mcycleh;
-        12'hf11: csr_rdata = mvendorid;
-        12'hf12: csr_rdata = marchid ;
-        default: csr_rdata = 32'h0;
-    endcase
-    end
-    else begin
-        csr_rdata=0;
-    end
-
-end
-
+// - 简化mcycleh的进位判断，利用溢出自然递增
 always @(posedge clock) begin
     if (reset) begin
-        mcycle <= 32'h0;      
-        mcycleh <= 32'h0;     
-    end
-    else begin
-        // 低32位计数器递增
-        mcycle <= mcycle + 1'b1;
-        if (mcycle == 32'hFFFFFFFF) begin
-            mcycleh <= mcycleh + 1'b1;
-        end
+        mcycle  <= 32'h0;
+        mcycleh <= 32'h0;
+    end else begin
+        {mcycleh, mcycle} <= {mcycleh, mcycle} + 1'b1; // 合并为64位递增，减少进位判断逻辑
     end
 end
-
-
-
 
 endmodule

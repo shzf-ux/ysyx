@@ -13,15 +13,18 @@ module ysyx_25030085_RegisterFile #(ADDR_WIDTH = 4, DATA_WIDTH = 32) (
   output [DATA_WIDTH-1:0] rdata1,
   output [DATA_WIDTH-1:0] rdata2
 );
-  reg [DATA_WIDTH-1:0] rf [0:15];
 
-//写
+  reg [DATA_WIDTH-1:0] rf [1:15];  // 仅存储x1-x15（15个寄存器），x0固定为0
+
+
   always @(posedge clk) begin
-    if (wen) rf[waddr] <=(waddr!=4'b0) ? wdata : 0;
+    if (wen && waddr != 4'b0) begin  // 仅当写使能且地址非0时才写
+      rf[waddr] <= wdata;
+    end
   end
-//读
-    assign rdata1=rf[arrs1];
-    assign rdata2=rf[arrs2];
+
+  assign rdata1 = (arrs1 == 4'b0) ? {DATA_WIDTH{1'b0}} : rf[arrs1];
+  assign rdata2 = (arrs2 == 4'b0) ? {DATA_WIDTH{1'b0}} : rf[arrs2];
 
 
 

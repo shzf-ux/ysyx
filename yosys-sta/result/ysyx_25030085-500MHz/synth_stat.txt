@@ -27,94 +27,93 @@
 
 === ysyx_25030085_RegisterFile ===
 
-   Number of wires:               3977
-   Number of wire bits:           4079
-   Number of public wires:         520
-   Number of public wire bits:     622
+   Number of wires:               3745
+   Number of wire bits:           3847
+   Number of public wires:         488
+   Number of public wire bits:     590
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:               3521
-     AND2_X1                        54
-     AND2_X2                         1
-     AND2_X4                        30
-     AND4_X1                         1
-     AOI21_X1                      122
-     BUF_X1                       1133
-     BUF_X4                        101
-     BUF_X8                          2
-     CLKBUF_X2                       6
-     DFF_X1                        512
-     INV_X1                         41
-     INV_X2                          5
-     INV_X32                         1
-     MUX2_X1                      1095
-     MUX2_X2                        44
-     NAND2_X1                       17
-     NAND3_X1                       36
-     NAND4_X1                        1
-     NOR2_X1                        33
-     NOR2_X2                         1
-     NOR2_X4                         1
-     NOR4_X1                         1
-     OAI211_X2                      86
-     OAI21_X1                       72
-     OR2_X1                        108
-     OR2_X2                          3
-     OR3_X1                         14
+   Number of cells:               3321
+     AND2_X1                        31
+     AND2_X2                         4
+     AND3_X1                         8
+     AOI211_X2                       4
+     AOI211_X4                       1
+     AOI21_X1                      151
+     AOI22_X1                      384
+     BUF_X1                       1069
+     BUF_X16                         1
+     BUF_X4                        153
+     BUF_X8                         32
+     DFF_X1                        480
+     INV_X1                         16
+     INV_X2                          8
+     INV_X4                          2
+     MUX2_X1                       490
+     NAND2_X1                       43
+     NAND2_X4                        1
+     NAND3_X1                      272
+     NAND4_X1                       31
+     NOR2_X1                         1
+     NOR2_X2                         5
+     NOR2_X4                        18
+     NOR3_X1                        11
+     NOR4_X1                         2
+     OAI211_X2                      14
+     OAI21_X1                       53
+     OAI221_X1                       5
+     OR3_X1                          9
+     OR3_X2                          1
+     OR3_X4                          9
+     OR4_X1                          6
+     XNOR2_X1                        2
+     XNOR2_X2                        4
 
-   Chip area for module '\ysyx_25030085_RegisterFile': 6366.178000
+   Chip area for module '\ysyx_25030085_RegisterFile': 5682.026000
 
 === ysyx_25030085_csr_regfile ===
 
-   Number of wires:                800
-   Number of wire bits:            842
+   Number of wires:                797
+   Number of wire bits:            839
    Number of public wires:          69
    Number of public wire bits:     111
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:                763
-     AND2_X1                        63
-     AND2_X2                         4
-     AND2_X4                        16
-     AND3_X1                        49
-     AND3_X2                         1
-     AND3_X4                         2
-     AND4_X1                        13
-     AND4_X2                         1
+   Number of cells:                760
+     AND2_X1                        59
+     AND2_X2                         2
+     AND2_X4                        11
+     AND3_X1                        68
+     AND3_X2                         2
+     AND3_X4                         4
+     AND4_X1                        24
      AND4_X4                         2
-     AOI211_X2                       9
-     AOI211_X4                       3
-     AOI21_X1                       48
-     AOI221_X4                       1
-     AOI22_X1                       13
-     BUF_X1                        232
-     BUF_X2                          4
-     BUF_X4                         18
+     AOI211_X2                       3
+     AOI211_X4                      12
+     AOI21_X1                       32
+     BUF_X1                        216
+     BUF_X2                          6
+     BUF_X4                         13
+     BUF_X8                          1
+     CLKBUF_X2                       9
      DFF_X1                         64
-     INV_X1                         45
-     INV_X2                          1
-     INV_X4                          2
-     NAND2_X1                        2
-     NAND3_X1                       14
-     NAND4_X1                       34
-     NOR2_X1                        32
-     NOR2_X2                         1
-     NOR3_X1                        22
-     NOR4_X1                         6
-     OAI211_X2                       9
-     OAI21_X1                       23
-     OAI221_X1                       3
-     OAI22_X1                        1
-     OR2_X1                         12
-     OR2_X2                          1
-     OR3_X1                          1
-     OR3_X4                          1
-     OR4_X4                          1
-     XNOR2_X1                        9
+     INV_X1                         24
+     NAND2_X1                       10
+     NAND3_X1                       27
+     NAND3_X2                        1
+     NAND4_X1                       27
+     NOR2_X1                        48
+     NOR3_X1                        21
+     NOR3_X2                         1
+     OAI21_X1                       55
+     OR2_X1                          8
+     OR3_X1                          2
+     OR3_X4                          2
+     XNOR2_X1                        6
 
-   Chip area for module '\ysyx_25030085_csr_regfile': 1062.936000
+   Chip area for module '\ysyx_25030085_csr_regfile': 1058.946000
 
 === ysyx_25030085_ex ===
 
@@ -269,51 +268,51 @@
 
 === ysyx_25030085_lsu ===
 
-   Number of wires:               1422
-   Number of wire bits:           1857
+   Number of wires:               1425
+   Number of wire bits:           1860
    Number of public wires:          64
    Number of public wire bits:     499
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:               1432
-     AND2_X1                        36
-     AND2_X2                         5
-     AND2_X4                         2
-     AND3_X1                         1
-     AOI21_X1                        3
+   Number of cells:               1435
+     AND2_X1                        12
+     AND2_X2                         4
+     AND2_X4                         3
+     AND3_X1                        24
+     AOI21_X1                        1
      AOI22_X1                        8
      BUF_X1                        716
-     BUF_X4                         25
+     BUF_X2                          2
+     BUF_X4                         22
      BUF_X8                          3
+     CLKBUF_X2                       4
      DFFR_X1                        78
      DFFS_X1                         1
      DFF_X1                        133
-     INV_X1                         60
-     INV_X2                          2
-     INV_X32                         1
-     INV_X4                          1
+     INV_X1                         64
+     INV_X32                         2
      LOGIC0_X1                       1
-     MUX2_X1                       211
-     NAND2_X1                       26
-     NAND2_X2                        3
-     NAND2_X4                        6
-     NAND3_X1                       28
+     MUX2_X1                       210
+     NAND2_X1                       15
+     NAND2_X2                       12
+     NAND2_X4                        1
+     NAND3_X1                       34
+     NAND4_X1                        1
      NOR2_X1                         4
      NOR2_X2                         2
-     NOR2_X4                         1
      NOR3_X1                         3
      NOR4_X1                         2
      NOR4_X4                         1
      OAI211_X2                       2
-     OAI21_X1                       33
+     OAI21_X1                       35
      OAI21_X2                        1
-     OAI22_X1                       23
+     OAI22_X1                       24
      OR3_X1                          8
      OR4_X1                          1
      OR4_X4                          1
 
-   Chip area for module '\ysyx_25030085_lsu': 2327.766000
+   Chip area for module '\ysyx_25030085_lsu': 2338.672000
 
 === ysyx_25030085_wb ===
 
@@ -374,87 +373,85 @@
      ysyx_25030085_lsu               1
      ysyx_25030085_wb                1
 
-   Number of wires:              11125
-   Number of wire bits:          12889
-   Number of public wires:        1888
-   Number of public wire bits:    3652
+   Number of wires:              10893
+   Number of wire bits:          12657
+   Number of public wires:        1856
+   Number of public wire bits:    3620
    Number of memories:               0
    Number of memory bits:            0
    Number of processes:              0
-   Number of cells:               9769
-     AND2_X1                       212
+   Number of cells:               9569
+     AND2_X1                       161
      AND2_X2                        29
-     AND2_X4                        90
-     AND3_X1                       105
-     AND3_X2                         4
-     AND3_X4                         6
-     AND4_X1                        26
-     AND4_X2                         1
+     AND2_X4                        56
+     AND3_X1                       155
+     AND3_X2                         5
+     AND3_X4                         8
+     AND4_X1                        36
      AND4_X4                         3
-     AOI211_X2                      16
-     AOI211_X4                      11
-     AOI21_X1                      246
+     AOI211_X2                      14
+     AOI211_X4                      21
+     AOI21_X1                      257
      AOI21_X2                        4
      AOI21_X4                        1
      AOI221_X2                       2
-     AOI221_X4                      13
-     AOI22_X1                       23
-     BUF_X1                       4074
-     BUF_X16                        14
-     BUF_X2                          8
+     AOI221_X4                      12
+     AOI22_X1                      394
+     BUF_X1                       3994
+     BUF_X16                        15
+     BUF_X2                         12
      BUF_X32                         1
-     BUF_X4                        198
-     BUF_X8                         15
+     BUF_X4                        242
+     BUF_X8                         46
      CLKBUF_X1                       1
-     CLKBUF_X2                      10
+     CLKBUF_X2                      17
      DFFR_X1                       544
      DFFS_X1                        13
-     DFF_X1                        782
+     DFF_X1                        750
      DLH_X1                         32
-     INV_X1                        197
+     INV_X1                        155
      INV_X16                         1
      INV_X2                         14
      INV_X32                         9
-     INV_X4                          9
+     INV_X4                          8
      INV_X8                          1
      LOGIC0_X1                       3
      LOGIC1_X1                       1
-     MUX2_X1                      1882
-     MUX2_X2                        48
-     NAND2_X1                       85
-     NAND2_X2                        9
-     NAND2_X4                       13
-     NAND3_X1                      119
-     NAND3_X2                        1
+     MUX2_X1                      1276
+     MUX2_X2                         4
+     NAND2_X1                      108
+     NAND2_X2                       18
+     NAND2_X4                        9
+     NAND3_X1                      374
+     NAND3_X2                        2
      NAND3_X4                        2
-     NAND4_X1                       52
-     NOR2_X1                       116
-     NOR2_X2                        14
-     NOR2_X4                         8
-     NOR3_X1                        48
-     NOR3_X2                         2
+     NAND4_X1                       76
+     NOR2_X1                       100
+     NOR2_X2                        17
+     NOR2_X4                        24
+     NOR3_X1                        58
+     NOR3_X2                         3
      NOR3_X4                         6
-     NOR4_X1                        17
+     NOR4_X1                        12
      NOR4_X4                         4
-     OAI211_X2                     104
+     OAI211_X2                      23
      OAI211_X4                       1
-     OAI21_X1                      199
+     OAI21_X1                      214
      OAI21_X2                        3
-     OAI221_X1                       5
+     OAI221_X1                       7
      OAI22_X1                       39
      OAI22_X2                        1
-     OR2_X1                        133
-     OR2_X2                          4
+     OR2_X1                         21
      OR2_X4                          6
-     OR3_X1                         50
-     OR3_X2                          1
-     OR3_X4                          2
-     OR4_X1                          1
-     OR4_X4                          2
-     XNOR2_X1                       34
-     XNOR2_X2                        1
+     OR3_X1                         46
+     OR3_X2                          2
+     OR3_X4                         12
+     OR4_X1                          7
+     OR4_X4                          1
+     XNOR2_X1                       33
+     XNOR2_X2                        5
      XOR2_X1                        27
      XOR2_X2                        11
 
-   Chip area for top module '\ysyx_25030085': 16806.678000
+   Chip area for top module '\ysyx_25030085': 16129.442000
 
